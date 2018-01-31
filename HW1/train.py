@@ -11,4 +11,5 @@ print (len(val_iter))
 print (len(test_iter))
 
 for batch_num,batch in enumerate(train_iter):
-    print(batch.shape)
+    print(batch.text.shape)
+    print (batch.label.shape)
