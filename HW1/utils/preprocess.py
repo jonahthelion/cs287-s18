@@ -1,4 +1,4 @@
-import torch
+import torchtext
 from torchtext.vocab import Vectors, GloVe
 
 def get_data(batch_size):
