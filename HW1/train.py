@@ -11,5 +11,5 @@ print (len(val_iter))
 print (len(test_iter))
 
 for batch_num,batch in enumerate(train_iter):
-    print(batch.text.shape)
-    print (batch.label.shape)
+    for i in xrange(batch.text.shape[1]):
+        print (" ".join([TEXT.vocab.itos[ix] for ix in batch.text.data[:,i]]))
