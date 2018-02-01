@@ -84,9 +84,9 @@ class LogReg(nn.Module):
 
     def train_sample(self, label, text):
         outs = self.forward(text)
+        l = F.binary_cross_entropy_with_logits(outs, label)
 
-
-        print(outs, label)
+        print(l)
 
 
 
