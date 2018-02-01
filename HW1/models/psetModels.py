@@ -18,5 +18,5 @@ class MNB(nn.Module):
             c = Counter(text[large_label==lab].numpy())
             print ('THING', lab,c)
             for val in c.keys():
-                self.w_pos[lab][val] += c[val]
+                self.w_counts[lab][val] += c[val]
 
