@@ -21,7 +21,7 @@ vis_windows = {'train_bce': None}
 
 chosen_model = {'type': 'CBOW'}
 
-TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
+TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
 url = 'https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.simple.vec'
 TEXT.vocab.load_vectors(vectors=Vectors('wiki.simple.vec', url=url))
 
@@ -85,21 +85,22 @@ if chosen_model['type'] == 'log_reg':
 
 
 if chosen_model['type'] == 'CBOW':
-    model = CBOW(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=5e-4)
+    model = torch.load('4_cbow.p')
+    # model = CBOW(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
+    # optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=5e-4)
     
-    for epoch in range(5):
-        for batch_num,batch in enumerate(train_iter):
-            l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
-            if batch_num % 100 != 0 and batch_num % 40 == 0:
-                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
-            else:
-                lvals = []
-                for batch in val_iter:
-                    lvals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
-                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), sum(lvals)/float(len(lvals)))
-        print('saving', str(epoch) + '_' + 'cbow.p')
-        torch.save(model, str(epoch) + '_' + 'cbow.p')
+    # for epoch in range(5):
+    #     for batch_num,batch in enumerate(train_iter):
+    #         l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
+    #         if batch_num % 100 != 0 and batch_num % 40 == 0:
+    #             vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+    #         else:
+    #             lvals = []
+    #             for batch in val_iter:
+    #                 lvals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
+    #             vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), sum(lvals)/float(len(lvals)))
+    #     print('saving', str(epoch) + '_' + 'cbow.p')
+    #     torch.save(model, str(epoch) + '_' + 'cbow.p')
 
     model.submission(test_iter, 'predictions3.txt')
 
