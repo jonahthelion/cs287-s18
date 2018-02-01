@@ -29,7 +29,7 @@ class MNB(nn.Module):
 
     def find_important_words(k):
         bad_vals, bad_ixes = torch.topk(self.w.weight, 0, k, largest=True)
-        good_vals, good_ixes = torch.topk(self.w.weight, 0, k, False=True)
+        good_vals, good_ixes = torch.topk(self.w.weight, 0, k, largest=False)
         return bad_vals, bad_ixes, good_vals, good_ixes
 
     def forward(self, text):
