@@ -44,4 +44,4 @@ all_actual = torch.cat(all_actual).numpy()
 all_preds = torch.cat(all_preds).numpy()
 
 print(metrics.roc_auc_score(all_actual, all_preds))
-print(metrics.classification_report(all_actual, round(all_preds)))
+print(metrics.classification_report(all_actual, all_preds.round()))
