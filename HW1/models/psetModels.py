@@ -56,6 +56,7 @@ class MNB(nn.Module):
         return all_actual, all_preds
 
     def submission(self, test_iter, fname):
+        print ('saving to', fname)
         upload = []
         for batch in test_iter:
             probs = self.forward(batch.text.data)
