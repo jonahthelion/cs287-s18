@@ -21,7 +21,7 @@ vis_windows = {'train_bce': None}
 
 chosen_model = {'type': 'CBOW'}
 
-TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
+TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=20)
 url = 'https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.simple.vec'
 TEXT.vocab.load_vectors(vectors=Vectors('wiki.simple.vec', url=url))
 
