@@ -131,7 +131,6 @@ class CBOW(nn.Module):
             embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])[0].unsqueeze(0)
         else:
             embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
-        print(embeds.shape)
         return self.w(embeds).view(-1)
 
     def train_sample(self, label, text, optimizer):
