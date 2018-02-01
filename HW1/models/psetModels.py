@@ -63,7 +63,7 @@ class MNB(nn.Module):
             upload.extend(list(probs.numpy().round().astype(int).flatten()))
         print (upload)
         with open(fname, 'w') as f:
-            fname.write('Id,Cat\n')
+            f.write('Id,Cat\n')
             for u_ix,u in enumerate(upload):
                 f.write(str(u_ix) + ',' + str(u) + '\n')
 
