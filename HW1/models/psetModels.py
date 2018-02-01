@@ -190,7 +190,7 @@ class Conv(nn.Module):
             nn.ReLU(inplace=True),
 
             nn.Conv1d(300, 200, 3, 2, 1),
-            nn.BatchNorm1d(300),
+            nn.BatchNorm1d(200),
             nn.ReLU(inplace=True),
 
             nn.AdaptiveMaxPool1d(3),
