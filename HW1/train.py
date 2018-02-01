@@ -23,7 +23,7 @@ for epoch in range(1):
 model.postprocess()
 
 for epoch in range(1):
-    for batch_num,batch in enumerate(tqdm(train_iter)):
+    for batch_num,batch in enumerate(train_iter):
         preds = model(batch.text.data)
         preds = F.sigmoid(preds)
-        print preds, batch.label.data - 1
+        print (preds, batch.label.data - 1)
