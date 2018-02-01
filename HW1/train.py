@@ -17,4 +17,3 @@ model = MNB(V=len(TEXT.vocab))
 
 for batch_num,batch in enumerate(tqdm(train_iter)):
     model.train_sample(batch.label.data - 1, batch.text.data)
-    assert (False)
