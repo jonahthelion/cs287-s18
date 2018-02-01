@@ -185,17 +185,17 @@ class Conv(nn.Module):
         self.embed.weight.data = embed
 
         self.w = nn.Sequential(
-            nn.Conv1d(300, 300, 3, 2, 1),
+            nn.Conv1d(in_channels=300, out_channels=300, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm1d(300),
             nn.ReLU(inplace=True),
 
-            nn.Conv1d(300, 200, 3, 2, 1),
-            nn.BatchNorm1d(200),
+            nn.Conv1d(in_channels=300, out_channels=300, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm1d(300),
             nn.ReLU(inplace=True),
 
             nn.AdaptiveMaxPool1d(3),
 
-            nn.Conv1d(200, 100, 3),
+            nn.Conv1d(300, 100, 3),
             nn.BatchNorm1d(100),
             nn.ReLU(inplace=True),
 
