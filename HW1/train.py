@@ -88,7 +88,7 @@ if chosen_model['type'] == 'CBOW':
     model = torch.load('4_cbow.p')
     # model = CBOW(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
     # optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=5e-4)
-    model.train()
+    # model.train()
     # for epoch in range(5):
     #     for batch_num,batch in enumerate(train_iter):
     #         l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
@@ -102,5 +102,6 @@ if chosen_model['type'] == 'CBOW':
     #     print('saving', str(epoch) + '_' + 'cbow.p')
     #     torch.save(model, str(epoch) + '_' + 'cbow.p')
     model.eval()
-    model.submission(test_iter, 'predictions3.txt')
+    model.evalu_loss(train_iter)
+
 

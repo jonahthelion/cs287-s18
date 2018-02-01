@@ -3,6 +3,7 @@ import torch.nn as nn
 from torch.autograd import Variable
 from collections import Counter
 import torch.nn.functional as F
+from sklearn import metrics
 
 class MNB(nn.Module):
     def __init__(self, V, alpha):
@@ -157,6 +158,22 @@ class CBOW(nn.Module):
             f.write('Id,Cat\n')
             for u_ix,u in enumerate(upload):
                 f.write(str(u_ix) + ',' + str(u) + '\n')
+
+    def evalu(self, train_iter):
+        all_actual = []
+        all_preds = []
+        for epoch in range(1):
+            for batch_num,batch in enumerate(train_iter):
+                preds = self.forward(batch.text.data)
+                preds = F.sigmoid(preds)
+                all_actual.append(batch.label.data - 1)
+                all_preds.append(preds.data)
+        all_actual = torch.cat(all_actual).numpy()
+        all_preds = torch.cat(all_preds).numpy()
+
+        print(metrics.classification_report(all_actual, all_preds.round()))
+
+        return all_actual, all_preds
 
 
 
