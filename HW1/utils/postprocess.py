@@ -13,4 +13,4 @@ def vis_display(vis, vis_windows, train_l, x_coord):
     if vis_windows['train_bce'] is None:
         vis_windows['train_bce'] = vis.line(Y=np.array([train_l]) , X=np.array([x_coord]))
     else:
-        vis.line(Y=np.array([train_l]) , X=np.array([x_coord]), win=vis_windows['train_bce'], update='append')
+        vis.line(Y=torch.Tensor([train_l]) , X=torch.Tensor([x_coord]), win=vis_windows['train_bce'], update='append')
