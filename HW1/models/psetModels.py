@@ -202,7 +202,7 @@ class Conv(nn.Module):
             # nn.Conv1d(500, 300, 1),
             # nn.BatchNorm1d(300),
             # nn.ReLU(inplace=True),
-
+            nn.Dropout(p=0.3, inplace=True)
             nn.Conv1d(300, 1, 1),
             )
 
