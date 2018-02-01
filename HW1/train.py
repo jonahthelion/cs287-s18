@@ -58,7 +58,7 @@ if chosen_model['type'] == 'MNB':
 
 if chosen_model['type'] == 'log_reg':
     print('working')
-    model = torch.load('8_logreg.p')
+    model = torch.load('10_logreg.p')
     # model = LogReg(V=len(TEXT.vocab))
 
     # optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
