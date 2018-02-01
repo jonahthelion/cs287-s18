@@ -75,12 +75,12 @@ class LogReg(nn.Module):
         self.w = nn.Linear(V, 1)
 
     def forward(self, text):
-        word_vecs = Variable(torch.zeros(text.shape[1], self.V))
+        word_vecs = torch.zeros(text.shape[1], self.V)
         for phrase_ix in range(text.shape[1]):
             c = Counter(text[:,phrase_ix].numpy())
             for val in c:
                 word_vecs[phrase_ix, val] += 1
-        return self.w(word_vecs)  
+        return self.w(Variable(word_vecs))  
 
     def train_sample(self, label, text):
         outs = self.forward(text)
