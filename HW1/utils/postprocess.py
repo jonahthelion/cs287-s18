@@ -9,9 +9,11 @@ def print_important(TEXT, bad_vals, bad_ixes, good_vals, good_ixes):
         print(TEXT.vocab.itos[ix], ' ', val)
     print('\n')
 
-def vis_display(vis, vis_windows, train_l, x_coord):
+def vis_display(vis, vis_windows, train_l, x_coord, val_l=None):
     if vis_windows['train_bce'] is None:
         vis_windows['train_bce'] = vis.line(Y=torch.Tensor([float(train_l)]) , X=torch.Tensor([x_coord]))
+        vis_windows['val_bce'] = vis.line(Y=torch.Tensor([float(val_l)]) , X=torch.Tensor([x_coord]))
     else:
         vis.line(Y=torch.Tensor([float(train_l)]) , X=torch.Tensor([x_coord]), win=vis_windows['train_bce'], update='append')
+        vis.line(Y=torch.Tensor([float(val_l)]) , X=torch.Tensor([x_coord]), win=vis_windows['val_bce'], update='append')
     return vis_windows
