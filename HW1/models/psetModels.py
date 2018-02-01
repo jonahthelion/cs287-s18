@@ -3,13 +3,14 @@ import torch.nn as nn
 from collections import Counter
 
 class MNB(nn.Module):
-    def __init__(self, V):
+    def __init__(self, V, alpha):
         super(MNB, self).__init__()
 
         self.V = V
+        self.alpha = alpha
 
         # initialize counts
-        self.w_counts = torch.zeros(2, V)
+        self.w_counts = torch.zeros(2, V) + alpha
         self.label_counts = torch.zeros(2)
 
     def train_sample(self, label, text):

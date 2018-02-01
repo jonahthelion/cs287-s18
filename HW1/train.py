@@ -14,7 +14,7 @@ from models.psetModels import MNB
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
 
 
-model = MNB(V=len(TEXT.vocab))
+model = MNB(V=len(TEXT.vocab), alpha=.1)
 
 for epoch in range(1):
     for batch_num,batch in enumerate(tqdm(train_iter)):
