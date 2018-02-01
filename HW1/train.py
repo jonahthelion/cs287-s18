@@ -12,7 +12,7 @@ from utils.preprocess import get_data
 from models.psetModels import MNB
 from utils.postprocess import print_important
 
-chosen_model = {'type': 'MNB'}
+chosen_model = {'type': 'log_reg'}
 
 
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
@@ -41,3 +41,6 @@ if chosen_model['type'] == 'MNB':
     print(metrics.classification_report(all_actual, all_preds.round()))
 
     model.submission(test_iter, 'predictions.txt')
+
+if chosen_model['type'] == 'log_reg':
+    print('hello')
