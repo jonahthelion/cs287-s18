@@ -6,6 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from tqdm import tqdm
+from sklearn import metrics
 
 from utils.preprocess import get_data
 from models.psetModels import MNB
@@ -31,9 +32,16 @@ bad_vals, bad_ixes, good_vals, good_ixes = model.find_important_words(k=10)
 print_important(TEXT, bad_vals, bad_ixes, good_vals, good_ixes)
 
 
+all_actual = []
+all_preds = []
+for epoch in range(1):
+    for batch_num,batch in enumerate(train_iter):
+        preds = model(batch.text.data)
+        preds = F.sigmoid(preds)
+        all_actual.append(batch.label.data - 1)
+        all_preds.append(preds)
+all_actual = torch.cat(all_actual).numpy()
+all_preds = torch.cat(all_preds).numpy()
 
-# for epoch in range(1):
-#     for batch_num,batch in enumerate(train_iter):
-#         preds = model(batch.text.data)
-#         preds = F.sigmoid(preds)
-#         print (preds, batch.label.data - 1)
+print(metrics.roc_auc_score(all_actual, all_preds))
+print(metrics.classification_report(all_actual, round(all_preds)))
