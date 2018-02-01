@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from torch.autograd import Variable
 from collections import Counter
 
 class MNB(nn.Module):
@@ -32,5 +33,5 @@ class MNB(nn.Module):
             c = Counter(text[:,phrase_ix].numpy())
             for val in c:
                 word_vecs[phrase_ix, val] += 1
-        return self.w(word_vecs)
+        return self.w(Variable(word_vecs)).data
 
