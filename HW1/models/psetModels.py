@@ -127,7 +127,7 @@ class CBOW(nn.Module):
 
     def train_sample(self, label, text, optimizer):
         optimizer.zero_grad()
-        outs = forward(text)
+        outs = self.forward(text)
         l = F.binary_cross_entropy_with_logits(outs, label)
         l.backward()
         optimizer.step()
