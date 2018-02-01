@@ -78,7 +78,7 @@ if chosen_model['type'] == 'log_reg':
 
     bad_vals,bad_ixes = torch.topk(model.w.weight.data, 10, largest=True)
     good_vals,good_ixes = torch.topk(model.w.weight.data, 10, largest=False)
-    print_important(TEXT, bad_vals, bad_ixes, good_vals, good_ixes)
+    print_important(TEXT, bad_vals.squeeze(), bad_ixes.squeeze(), good_vals.squeeze(), good_ixes.squeeze())
 
 
 
