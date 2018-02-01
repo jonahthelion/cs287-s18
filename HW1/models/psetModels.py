@@ -147,7 +147,7 @@ class CBOW(nn.Module):
         print ('saving to', fname)
         upload = []
         for batch in test_iter:
-            probs = F.sigmoid(self.forward(batch.text.data)) + 1
+            probs = F.sigmoid(self.forward(batch.text)) + 1
             upload.extend(list(probs.data.numpy().round().astype(int).flatten()))
         with open(fname, 'w') as f:
             f.write('Id,Cat\n')
