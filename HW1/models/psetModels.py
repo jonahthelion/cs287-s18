@@ -123,6 +123,7 @@ class CBOW(nn.Module):
 
     def forward(self, text):
         embeds = torch.stack([self.embed(text[:,i]).sum(0) for i in range(text.shape[1])])
+        print(embeds.shape)
         return self.w(embeds).view(-1)
 
     def train_sample(self, label, text, optimizer):
