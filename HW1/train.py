@@ -12,4 +12,4 @@ print (len(test_iter))
 
 for batch_num,batch in enumerate(train_iter):
     for i in range(batch.text.shape[1]):
-        print (str(batch.label.data[i]) + " ".join([TEXT.vocab.itos[ix] for ix in batch.text.data[:,i]]))
+        print (str(batch.label.data[i]) + "  " + " ".join([TEXT.vocab.itos[ix] for ix in batch.text.data[:,i]]))
