@@ -28,8 +28,8 @@ class MNB(nn.Module):
         self.w.bias.data = torch.Tensor([self.label_counts[1] / self.label_counts[0]]).log()
 
     def find_important_words(self, k):
-        bad_vals, bad_ixes = torch.topk(self.w.weight, k, 0, largest=True)
-        good_vals, good_ixes = torch.topk(self.w.weight, k, 0, largest=False)
+        bad_vals, bad_ixes = torch.topk(self.w.weight, k, largest=True)
+        good_vals, good_ixes = torch.topk(self.w.weight, k, largest=False)
         return bad_vals, bad_ixes, good_vals, good_ixes
 
     def forward(self, text):
