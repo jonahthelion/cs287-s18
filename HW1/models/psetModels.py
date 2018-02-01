@@ -205,9 +205,9 @@ class Conv(nn.Module):
     def forward(self, text):
         if text.shape[1] == 1:
             text = torch.stack([text[:,0], torch.zeros(text.shape[0]).long()], dim=1)
-            embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])[0].unsqueeze(0)
+            embeds = torch.stack([self.embed(text[:,i]) for i in range(text.shape[1])])[0].unsqueeze(0)
         else:
-            embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
+            embeds = torch.stack([self.embed(text[:,i]) for i in range(text.shape[1])])
 
         return self.w(embeds).view(-1)     
 
