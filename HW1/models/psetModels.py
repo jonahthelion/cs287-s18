@@ -85,7 +85,8 @@ class LogReg(nn.Module):
     def train_sample(self, label, text):
         outs = self.forward(text)
 
-        print(outs.shape, label.shape)
+
+        print(outs, label)
 
 
 
