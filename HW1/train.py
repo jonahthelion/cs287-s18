@@ -102,6 +102,6 @@ if chosen_model['type'] == 'CBOW':
     #     print('saving', str(epoch) + '_' + 'cbow.p')
     #     torch.save(model, str(epoch) + '_' + 'cbow.p')
     model.eval()
-    model.evalu_loss(train_iter)
+    model.evalu(train_iter)
 
 
