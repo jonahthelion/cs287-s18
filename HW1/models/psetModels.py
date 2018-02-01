@@ -118,8 +118,12 @@ class CBOW(nn.Module):
         self.embed = nn.Embedding(V, 300)
         self.embed.weight.data = embed
 
-        self.w = nn.Linear(300, 1, bias=False)
-        torch.nn.init.xavier_uniform(self.w.weight.data)
+        self.w = nn.Sequential(
+            nn.Linear(300, 300),
+            nn.ReLU(inplace=True),
+            nn.BatchNorm1d(300),
+            nn.Linear(300, 1, bias=False)
+            )
 
     def forward(self, text):
         embeds = torch.stack([self.embed(text[:,i]).sum(0) for i in range(text.shape[1])])
