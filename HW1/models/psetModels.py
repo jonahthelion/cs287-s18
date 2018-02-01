@@ -89,7 +89,7 @@ class LogReg(nn.Module):
         l.backward()
         optimizer.step()
 
-        print(l)
+        return l
 
 
 

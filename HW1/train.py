@@ -7,15 +7,23 @@ import torch.nn.functional as F
 
 from tqdm import tqdm
 from sklearn import metrics
+import visdom
 
 from utils.preprocess import get_data
 from models.psetModels import MNB, LogReg
 from utils.postprocess import print_important
 
+vis = visdom.Visdom()
+vis.env = 'train'
+vis_windows = {'train_bce': None}
+
+
+
 chosen_model = {'type': 'log_reg'}
 
-
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
+
+
 
 if chosen_model['type'] == 'MNB':
     model = MNB(V=len(TEXT.vocab), alpha=.1)
@@ -51,4 +59,5 @@ if chosen_model['type'] == 'log_reg':
 
     for epoch in range(10):
         for batch_num,batch in enumerate(train_iter):
-            model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
+            l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
+            vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
