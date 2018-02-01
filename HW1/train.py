@@ -19,7 +19,7 @@ vis_windows = {'train_bce': None}
 
 
 
-chosen_model = {'type': 'MNB'}
+chosen_model = {'type': 'log_reg'}
 
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
 
@@ -58,6 +58,7 @@ if chosen_model['type'] == 'MNB':
 
 if chosen_model['type'] == 'log_reg':
     model = LogReg(V=len(TEXT.vocab))
+    model.cuda()
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=5e-4)
 
