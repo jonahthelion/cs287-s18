@@ -3,6 +3,7 @@ import torchtext
 from torchtext.vocab import Vectors, GloVe
 from torch.autograd import Variable
 import torch.nn as nn
+import torch.nn.functional as F
 
 from tqdm import tqdm
 
@@ -24,3 +25,5 @@ model.postprocess()
 for epoch in range(1):
     for batch_num,batch in enumerate(tqdm(train_iter)):
         preds = model(batch.text.data)
+        preds = F.sigmoid(preds)
+        print preds, batch.label.data - 1
