@@ -3,13 +3,14 @@ from torchtext.vocab import Vectors, GloVe
 from torch.autograd import Variable
 
 from utils.preprocess import get_data
+from models.psetModels import MNB
+
+
 
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
 
-print (len(train_iter))
-print (len(val_iter))
-print (len(test_iter))
+
+model = MNB(V=len(TEXT.vocab))
 
 for batch_num,batch in enumerate(train_iter):
-    for i in range(batch.text.shape[1]):
-        print (str(batch.label.data[i]) + "  " + " ".join([TEXT.vocab.itos[ix] for ix in batch.text.data[:,i]]))
+    assert (False)
