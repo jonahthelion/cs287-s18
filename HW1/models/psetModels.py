@@ -143,7 +143,16 @@ class CBOW(nn.Module):
         l = F.binary_cross_entropy_with_logits(outs, label)
         return l
 
-
+    def submission(self, test_iter, fname):
+        print ('saving to', fname)
+        upload = []
+        for batch in test_iter:
+            probs = F.sigmoid(self.forward(batch.text.data)) + 1
+            upload.extend(list(probs.data.numpy().round().astype(int).flatten()))
+        with open(fname, 'w') as f:
+            f.write('Id,Cat\n')
+            for u_ix,u in enumerate(upload):
+                f.write(str(u_ix) + ',' + str(u) + '\n')
 
 
 
