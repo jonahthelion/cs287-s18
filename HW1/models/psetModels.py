@@ -72,7 +72,7 @@ class LogReg(nn.Module):
         super(LogReg, self).__init__()
 
         self.V = V
-        
+
         self.w = nn.Linear(V, 1)
         torch.nn.init.xavier_uniform(self.w.weight.data)
         torch.nn.init.constant(self.w.bias.data, 0.0)
@@ -99,7 +99,16 @@ class LogReg(nn.Module):
         l = F.binary_cross_entropy_with_logits(outs, label)
         return l
 
-
+    def submission(self, test_iter, fname):
+        print ('saving to', fname)
+        upload = []
+        for batch in test_iter:
+            probs = F.sigmoid(self.forward(batch.text)) + 1
+            upload.extend(list(probs.numpy().round().astype(int).flatten()))
+        with open(fname, 'w') as f:
+            f.write('Id,Cat\n')
+            for u_ix,u in enumerate(upload):
+                f.write(str(u_ix) + ',' + str(u) + '\n')
 
 
 

@@ -57,28 +57,27 @@ if chosen_model['type'] == 'MNB':
 
 
 if chosen_model['type'] == 'log_reg':
-    print('working')
-    model = torch.load('10_logreg.p')
-    # model = LogReg(V=len(TEXT.vocab))
+    model = LogReg(V=len(TEXT.vocab))
 
-    # optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
 
-    # for epoch in range(20):
-    #     for batch_num,batch in enumerate(train_iter):
-    #         l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
-    #         if batch_num % 100 != 0 and batch_num % 20 == 0:
-    #             vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
-    #         else:
-    #             lvals = []
-    #             for batch in val_iter:
-    #                 lvals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
-    #             vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), sum(lvals)/float(len(lvals)))
-    #     print('saving', str(epoch) + '_' + 'logreg.p')
-    #     torch.save(model, str(epoch) + '_' + 'logreg.p')
+    for epoch in range(10):
+        for batch_num,batch in enumerate(train_iter):
+            l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
+            if batch_num % 100 != 0 and batch_num % 40 == 0:
+                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+            else:
+                lvals = []
+                for batch in val_iter:
+                    lvals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
+                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), sum(lvals)/float(len(lvals)))
+        print('saving', str(epoch) + '_' + 'logreg.p')
+        torch.save(model, str(epoch) + '_' + 'logreg.p')
 
-    bad_vals,bad_ixes = torch.topk(model.w.weight.data, 10, largest=True)
-    good_vals,good_ixes = torch.topk(model.w.weight.data, 10, largest=False)
-    print_important(TEXT, bad_vals.squeeze(), bad_ixes.squeeze(), good_vals.squeeze(), good_ixes.squeeze())
+        bad_vals,bad_ixes = torch.topk(model.w.weight.data, 10, largest=True)
+        good_vals,good_ixes = torch.topk(model.w.weight.data, 10, largest=False)
+        print_important(TEXT, bad_vals.squeeze(), bad_ixes.squeeze(), good_vals.squeeze(), good_ixes.squeeze())
 
+    model.submission(test_iter, 'predictions2.txt')
 
 
