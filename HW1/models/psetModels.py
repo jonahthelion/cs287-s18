@@ -33,5 +33,6 @@ class MNB(nn.Module):
             c = Counter(text[:,phrase_ix].numpy())
             for val in c:
                 word_vecs[phrase_ix, val] += 1
+        print ('thing', word_vecs.shape)
         return self.w(Variable(word_vecs)).data
 
