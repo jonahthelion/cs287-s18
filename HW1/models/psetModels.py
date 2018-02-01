@@ -121,6 +121,9 @@ class CBOW(nn.Module):
         self.w = nn.Linear(V, 1, bias=False)
         torch.nn.init.xavier_uniform(self.w.weight.data)
 
+    def forward(self, text):
+        embeds = torch.stack([self.embed(text[:,i]).sum(0) for i in range(text.shape[1])])
+        return self.w(embeds).view(-1)
 
     def train_sample(self, label, text, optimizer):
         optimizer.zero_grad()
