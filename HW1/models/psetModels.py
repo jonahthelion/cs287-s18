@@ -199,7 +199,7 @@ class Conv(nn.Module):
             nn.BatchNorm1d(100),
             nn.ReLU(inplace=True),
 
-            nn.Conv1d(100, 1),
+            nn.Conv1d(100, 1, 1),
             )
 
     def forward(self, text):
