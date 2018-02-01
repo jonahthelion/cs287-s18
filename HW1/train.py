@@ -91,5 +91,13 @@ if chosen_model['type'] == 'CBOW':
     for epoch in range(10):
         for batch_num,batch in enumerate(train_iter):
             l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
-
+            if batch_num % 100 != 0 and batch_num % 40 == 0:
+                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+            else:
+                lvals = []
+                for batch in val_iter:
+                    lvals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
+                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), sum(lvals)/float(len(lvals)))
+        print('saving', str(epoch) + '_' + 'cbow.p')
+        torch.save(model, str(epoch) + '_' + 'cbow.p')
 
