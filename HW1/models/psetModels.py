@@ -59,7 +59,7 @@ class MNB(nn.Module):
         print ('saving to', fname)
         upload = []
         for batch in test_iter:
-            probs = F.sigmoid(self.forward(batch.text.data))
+            probs = F.sigmoid(self.forward(batch.text.data)) + 1
             upload.extend(list(probs.numpy().round().astype(int).flatten()))
         print (upload)
         with open(fname, 'w') as f:
