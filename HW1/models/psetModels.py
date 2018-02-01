@@ -62,7 +62,7 @@ class MNB(nn.Module):
             print (batch)
             probs = self.forward(batch.text.data)
             upload.extend(list(probs.numpy().round()))
-        print upload
+        print (upload)
         with open(fname, 'w') as f:
             for u in upload:
                 f.write(str(u) + '\n')
