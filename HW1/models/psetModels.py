@@ -195,11 +195,11 @@ class Conv(nn.Module):
 
             nn.AdaptiveMaxPool1d(3),
 
-            nn.Conv1d(300, 100, 3),
-            nn.BatchNorm1d(100),
+            nn.Conv1d(500, 300, 3),
+            nn.BatchNorm1d(300),
             nn.ReLU(inplace=True),
 
-            nn.Conv1d(100, 1, 1),
+            nn.Conv1d(300, 1, 1),
             )
 
     def forward(self, text):
