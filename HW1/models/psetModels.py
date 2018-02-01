@@ -72,7 +72,10 @@ class LogReg(nn.Module):
         super(LogReg, self).__init__()
 
         self.V = V
+        
         self.w = nn.Linear(V, 1)
+        torch.nn.init.xavier_uniform(self.w.weight.data)
+        torch.nn.init.constant(self.w.bias.data, 0.0)
 
     def forward(self, text):
         word_vecs = torch.zeros(text.shape[1], self.V)

@@ -19,7 +19,7 @@ vis_windows = {'train_bce': None}
 
 
 
-chosen_model = {'type': 'log_reg'}
+chosen_model = {'type': 'MNB'}
 
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
 
@@ -43,6 +43,8 @@ if chosen_model['type'] == 'MNB':
     all_actual, all_preds = model.evalu(val_iter)
     print(metrics.roc_auc_score(all_actual, all_preds))
     print(metrics.classification_report(all_actual, all_preds.round()))
+
+    print('BCE LOSS', F.binary_cross_entropy( torch.from_numpy(all_preds).float() , torch.from_numpy(all_actual).float()))
 
     all_actual, all_preds = model.evalu(test_iter)
     print(metrics.roc_auc_score(all_actual, all_preds))
