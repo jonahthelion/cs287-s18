@@ -10,7 +10,7 @@ from sklearn import metrics
 import visdom
 
 from utils.preprocess import get_data
-from models.psetModels import MNB, LogReg
+from models.psetModels import MNB, LogReg, CBOW
 from utils.postprocess import print_important, vis_display
 
 vis = visdom.Visdom()
@@ -19,7 +19,7 @@ vis_windows = {'train_bce': None}
 
 
 
-chosen_model = {'type': 'log_reg'}
+chosen_model = {'type': 'CBOW'}
 
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
 
@@ -80,5 +80,11 @@ if chosen_model['type'] == 'log_reg':
     #     print_important(TEXT, bad_vals.squeeze(), bad_ixes.squeeze(), good_vals.squeeze(), good_ixes.squeeze())
 
     model.submission(test_iter, 'predictions2.txt')
+
+
+
+if chosen_model['type'] == 'CBOW':
+    model = CBOW(V=len(TEXT.vocab))
+
 
 

@@ -110,8 +110,11 @@ class LogReg(nn.Module):
             for u_ix,u in enumerate(upload):
                 f.write(str(u_ix) + ',' + str(u) + '\n')
 
+class CBOW(nn.Module):
+    def __init__(self, V):
+        super(CBOW, self).__init__()
 
-
+        self.V = V
 
 
 
