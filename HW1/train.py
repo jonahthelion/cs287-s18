@@ -44,7 +44,7 @@ if chosen_model['type'] == 'MNB':
     print(metrics.roc_auc_score(all_actual, all_preds))
     print(metrics.classification_report(all_actual, all_preds.round()))
 
-    print('BCE LOSS', F.binary_cross_entropy( torch.from_numpy(all_preds).float() , torch.from_numpy(all_actual).float()))
+    print('BCE LOSS', F.binary_cross_entropy( Variable(torch.from_numpy(all_preds).float()) , torch.from_numpy(all_actual).float()))
 
     all_actual, all_preds = model.evalu(test_iter)
     print(metrics.roc_auc_score(all_actual, all_preds))
