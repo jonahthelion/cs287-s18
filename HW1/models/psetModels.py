@@ -25,7 +25,7 @@ class MNB(nn.Module):
     def postprocess(self):
         self.w = nn.Linear(self.V, 1)
         print ('W', self.w.weight.shape)
-        self.w.weight.data = ( (self.w_counts[1] / self.w_counts[1].sum()) / (self.w_counts[0] / self.w_counts[0].sum()) ).log() 
+        self.w.weight.data = ( (self.w_counts[1] / self.w_counts[1].sum()) / (self.w_counts[0] / self.w_counts[0].sum()) ).log().view(1, -1) 
         print ('W', self.w.weight.shape)
         print ('b', self.w.bias.shape)
         self.w.bias.data = torch.Tensor([self.label_counts[1] / self.label_counts[0]]).log()
