@@ -64,7 +64,6 @@ if chosen_model['type'] == 'log_reg':
                 vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
             else:
                 lvals = []
-                print(lvals)
                 for batch in val_iter:
-                    l_vals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
-                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), np.mean(l_vals))
+                    lvals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
+                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), np.mean(lvals))
