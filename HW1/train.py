@@ -101,6 +101,6 @@ if chosen_model['type'] == 'CBOW':
     #             vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), sum(lvals)/float(len(lvals)))
     #     print('saving', str(epoch) + '_' + 'cbow.p')
     #     torch.save(model, str(epoch) + '_' + 'cbow.p')
-
+    model.eval()
     model.submission(test_iter, 'predictions3.txt')
 
