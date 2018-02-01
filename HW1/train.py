@@ -50,6 +50,8 @@ if chosen_model['type'] == 'MNB':
     print(metrics.roc_auc_score(all_actual, all_preds))
     print(metrics.classification_report(all_actual, all_preds.round()))
 
+    print('BCE LOSS', F.binary_cross_entropy( Variable(torch.from_numpy(all_preds).float()).view(-1) , Variable(torch.from_numpy(all_actual).float())))
+
     model.submission(test_iter, 'predictions.txt')
 
 
