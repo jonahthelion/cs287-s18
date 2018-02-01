@@ -189,9 +189,9 @@ class Conv(nn.Module):
             nn.BatchNorm1d(300),
             nn.ReLU(inplace=True),
 
-            nn.Conv1d(in_channels=300, out_channels=300, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm1d(300),
-            nn.ReLU(inplace=True),
+            # nn.Conv1d(in_channels=300, out_channels=300, kernel_size=3, stride=1, padding=1),
+            # nn.BatchNorm1d(300),
+            # nn.ReLU(inplace=True),
 
             nn.AdaptiveMaxPool1d(3),
 
