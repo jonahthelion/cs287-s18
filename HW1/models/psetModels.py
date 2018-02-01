@@ -55,5 +55,14 @@ class MNB(nn.Module):
 
         return all_actual, all_preds
 
+    def submission(self, test_iter, fname):
+        upload = []
+        for batch in test_iter:
+            probs = self.forward(batch.text.data)
+            upload.extend(list(probs.numpy().round()))
+        with open(fname, 'w') as f:
+            for u in upload:
+                f.write(str(u) + '\n')
+
 
 
