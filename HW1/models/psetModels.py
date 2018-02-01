@@ -26,4 +26,11 @@ class MNB(nn.Module):
         self.w.weight.data = ( (self.w_counts[1] / self.w_counts[1].sum()) / (self.w_counts[0] / self.w_counts[0].sum()) ).log() 
         self.w.bias.data = torch.Tensor([self.label_counts[1] / self.label_counts[0]]).log()
 
+    def forward(self, text):
+        word_vecs = torch.zeros(text.shape[1], self.V)
+        for phrase_ix in range(text.shape[1]):
+            c = Counter(text[:,phrase_ix].numpy())
+            for val in c:
+                word_vecs[phrase_ix, val] += 1
+        return self.w(word_vecs)
 

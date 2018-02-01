@@ -20,3 +20,7 @@ for epoch in range(1):
     for batch_num,batch in enumerate(tqdm(train_iter)):
         model.train_sample(batch.label.data - 1, batch.text.data)
 model.postprocess()
+
+for epoch in range(1):
+    for batch_num,batch in enumerate(tqdm(train_iter)):
+        preds = model(batch.text.data)
