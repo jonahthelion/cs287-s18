@@ -84,7 +84,11 @@ if chosen_model['type'] == 'log_reg':
 
 
 if chosen_model['type'] == 'CBOW':
-    model = CBOW(V=len(TEXT.vocab))
-
+    url = 'https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.simple.vec'
+    model = CBOW(V=len(TEXT.vocab), embed=Vectors('wiki.simple.vec', url=url))
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
+    for epoch in range(10):
+        for batch_num,batch in enumerate(train_iter):
+            l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
 
 

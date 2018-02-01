@@ -111,12 +111,25 @@ class LogReg(nn.Module):
                 f.write(str(u_ix) + ',' + str(u) + '\n')
 
 class CBOW(nn.Module):
-    def __init__(self, V):
+    def __init__(self, V, embed):
         super(CBOW, self).__init__()
 
         self.V = V
+        self.embed = nn.Embedding(V, 300)
+        self.embed.weight.data = embed
+
+        self.w = nn.Linear(V, 1, bias=False)
+        torch.nn.init.xavier_uniform(self.w.weight.data)
 
 
+    def train_sample(self, label, text, optimizer):
+        optimizer.zero_grad()
+        outs = forward(text)
+        l = F.binary_cross_entropy_with_logits(outs, label)
+        l.backward()
+        optimizer.step()
+
+        return l
 
 
 
