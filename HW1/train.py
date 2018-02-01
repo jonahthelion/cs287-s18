@@ -58,7 +58,7 @@ if chosen_model['type'] == 'MNB':
 
 if chosen_model['type'] == 'log_reg':
     model = LogReg(V=len(TEXT.vocab))
-    model.cuda()
+    model.cuda(0)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=5e-4)
 
