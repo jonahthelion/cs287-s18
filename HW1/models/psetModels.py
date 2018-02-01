@@ -7,5 +7,11 @@ class MNB(nn.Module):
 
         self.V = V
 
-        self.w_pos = nn.Embedding(V , 1 )
-        self.w_neg = nn.Embedding(V , 1 )
+        # initialize counts
+        self.w_pos = torch.zeros(V)
+        self.w_neg = torch.zeros(V)
+
+    def train_sample(label, text):
+        large_label = label.view(1, -1) * Variable(torch.ones(text.shape[0], 1).long())
+
+
