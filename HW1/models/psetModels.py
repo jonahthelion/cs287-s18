@@ -59,7 +59,7 @@ class MNB(nn.Module):
         print ('saving to', fname)
         upload = []
         for batch in test_iter:
-            print batch
+            print (batch)
             probs = self.forward(batch.text.data)
             upload.extend(list(probs.numpy().round()))
         print upload
