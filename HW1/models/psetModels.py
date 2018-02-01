@@ -45,7 +45,7 @@ class MNB(nn.Module):
         all_preds = []
         for epoch in range(1):
             for batch_num,batch in enumerate(train_iter):
-                preds = model(batch.text.data)
+                preds = self.forward(batch.text.data)
                 preds = F.sigmoid(preds)
                 all_actual.append(batch.label.data - 1)
                 all_preds.append(preds)
