@@ -127,6 +127,7 @@ class CBOW(nn.Module):
 
     def forward(self, text):
         if text.shape[1] == 1:
+            print([text[:,0], torch.zeros(text.shape[0])])
             text = torch.stack([text[:,0], torch.zeros(text.shape[0])], dim=1)
         embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
         print(self.w(embeds).view(-1).shape)
