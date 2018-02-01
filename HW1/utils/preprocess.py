@@ -15,8 +15,6 @@ def get_data(batch_size):
     LABEL.build_vocab(train)
 
     train_iter, val_iter, test_iter = torchtext.data.BucketIterator.splits(
-        (train, val, test), batch_size=batch_size, device=-1, repeat=False)
-
-    test_iter = torchtext.data.BucketIterator(test, train=False, batch_size=10)
+        (train, val, test), batch_size=(batch_size,batch_size,10), device=-1, repeat=False)
 
     return TEXT, LABEL, train_iter, val_iter, test_iter
