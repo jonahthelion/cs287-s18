@@ -14,3 +14,4 @@ def vis_display(vis, vis_windows, train_l, x_coord):
         vis_windows['train_bce'] = vis.line(Y=torch.Tensor([float(train_l)]) , X=torch.Tensor([x_coord]))
     else:
         vis.line(Y=torch.Tensor([float(train_l)]) , X=torch.Tensor([x_coord]), win=vis_windows['train_bce'], update='append')
+    return vis_windows
