@@ -61,7 +61,6 @@ class MNB(nn.Module):
         for batch in test_iter:
             probs = F.sigmoid(self.forward(batch.text.data)) + 1
             upload.extend(list(probs.numpy().round().astype(int).flatten()))
-        print (upload)
         with open(fname, 'w') as f:
             f.write('Id,Cat\n')
             for u_ix,u in enumerate(upload):
