@@ -11,7 +11,7 @@ class MNB(nn.Module):
         # initialize counts
         self.w_counts = [torch.zeros(V), torch.zeros(V)]
 
-    def train_sample(label, text):
+    def train_sample(self, label, text):
         large_label = label.view(1, -1) * torch.ones(text.shape[0], 1).long()
 
         for lab in [0,1]:
