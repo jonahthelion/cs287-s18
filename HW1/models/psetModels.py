@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.autograd import Variable
 from collections import Counter
-import nn.functional as F
+import torch.nn.functional as F
 
 class MNB(nn.Module):
     def __init__(self, V, alpha):
