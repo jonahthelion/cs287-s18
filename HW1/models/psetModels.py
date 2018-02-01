@@ -67,4 +67,38 @@ class MNB(nn.Module):
                 f.write(str(u_ix) + ',' + str(u) + '\n')
 
 
+class LogReg(nn.Module):
+    def __init__(self, V):
+        super(LogReg, self).__init__()
+
+        self.V = V
+        self.w = nn.Linear(V, 1)
+
+    def forward(self, text):
+        word_vecs = Variable(torch.zeros(text.shape[1], self.V))
+        for phrase_ix in range(text.shape[1]):
+            c = Counter(text[:,phrase_ix].numpy())
+            for val in c:
+                word_vecs[phrase_ix, val] += 1
+        return self.w(word_vecs)  
+
+    def train_sample(self, label, text):
+        outs = self.forward(text)
+
+        print(outs.shape, label.shape)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

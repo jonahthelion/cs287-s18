@@ -9,7 +9,7 @@ from tqdm import tqdm
 from sklearn import metrics
 
 from utils.preprocess import get_data
-from models.psetModels import MNB
+from models.psetModels import MNB, LogReg
 from utils.postprocess import print_important
 
 chosen_model = {'type': 'log_reg'}
@@ -42,5 +42,11 @@ if chosen_model['type'] == 'MNB':
 
     model.submission(test_iter, 'predictions.txt')
 
+
+
 if chosen_model['type'] == 'log_reg':
-    print('hello')
+    model = LogReg(V=len(TEXT.vocab))
+
+    for epoch in range(1):
+        for batch_num,batch in enumerate(tqdm(train_iter)):
+            model.train_sample(batch.label.float() - 1, batch.text.data)
