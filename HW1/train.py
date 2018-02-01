@@ -15,5 +15,7 @@ TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
 
 model = MNB(V=len(TEXT.vocab))
 
-for batch_num,batch in tqdm(enumerate(train_iter)):
-    model.train_sample(batch.label.data - 1, batch.text.data)
+for epoch in range(1):
+    for batch_num,batch in tqdm(train_iter):
+        print batch_num
+        model.train_sample(batch.label.data - 1, batch.text.data)
