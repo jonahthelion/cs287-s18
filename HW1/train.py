@@ -59,7 +59,7 @@ if chosen_model['type'] == 'MNB':
 if chosen_model['type'] == 'log_reg':
     model = LogReg(V=len(TEXT.vocab))
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=5e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
 
     for epoch in range(20):
         for batch_num,batch in enumerate(train_iter):
