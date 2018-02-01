@@ -126,7 +126,6 @@ class CBOW(nn.Module):
             )
 
     def forward(self, text):
-        print([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
         embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
         return self.w(embeds).view(-1)
 
@@ -148,6 +147,7 @@ class CBOW(nn.Module):
         print ('saving to', fname)
         upload = []
         for batch in test_iter:
+            print (batch.text.data.shape)
             probs = F.sigmoid(self.forward(batch.text.data)) + 1
             upload.extend(list(probs.data.numpy().round().astype(int).flatten()))
         with open(fname, 'w') as f:
