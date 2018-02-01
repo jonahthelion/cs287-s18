@@ -82,9 +82,12 @@ class LogReg(nn.Module):
                 word_vecs[phrase_ix, val] += 1
         return self.w(Variable(word_vecs)).view(-1)  
 
-    def train_sample(self, label, text):
+    def train_sample(self, label, text, optimizer):
+        optimizer.zero_grad()
         outs = self.forward(text)
         l = F.binary_cross_entropy_with_logits(outs, label)
+        l.backward()
+        optimizer.step()
 
         print(l)
 
