@@ -176,6 +176,41 @@ class CBOW(nn.Module):
         return all_actual, all_preds
 
 
+class Conv(nn.Module):
+    def __init__(self, V, embed):
+        super(Conv, self).__init__()
+
+        self.V = V
+        self.embed = nn.Embedding(V, 300)
+        self.embed.weight.data = embed
+
+        self.w = nn.Sequential(
+            nn.Conv1d(300, 300, 3, 2, 1),
+            nn.BatchNorm1d(300),
+            nn.ReLU(inplace=True),
+
+            nn.Conv1d(300, 200, 3, 2, 1),
+            nn.BatchNorm1d(300),
+            nn.ReLU(inplace=True),
+
+            nn.AdaptiveMaxPool1d(3),
+
+            nn.Conv1d(200, 100, 3),
+            nn.BatchNorm1d(100),
+            nn.ReLU(inplace=True),
+
+            nn.Conv1d(100, 1),
+            )
+
+    def forward(self, text):
+        if text.shape[1] == 1:
+            text = torch.stack([text[:,0], torch.zeros(text.shape[0]).long()], dim=1)
+            embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])[0].unsqueeze(0)
+        else:
+            embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
+
+        return self.w(embeds).view(-1)     
+
 
 
 

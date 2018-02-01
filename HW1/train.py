@@ -10,7 +10,7 @@ from sklearn import metrics
 import visdom
 
 from utils.preprocess import get_data
-from models.psetModels import MNB, LogReg, CBOW
+from models.psetModels import MNB, LogReg, CBOW, Conv
 from utils.postprocess import print_important, vis_display
 
 vis = visdom.Visdom()
@@ -19,9 +19,9 @@ vis_windows = {'train_bce': None}
 
 
 
-chosen_model = {'type': 'CBOW'}
+chosen_model = {'type': 'conv'}
 
-TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=10)
+TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
 url = 'https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.simple.vec'
 TEXT.vocab.load_vectors(vectors=Vectors('wiki.simple.vec', url=url))
 
@@ -102,6 +102,20 @@ if chosen_model['type'] == 'CBOW':
     #     print('saving', str(epoch) + '_' + 'cbow.p')
     #     torch.save(model, str(epoch) + '_' + 'cbow.p')
     model.eval()
-    model.evalu(train_iter)
+    model.evalu(test_iter)
+
+
+if chosen_model['type'] == 'conv':
+    model = Conv(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=5e-4)
+    model.train()
+    for epoch in range(5):
+        for batch_num,batch in enumerate(train_iter):
+            preds = model(batch.text.data)
+            assert False
+
+
+
+
 
 
