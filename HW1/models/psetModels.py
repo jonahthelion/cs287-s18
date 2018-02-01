@@ -135,7 +135,7 @@ class CBOW(nn.Module):
         return l
 
     def evalu_loss(self, label, text):
-        outs = forward(text)
+        outs = self.forward(text)
         l = F.binary_cross_entropy_with_logits(outs, label)
         return l
 
