@@ -40,3 +40,7 @@ print(metrics.classification_report(all_actual, all_preds.round()))
 all_actual, all_preds = model.evalu(val_iter)
 print(metrics.roc_auc_score(all_actual, all_preds))
 print(metrics.classification_report(all_actual, all_preds.round()))
+
+all_actual, all_preds = model.evalu(test_iter)
+print(metrics.roc_auc_score(all_actual, all_preds))
+print(metrics.classification_report(all_actual, all_preds.round()))
