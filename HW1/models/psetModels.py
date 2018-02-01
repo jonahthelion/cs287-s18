@@ -209,7 +209,12 @@ class Conv(nn.Module):
         else:
             embeds = torch.stack([torch.t(self.embed(text[:,i])) for i in range(text.shape[1])])
 
-        return self.w(embeds).view(-1)     
+        return self.w(embeds).view(-1)    
+
+    def evalu_loss(self, label, text):
+        outs = self.forward(text)
+        l = F.binary_cross_entropy_with_logits(outs, label)
+        return l
 
 
 

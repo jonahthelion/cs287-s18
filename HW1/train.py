@@ -111,8 +111,21 @@ if chosen_model['type'] == 'conv':
     model.train()
     for epoch in range(5):
         for batch_num,batch in enumerate(train_iter):
-            preds = model(batch.text.data)
-            assert False
+            optimizer.zero_grad()
+            outs = model(batch.text.data)
+            l = F.binary_cross_entropy_with_logits(outs, batch.label.float() - 1)
+            l.backward()
+            optimizer.step()
+
+            if batch_num % 100 != 0 and batch_num % 40 == 0:
+                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+            else:
+                lvals = []
+                for batch in val_iter:
+                    lvals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
+                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), sum(lvals)/float(len(lvals)))
+        print('saving', str(epoch) + '_' + 'conv.p')
+        torch.save(model, str(epoch) + '_' + 'conv.p')
 
 
 
