@@ -72,4 +72,4 @@ if chosen_model['type'] == 'log_reg':
                     lvals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
                 vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), sum(lvals)/float(len(lvals)))
         print('saving', str(epoch) + '_' + 'logreg.p')
-        torch.save(str(epoch) + '_' + 'logreg.p', model)
+        torch.save(model, str(epoch) + '_' + 'logreg.p')
