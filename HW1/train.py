@@ -11,7 +11,7 @@ import visdom
 
 from utils.preprocess import get_data
 from models.psetModels import MNB, LogReg
-from utils.postprocess import print_important
+from utils.postprocess import print_important, vis_display
 
 vis = visdom.Visdom()
 vis.env = 'train'
