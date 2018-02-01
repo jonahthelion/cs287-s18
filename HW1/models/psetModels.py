@@ -118,7 +118,7 @@ class CBOW(nn.Module):
         self.embed = nn.Embedding(V, 300)
         self.embed.weight.data = embed
 
-        self.w = nn.Linear(V, 1, bias=False)
+        self.w = nn.Linear(300, 1, bias=False)
         torch.nn.init.xavier_uniform(self.w.weight.data)
 
     def forward(self, text):
