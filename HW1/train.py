@@ -127,7 +127,7 @@ if chosen_model['type'] == 'conv':
         print('saving', str(epoch) + '_' + 'conv.p')
         torch.save(model, str(epoch) + '_' + 'conv.p')
 
-
+        model.evalu(test_iter)
 
 
 
