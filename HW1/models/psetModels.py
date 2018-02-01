@@ -126,10 +126,8 @@ class CBOW(nn.Module):
             )
 
     def forward(self, text):
-        if text.shape[1] > 1:
-            embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
-        else:
-            print([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
+        print([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
+        embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
         return self.w(embeds).view(-1)
 
     def train_sample(self, label, text, optimizer):
