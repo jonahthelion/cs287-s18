@@ -40,3 +40,19 @@ class MNB(nn.Module):
                 word_vecs[phrase_ix, val] += 1
         return self.w(Variable(word_vecs)).data
 
+    def evalu(self, train_iter):
+        all_actual = []
+        all_preds = []
+        for epoch in range(1):
+            for batch_num,batch in enumerate(train_iter):
+                preds = model(batch.text.data)
+                preds = F.sigmoid(preds)
+                all_actual.append(batch.label.data - 1)
+                all_preds.append(preds)
+        all_actual = torch.cat(all_actual).numpy()
+        all_preds = torch.cat(all_preds).numpy()
+
+        return all_actual, all_preds
+
+
+
