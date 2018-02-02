@@ -26,7 +26,7 @@ vis.env = 'train'
 vis_windows = None
 
 # define model
-chosen_model = {'type': 'MNB', 'alpha':np.linspace(.05, 3, 20)}
+chosen_model = {'type': 'MNB', 'alpha':np.linspace(.01, 10, 40)}
 
 # get data
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
