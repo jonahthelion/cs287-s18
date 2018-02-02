@@ -27,7 +27,7 @@ def evaluate_model(model, val_iter):
     all_actual, all_preds = [],[]
 
     for batch in val_iter:
-        all_preds.append(model(batch.text.data))
+        all_preds.append(model(batch.text.data).squeeze(0))
         all_actual.append(batch.label.data - 1)
 
     all_actual = Variable(torch.cat(all_actual).cuda())
