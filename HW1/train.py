@@ -35,7 +35,7 @@ TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
 if chosen_model['type'] == 'MNB':
     all_scores = []
     for alpha in chosen_model['alpha']:
-        model = MNB(V=len(TEXT.vocab), alpha=.1, chosen_model['counts'])
+        model = MNB(V=len(TEXT.vocab), alpha=.1, counts=chosen_model['counts'])
 
         for batch_num,batch in enumerate(tqdm(train_iter)):
             model.train_sample(batch.label.data - 1, batch.text.data)
