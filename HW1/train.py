@@ -102,7 +102,7 @@ if chosen_model['type'] == 'log_reg':
 if chosen_model['type'] == 'CBOW':
     model = CBOW(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
     model.cuda()
-    optimizer = torch.optim.Adam(model.w.parameters(), lr=0.00001, weight_decay=5e-4)
+    optimizer = torch.optim.Adam(model.w.parameters(), lr=0.00001)
     for epoch in range(500):
         for batch_num,batch in enumerate(train_iter):
             model.train()
