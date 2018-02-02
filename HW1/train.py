@@ -32,7 +32,8 @@ if chosen_model['type'] == 'MNB':
         model.train_sample(batch.label.data - 1, batch.text.data)
     model.postprocess()
     # print_important(model.w.weight.data.cpu().squeeze(0), TEXT, 15)
-    evaluate_model(model, val_iter)
+    bce, roc, acc = evaluate_model(model, val_iter)
+    print(bce, roc, acc)
 
     # bad_vals, bad_ixes, good_vals, good_ixes = model.find_important_words(k=10)
     # print_important(TEXT, bad_vals, bad_ixes, good_vals, good_ixes)

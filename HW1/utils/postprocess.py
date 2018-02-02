@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 from torch.autograd import Variable
+from sklearn import metrics
 
 def print_important(w, TEXT, k):
     bad_vals, bad_ixes = torch.topk(w, k, largest=True)
@@ -36,8 +37,10 @@ def evaluate_model(model, val_iter):
     # binary cross entropy loss
     bce_l = F.binary_cross_entropy_with_logits(all_preds, all_actual.float())
 
-    # accuracy
+    # accuracy and roc_auc
     all_preds = F.sigmoid(all_preds).data.cpu().numpy()
     all_actual = all_actual.data.cpu().numpy()
+    roc_auc = metrics.roc_auc_score(all_actual, all_preds)
+    acc = metrics.accuracy_score(all_actual, all_preds)
 
-    print(all_preds.shape, all_actual.shape)
+    return bce_l.data.cpu().numpy()[0], roc_auc, acc
