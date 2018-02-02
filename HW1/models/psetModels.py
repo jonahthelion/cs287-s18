@@ -119,7 +119,11 @@ class Conv(nn.Module):
             nn.ReLU(inplace=True),
             nn.AdaptiveMaxPool1d(1))
 
-        self.w = nn.Conv1d(300, 1, 1, 1, 0)
+
+        self.w = nn.Sequential(
+            nn.Droupout(.5),
+            nn.Conv1d(300, 1, 1, 1, 0),
+            )
 
 
     def forward(self, text):
