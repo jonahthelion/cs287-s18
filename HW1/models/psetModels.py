@@ -109,20 +109,20 @@ class Conv(nn.Module):
             nn.ReLU(inplace=True),
             nn.AdaptiveMaxPool1d(1))
         self.w4 = nn.Sequential(
-            nn.Conv1d(in_channels=300, out_channels=50, kernel_size=4, stride=1, padding=1),
-            nn.BatchNorm1d(50),
+            nn.Conv1d(in_channels=300, out_channels=25, kernel_size=4, stride=1, padding=1),
+            nn.BatchNorm1d(25),
             nn.ReLU(inplace=True),
             nn.AdaptiveMaxPool1d(1))
         self.w5 = nn.Sequential(
-            nn.Conv1d(in_channels=300, out_channels=50, kernel_size=5, stride=1, padding=1),
-            nn.BatchNorm1d(50),
+            nn.Conv1d(in_channels=300, out_channels=25, kernel_size=5, stride=1, padding=1),
+            nn.BatchNorm1d(25),
             nn.ReLU(inplace=True),
             nn.AdaptiveMaxPool1d(1))
 
 
         self.w = nn.Sequential(
             nn.Dropout(.6),
-            nn.Conv1d(150, 1, 1, 1, 0),
+            nn.Conv1d(100, 1, 1, 1, 0),
             )
 
 
