@@ -79,12 +79,12 @@ class CBOW(nn.Module):
 
         self.w = nn.Sequential(
             nn.Linear(300, 300),
-            nn.ReLU(inplace=True),
             nn.BatchNorm1d(300),
+            nn.ReLU(inplace=True),
 
             nn.Linear(300, 300),
-            nn.ReLU(inplace=True),
             nn.BatchNorm1d(300),
+            nn.ReLU(inplace=True),
 
             nn.Linear(300, 1),
             )
