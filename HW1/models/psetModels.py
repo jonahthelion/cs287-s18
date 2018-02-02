@@ -103,20 +103,30 @@ class Conv(nn.Module):
         self.embed = nn.Embedding(V, 300)
         self.embed.weight.data = embed
 
-        self.w = nn.Sequential(
-            nn.Conv1d(in_channels=300, out_channels=300, kernel_size=4, stride=2, padding=1),
+        self.w3 = nn.Sequential(
+            nn.Conv1d(in_channels=300, out_channels=100, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm1d(100),
+            nn.ReLU(inplace=True),
+            nn.AdaptiveMaxPool1d(1))
+        self.w4 = nn.Sequential(
+            nn.Conv1d(in_channels=300, out_channels=100, kernel_size=4, stride=1, padding=1),
+            nn.BatchNorm1d(100),
+            nn.ReLU(inplace=True),
+            nn.AdaptiveMaxPool1d(1))
+        self.w5 = nn.Sequential(
+            nn.Conv1d(in_channels=300, out_channels=100, kernel_size=5, stride=1, padding=1),
             nn.BatchNorm1d(300),
             nn.ReLU(inplace=True),
+            nn.AdaptiveMaxPool1d(1))
 
-            nn.AdaptiveMaxPool1d(1),
-
-            nn.Dropout(.5),
-            nn.Conv1d(300, 1, 1, 1, 0),
-            )
 
     def forward(self, text):
-        embeds = self.embed(Variable(text.cuda()))
-        return self.w(embeds.permute(1,2,0))
+        embeds = self.embed(Variable(text.cuda())).permute(1,2,0)
+        out3 = self.w3(embeds)
+        out4 = self.w4(embeds)
+        out5 = self.w5(embeds)
+
+        return 
 
 
 
