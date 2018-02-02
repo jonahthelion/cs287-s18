@@ -26,7 +26,7 @@ vis.env = 'train'
 vis_windows = None
 
 # define model
-chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': True}
+chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False}
 
 # get data
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
@@ -40,7 +40,7 @@ if chosen_model['type'] == 'MNB':
         for batch_num,batch in enumerate(tqdm(train_iter)):
             model.train_sample(batch.label.data - 1, batch.text.data)
         model.postprocess()
-        # print_important(model.w.weight.data.cpu().squeeze(0), TEXT, 15)
+        print_important(model.w.weight.data.cpu().squeeze(0), TEXT, 10)
         bce, roc, acc = evaluate_model(model, test_iter)
         print('alpha:', alpha)
         print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
