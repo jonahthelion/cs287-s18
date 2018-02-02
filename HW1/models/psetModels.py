@@ -115,7 +115,7 @@ class Conv(nn.Module):
             nn.AdaptiveMaxPool1d(1))
         self.w5 = nn.Sequential(
             nn.Conv1d(in_channels=300, out_channels=100, kernel_size=5, stride=1, padding=1),
-            nn.BatchNorm1d(300),
+            nn.BatchNorm1d(100),
             nn.ReLU(inplace=True),
             nn.AdaptiveMaxPool1d(1))
 
