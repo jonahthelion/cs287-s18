@@ -11,7 +11,7 @@ import visdom
 
 from utils.preprocess import get_data
 from models.psetModels import MNB, LogReg, CBOW, Conv
-from utils.postprocess import print_important, vis_display
+from utils.postprocess import print_important, vis_display, evaluate_model
 
 # set up visdom
 vis = visdom.Visdom()
