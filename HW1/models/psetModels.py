@@ -78,7 +78,7 @@ class CBOW(nn.Module):
         self.embed.weight.data = embed
 
         self.w = nn.Sequential(
-            nn.Linear(300, 300),
+            nn.Linear(300, 100),
             nn.ReLU(inplace=True),
 
             # nn.Linear(300, 300),
@@ -86,7 +86,7 @@ class CBOW(nn.Module):
             # nn.Dropout(.5, inplace=True),
             # nn.ReLU(inplace=True),
 
-            nn.Linear(300, 1),
+            nn.Linear(100, 1),
             )
 
     def forward(self, text):
