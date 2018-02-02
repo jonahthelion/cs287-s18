@@ -26,7 +26,7 @@ vis.env = 'train'
 vis_windows = None
 
 # define model
-chosen_model = {'type': 'MNB', 'alpha':np.linspace(.05, 3, 2)}
+chosen_model = {'type': 'MNB', 'alpha':np.linspace(.05, 3, 20)}
 
 # get data
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
@@ -46,6 +46,8 @@ if chosen_model['type'] == 'MNB':
         all_scores.append((bce, roc, acc))
     fig = plt.figure(figsize=(10,6))
     plt.plot(chosen_model['alpha'], [all_score[2] for all_score in all_scores])
+    plt.xlabel(r'$\alpha$')
+    plt.ylabel('Accuracy')
     plt.savefig('writeup/imgs/alpha.pdf')
     plt.close(fig)
 
