@@ -8,6 +8,11 @@ import torch.nn.functional as F
 from tqdm import tqdm
 from sklearn import metrics
 import visdom
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
+plt.rcParams['font.serif'] = 'Ubuntu'
+plt.rcParams.update({'font.size': 18})
 
 from utils.preprocess import get_data
 from models.psetModels import MNB, LogReg, CBOW, Conv
@@ -19,7 +24,7 @@ vis.env = 'train'
 vis_windows = None
 
 # define model
-chosen_model = {'type': 'MNB', 'alpha':np.linspace(.05, 3, 20)}
+chosen_model = {'type': 'MNB', 'alpha':np.linspace(.05, 3, 2)}
 
 # get data
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
@@ -37,6 +42,11 @@ if chosen_model['type'] == 'MNB':
         bce, roc, acc = evaluate_model(model, val_iter)
         print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
         all_scores.append((bce, roc, acc))
+    fig = plt.figure(figsize=(10,6))
+    plt.plot(chosen_model['alpha'], [all_score[2] for all_score in all_scores])
+    plt.savefig('alpha.pdf')
+    plt.close(fig)
+
 
     # bad_vals, bad_ixes, good_vals, good_ixes = model.find_important_words(k=10)
     # print_important(TEXT, bad_vals, bad_ixes, good_vals, good_ixes)
