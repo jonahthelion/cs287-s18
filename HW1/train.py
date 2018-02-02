@@ -64,7 +64,7 @@ if chosen_model['type'] == 'log_reg':
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
 
-    for epoch in range(100):
+    for epoch in range(80):
         for batch_num,batch in enumerate(train_iter):
             optimizer.zero_grad()
             preds = model(batch.text.data)
@@ -77,6 +77,10 @@ if chosen_model['type'] == 'log_reg':
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), bce)
             if batch_num % 4 == 0 and batch_num % 10 != 0:
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+
+        print_important(model.w.weight.data.cpu().squeeze(0), TEXT, 10)
+        bce, roc, acc = evaluate_model(model, test_iter)
+        print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
 
     #         l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
     #         if batch_num % 100 != 0 and batch_num % 40 == 0:
