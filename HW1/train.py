@@ -28,7 +28,7 @@ vis_windows = None
 # define model
 # chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False, 'batch_size': 50}
 # chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
-chosen_model = {'type': 'CBOW', 'batch_size': 70}
+chosen_model = {'type': 'CBOW', 'batch_size': 100}
 print(chosen_model)
 
 # get data
@@ -119,7 +119,8 @@ if chosen_model['type'] == 'CBOW':
             if batch_num % 64*4 == 0 and batch_num % 160*4 != 0:
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
  
-
+        bce,roc,acc = evaluate_model(model, test_iter)
+        print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
 
 if chosen_model['type'] == 'conv':
     model = Conv(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
