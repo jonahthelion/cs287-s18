@@ -53,6 +53,7 @@ class LogReg(nn.Module):
         self.V = V
 
         self.w = nn.Linear(V, 1)
+        self.w.weight.data.zero_()
 
     def forward(self, text):
         word_vecs = torch.zeros(text.shape[1], self.V)
