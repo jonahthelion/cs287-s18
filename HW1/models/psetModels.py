@@ -78,10 +78,13 @@ class CBOW(nn.Module):
         self.embed.weight.data = embed
 
         self.w = nn.Sequential(
-            nn.Linear(300, 100),
+            nn.Linear(300, 50),
             nn.ReLU(inplace=True),
 
-            nn.Linear(100, 50),
+            nn.Linear(50, 50),
+            nn.ReLU(inplace=True),
+
+            nn.Linear(50, 50),
             nn.ReLU(inplace=True),
 
             nn.Linear(50, 1),
@@ -89,7 +92,7 @@ class CBOW(nn.Module):
 
     def forward(self, text):
         embeds = self.embed(Variable(text.cuda()))
-        return self.w(embeds.sum(0))
+        return self.w(embeds.mean(0))
 
 
 
