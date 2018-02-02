@@ -84,7 +84,7 @@ class CBOW(nn.Module):
 
     def forward(self, text):
         embeds = self.embed(Variable(text.cuda()))
-        return self.w(embeds.mean(0))
+        return self.w(embeds.sum(0))
 
 
 
