@@ -39,7 +39,7 @@ def evaluate_model(model, val_iter):
 
     # accuracy and roc_auc
     all_preds = F.sigmoid(all_preds).data.cpu().numpy()
-    all_actual = all_actual.data.cpu().numpy()
+    all_actual = all_actual.data.cpu().numpy().astype(int)
     roc_auc = metrics.roc_auc_score(all_actual, all_preds)
     acc = metrics.accuracy_score(all_actual, all_preds)
 
