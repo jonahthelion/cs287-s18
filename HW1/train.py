@@ -64,7 +64,7 @@ if chosen_model['type'] == 'log_reg':
     model = LogReg(V=len(TEXT.vocab))
     model.cuda()
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0004, weight_decay=5e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0002, weight_decay=5e-4)
 
     for epoch in range(150):
         for batch_num,batch in enumerate(train_iter):
@@ -74,10 +74,10 @@ if chosen_model['type'] == 'log_reg':
             l.backward()
             optimizer.step()
 
-            if batch_num % 10 == 0:
+            if batch_num % 40 == 0:
                 bce, roc, acc = evaluate_model(model, val_iter)
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
-            if batch_num % 4 == 0 and batch_num % 10 != 0:
+            if batch_num % 16 == 0 and batch_num % 40 != 0:
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
 
         print_important(model.w.weight.data.cpu().squeeze(0), TEXT, 10)
