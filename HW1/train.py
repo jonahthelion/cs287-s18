@@ -29,7 +29,7 @@ vis_windows = None
 # chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False, 'batch_size': 50}
 # chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
 # chosen_model = {'type': 'CBOW', 'batch_size': 100, 'pool': 'max'}
-chosen_model = {'type': 'Conv', 'batch_size': 150}
+chosen_model = {'type': 'Conv', 'batch_size': 50}
 print(chosen_model)
 
 # get data
