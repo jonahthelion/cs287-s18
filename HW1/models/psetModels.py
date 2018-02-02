@@ -33,11 +33,6 @@ class MNB(nn.Module):
         self.w.weight.data = ( (self.w_counts[1] / self.w_counts[1].sum()) / (self.w_counts[0] / self.w_counts[0].sum()) ).log().view(1, -1).cuda() 
         self.w.bias.data = torch.Tensor([self.label_counts[1] / self.label_counts[0]]).log().cuda()
 
-    def find_important_words(self, k):
-        bad_vals, bad_ixes = torch.topk(self.w.weight.data, k, largest=True)
-        good_vals, good_ixes = torch.topk(self.w.weight.data, k, largest=False)
-        return bad_vals.squeeze(), bad_ixes.squeeze(), good_vals.squeeze(), good_ixes.squeeze()
-
     # text is batch.text.data, shoud return cuda variable
     def forward(self, text):
         word_vecs = torch.zeros(text.shape[1], self.V)
@@ -50,17 +45,6 @@ class MNB(nn.Module):
                     word_vecs[phrase_ix, val] += c[val]
         return self.w(Variable(word_vecs.cuda()))
 
-    def submission(self, test_iter, fname):
-        print ('saving to', fname)
-        upload = []
-        for batch in test_iter:
-            probs = F.sigmoid(self.forward(batch.text.data)) + 1
-            upload.extend(list(probs.numpy().round().astype(int).flatten()))
-        with open(fname, 'w') as f:
-            f.write('Id,Cat\n')
-            for u_ix,u in enumerate(upload):
-                f.write(str(u_ix) + ',' + str(u) + '\n')
-
 
 class LogReg(nn.Module):
     def __init__(self, V):
@@ -69,8 +53,6 @@ class LogReg(nn.Module):
         self.V = V
 
         self.w = nn.Linear(V, 1)
-        torch.nn.init.xavier_uniform(self.w.weight.data)
-        torch.nn.init.constant(self.w.bias.data, 0.0)
 
     def forward(self, text):
         word_vecs = torch.zeros(text.shape[1], self.V)
@@ -78,16 +60,7 @@ class LogReg(nn.Module):
             c = Counter(text[:,phrase_ix].numpy())
             for val in c:
                 word_vecs[phrase_ix, val] += 1
-        return self.w(Variable(word_vecs)).view(-1)  
-
-    def train_sample(self, label, text, optimizer):
-        optimizer.zero_grad()
-        outs = self.forward(text)
-        l = F.binary_cross_entropy_with_logits(outs, label)
-        l.backward()
-        optimizer.step()
-
-        return l
+        return self.w(Variable(word_vecs).cuda())
 
     def evalu_loss(self, label, text):
         outs = self.forward(text)

@@ -26,7 +26,8 @@ vis.env = 'train'
 vis_windows = None
 
 # define model
-chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False}
+# chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False}
+chosen_model = {'type': 'log_reg'}
 
 # get data
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
@@ -55,38 +56,30 @@ if chosen_model['type'] == 'MNB':
         plt.close(fig)
 
 
-    # bad_vals, bad_ixes, good_vals, good_ixes = model.find_important_words(k=10)
-    # print_important(TEXT, bad_vals, bad_ixes, good_vals, good_ixes)
-
-    # all_actual, all_preds = model.evalu(train_iter)
-    # print(metrics.roc_auc_score(all_actual, all_preds))
-    # print(metrics.classification_report(all_actual, all_preds.round()))
-
-    # all_actual, all_preds = model.evalu(val_iter)
-    # print(metrics.roc_auc_score(all_actual, all_preds))
-    # print(metrics.classification_report(all_actual, all_preds.round()))
-
-    # print('BCE LOSS', F.binary_cross_entropy( Variable(torch.from_numpy(all_preds).float()).view(-1) , Variable(torch.from_numpy(all_actual).float())))
-
-    # all_actual, all_preds = model.evalu(test_iter)
-    # print(metrics.roc_auc_score(all_actual, all_preds))
-    # print(metrics.classification_report(all_actual, all_preds.round()))
-
-    # print('BCE LOSS', F.binary_cross_entropy( Variable(torch.from_numpy(all_preds).float()).view(-1) , Variable(torch.from_numpy(all_actual).float())))
-
-
-
 if chosen_model['type'] == 'log_reg':
-    model = torch.load('9_logreg.p')
-    # model = LogReg(V=len(TEXT.vocab))
 
-    # optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
+    model = LogReg(V=len(TEXT.vocab))
+    model.cuda()
 
-    # for epoch in range(10):
-    #     for batch_num,batch in enumerate(train_iter):
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
+
+    for epoch in range(10):
+        for batch_num,batch in enumerate(train_iter):
+            optimizer.zero_grad()
+            preds = model(batch.text.data)
+            l = F.binary_cross_entropy_with_logits(preds.view(-1), Variable((batch.label - 1).float().cuda()))
+            l.backward()
+            optimizer.step()
+
+            if batch_num % 40 == 0:
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+            if batch_num % 100 == 0:
+                bce, roc, acc = evaluate_model(model, val_iter)
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), bce)
+
     #         l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
     #         if batch_num % 100 != 0 and batch_num % 40 == 0:
-    #             vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+    #             
     #         else:
     #             lvals = []
     #             for batch in val_iter:
@@ -99,7 +92,7 @@ if chosen_model['type'] == 'log_reg':
     #     good_vals,good_ixes = torch.topk(model.w.weight.data, 10, largest=False)
     #     print_important(TEXT, bad_vals.squeeze(), bad_ixes.squeeze(), good_vals.squeeze(), good_ixes.squeeze())
 
-    model.submission(test_iter, 'predictions2.txt')
+
 
 
 

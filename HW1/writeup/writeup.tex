@@ -174,15 +174,21 @@ The weight vector determined by Naive Bayes can be interpreted as the sentiment 
 \caption{\label{tab:nb} Binarizing or counting words does not significantly affect the performance of the model on the test set.}
 \end{table}
 
+
+
 \begin{table}[h]
 \centering
-\begin{tabular}{llrrr}
+\begin{tabular}{cccccccccc}
  \midrule
- \textsc{Binarized} & & 0.791 & 0.679 & 0.867\\
- \textsc{Counts} & & 0.793  & 0.686 & 0.867\\
+ stupid & unfunny& pointless  & poorly & suffers & Feels & tiresome & car \\
+   5.39452 & 5.1085& 5.03998 &4.96641&4.96641 & 4.88701 & 4.88701 & 4.88701 \\
+ \bottomrule
+ \bottomrule
+ powerful  & solid& perfectly & inventive & refreshing & riveting & wonderfully & universal \\
+  -5.79766 & -5.7109 & -4.99019 & -4.85754 & -4.78398 & -4.70458 & -4.61832 & -4.61832 \\
  \bottomrule
 \end{tabular}
-\caption{\label{tab:nbwords} Words with the highest and lowest weights in the naive bayes weight vector correspond to human intuition.}
+\caption{\label{tab:nbwords} Words with the highest and lowest weights in the naive bayes weight vector agree with intuition for being negative and positive words respectively.}
 \end{table}
 
 \end{subsection}
