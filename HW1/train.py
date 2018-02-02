@@ -47,12 +47,14 @@ if chosen_model['type'] == 'MNB':
         print('alpha:', alpha)
         print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
         all_scores.append((bce, roc, acc))
-
+    print('saving', 'MNB.p')
+    torch.save(model, 'MNB.p')
     if chosen_model['should_plot']:
         fig = plt.figure(figsize=(10,6))
         plt.plot(chosen_model['alpha'], [all_score[2] for all_score in all_scores])
         plt.xlabel(r'$\alpha$')
         plt.ylabel('Accuracy')
+        print('saving', 'writeup/imgs/alpha.pdf')
         plt.savefig('writeup/imgs/alpha.pdf')
         plt.close(fig)
 
