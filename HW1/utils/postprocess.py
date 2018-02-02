@@ -1,6 +1,6 @@
 import torch
 
-def print_important(w, TEXT):
+def print_important(w, TEXT, k):
     bad_vals, bad_ixes = torch.topk(w, k, largest=True)
     good_vals, good_ixes = torch.topk(w, k, largest=False)
     print('BAD')
