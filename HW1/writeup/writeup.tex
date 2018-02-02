@@ -197,8 +197,14 @@ The weight vector determined by Naive Bayes can be interpreted as the sentiment 
 
 
 \begin{subsection}{Logistic Regression}
-In the logistic regression model, we take the bag of words $\phi(x)$ but train $w$ and $b$ instead of calculating $w$ and $b$.
+In the logistic regression model, we take the bag of words $\phi(x)$ but train $w$ and $b$ instead of calculating $w$ and $b$. Figure \ref{fig:logtrain} shows that as the model decreases cross entropy, the accuracy on the validation set also increases. However, this model does not do significantly better than naive bayes.
 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=6cm]{imgs/alpha}
+  \caption{\label{fig:logtrain} The model does not overfit.}
+\end{figure}
 
 \end{subsection}
 
