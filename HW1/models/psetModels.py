@@ -119,6 +119,8 @@ class Conv(nn.Module):
             nn.ReLU(inplace=True),
             nn.AdaptiveMaxPool1d(1))
 
+        self.w = nn.Conv1d(300, 1, 1, 1, 0)
+
 
     def forward(self, text):
         embeds = self.embed(Variable(text.cuda())).permute(1,2,0)
@@ -126,7 +128,9 @@ class Conv(nn.Module):
         out4 = self.w4(embeds)
         out5 = self.w5(embeds)
 
-        return 
+        out = torch.cat([out3, out4, out5], 1)
+
+        return self.w(out)
 
 
 
