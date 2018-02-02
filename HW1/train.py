@@ -28,6 +28,7 @@ vis_windows = None
 # define model
 # chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False}
 chosen_model = {'type': 'log_reg'}
+print(chosen_model)
 
 # get data
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
