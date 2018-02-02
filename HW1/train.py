@@ -126,7 +126,7 @@ if chosen_model['type'] == 'CBOW':
 if chosen_model['type'] == 'Conv':
     model = Conv(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
     model.cuda()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.00001)
+    optimizer = torch.optim.Adam(model.w.parameters(), lr=0.00001)
     for epoch in range(350):
         for batch_num,batch in enumerate(train_iter):
             model.train()
