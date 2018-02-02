@@ -150,11 +150,29 @@ All models are trained on the \href{https://nlp.stanford.edu/~socherr/EMNLP2013_
 \section{Experiments}
 
 \begin{subsection}{Naive Bayes}
+All words are initialized to a count of $\alpha$. Figure \ref{fig:clusters} shows that performance of the algorithm on the validation set is robust to changes in $\alpha$. With $\alpha=.5$, performance on the test set using binarized and count word vectors are analyzed in Table \ref{tab:nb}.
+
+
+
 \begin{figure}
   \centering
   \includegraphics[width=6cm]{imgs/alpha}
-  \caption{\label{fig:clusters} Affect of global smoothing parameter $\alpha$ on validation accuracy.}
+  \caption{\label{fig:clusters} Affect of global smoothing parameter $\alpha$ on validation accuracy. Validation accuracy is calculated using sklearn's \texttt{accuracy\_score}. The performance is not sensitive to $\alpha$.}
 \end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llrrr}
+ \toprule
+ Model &  & Acc. & Bce. & Roc.\\
+ \midrule
+ \textsc{Binarized} & & 0.45 & 1 & 1\\
+ \textsc{Counts} & & 2.59  & 1 & 1\\
+ \bottomrule
+\end{tabular}
+\caption{\label{tab:nb} Table with the main results.}
+\end{table}
+
 \end{subsection}
 
 

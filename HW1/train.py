@@ -26,7 +26,7 @@ vis.env = 'train'
 vis_windows = None
 
 # define model
-chosen_model = {'type': 'MNB', 'alpha':np.linspace(.01, 10, 40)}
+chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False}
 
 # get data
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
@@ -41,15 +41,18 @@ if chosen_model['type'] == 'MNB':
             model.train_sample(batch.label.data - 1, batch.text.data)
         model.postprocess()
         # print_important(model.w.weight.data.cpu().squeeze(0), TEXT, 15)
-        bce, roc, acc = evaluate_model(model, val_iter)
+        bce, roc, acc = evaluate_model(model, test_iter)
+        print(alpha)
         print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
         all_scores.append((bce, roc, acc))
-    fig = plt.figure(figsize=(10,6))
-    plt.plot(chosen_model['alpha'], [all_score[2] for all_score in all_scores])
-    plt.xlabel(r'$\alpha$')
-    plt.ylabel('Accuracy')
-    plt.savefig('writeup/imgs/alpha.pdf')
-    plt.close(fig)
+
+    if chosen_model['should_plot']:
+        fig = plt.figure(figsize=(10,6))
+        plt.plot(chosen_model['alpha'], [all_score[2] for all_score in all_scores])
+        plt.xlabel(r'$\alpha$')
+        plt.ylabel('Accuracy')
+        plt.savefig('writeup/imgs/alpha.pdf')
+        plt.close(fig)
 
 
     # bad_vals, bad_ixes, good_vals, good_ixes = model.find_important_words(k=10)
