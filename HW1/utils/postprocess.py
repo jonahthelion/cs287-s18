@@ -34,7 +34,7 @@ def evaluate_model(model, val_iter):
     all_preds = torch.cat(all_preds)
 
     # binary cross entropy loss
-    bce_l = F.binary_cross_entropy_with_logits(all_preds, all_actual)
+    bce_l = F.binary_cross_entropy_with_logits(all_preds, all_actual.float())
 
     # accuracy
     all_preds = F.sigmoid(all_preds).data.cpu().numpy()
