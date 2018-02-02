@@ -1,6 +1,8 @@
 import torch
 
-def print_important(TEXT, bad_vals, bad_ixes, good_vals, good_ixes):
+def print_important(w, TEXT):
+    bad_vals, bad_ixes = torch.topk(w, k, largest=True)
+    good_vals, good_ixes = torch.topk(w, k, largest=False)
     print('BAD')
     for val,ix in zip(bad_vals, bad_ixes):
         print(TEXT.vocab.itos[ix], ' ', val)

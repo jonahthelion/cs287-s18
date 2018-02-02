@@ -31,6 +31,8 @@ if chosen_model['type'] == 'MNB':
     for batch_num,batch in enumerate(tqdm(train_iter)):
         model.train_sample(batch.label.data - 1, batch.text.data)
     model.postprocess()
+    print_important(model.w.weight.data.cpu(), TEXT)
+
     # bad_vals, bad_ixes, good_vals, good_ixes = model.find_important_words(k=10)
     # print_important(TEXT, bad_vals, bad_ixes, good_vals, good_ixes)
 
