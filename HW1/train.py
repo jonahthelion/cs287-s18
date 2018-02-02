@@ -66,7 +66,7 @@ if chosen_model['type'] == 'log_reg':
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0005, weight_decay=5e-4)
 
-    for epoch in range(80):
+    for epoch in range(100):
         for batch_num,batch in enumerate(train_iter):
             optimizer.zero_grad()
             preds = model(batch.text.data)
