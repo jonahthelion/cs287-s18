@@ -197,7 +197,7 @@ The weight vector determined by Naive Bayes can be interpreted as the sentiment 
 
 
 \begin{subsection}{Logistic Regression}
-In the logistic regression model, we take the bag of words $\phi(x)$ but train $w$ and $b$ instead of calculating $w$ and $b$. Figure \ref{fig:logtrain} shows that as the model decreases cross entropy, the accuracy on the validation set also increases. However, this model does not do significantly better than naive bayes.
+In the logistic regression model, we take the bag of words $\phi(x)$ but train $w$ and $b$ instead of calculating $w$ and $b$. Figure \ref{fig:logtrain} shows that as the model decreases cross entropy, the accuracy on the validation set also increases. However, this model does not do significantly better than naive bayes. The model is trained with batch size of 150 for 150 iterations with an adam optimizer of learning rate 0.0002 and weight decay 0.0005. The weight vector is initialized to zero to guard against words in the validation set which are not in the training set. The model is trained on binary and count vectors as with naive bayes. The metrics are recorded in Table \ref{tab:logreg}.
 
 
 \begin{figure}
@@ -205,6 +205,19 @@ In the logistic regression model, we take the bag of words $\phi(x)$ but train $
   \includegraphics[width=6cm]{imgs/logtrain}
   \caption{\label{fig:logtrain} The left is the binary cross entropy recorded during training of binarized logistic regression and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is no better than naive bayes.}
 \end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llrrr}
+ \toprule
+ Model &  & Acc. & Bce. & Roc.\\
+ \midrule
+ \textsc{Binarized} & & 0.789 & 0.496 & 0.876\\
+ \textsc{Counts} & & 0.793  & 0.686 & 0.867\\
+ \bottomrule
+\end{tabular}
+\caption{\label{tab:logreg} Binarizing or counting words does not significantly affect the performance of the model on the test set.}
+\end{table}
 
 \end{subsection}
 

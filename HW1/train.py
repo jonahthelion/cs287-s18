@@ -27,7 +27,7 @@ vis_windows = None
 
 # define model
 # chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False, 'batch_size': 50}
-chosen_model = {'type': 'log_reg', 'batch_size': 150}
+chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
 print(chosen_model)
 
 # get data
@@ -61,7 +61,7 @@ if chosen_model['type'] == 'MNB':
 
 if chosen_model['type'] == 'log_reg':
 
-    model = LogReg(V=len(TEXT.vocab))
+    model = LogReg(V=len(TEXT.vocab), counts=chosen_model['counts'])
     model.cuda()
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0002, weight_decay=5e-4)

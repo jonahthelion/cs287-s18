@@ -47,10 +47,11 @@ class MNB(nn.Module):
 
 
 class LogReg(nn.Module):
-    def __init__(self, V):
+    def __init__(self, V, counts):
         super(LogReg, self).__init__()
 
         self.V = V
+        self.counts = counts
 
         self.w = nn.Linear(V, 1)
         self.w.weight.data.zero_()
@@ -60,24 +61,13 @@ class LogReg(nn.Module):
         for phrase_ix in range(text.shape[1]):
             c = Counter(text[:,phrase_ix].numpy())
             for val in c:
-                word_vecs[phrase_ix, val] += 1
+                if not self.counts:
+                    word_vecs[phrase_ix, val] += 1
+                else:
+                    word_vecs[phrase_ix, val] += c[val]
         return self.w(Variable(word_vecs).cuda())
 
-    def evalu_loss(self, label, text):
-        outs = self.forward(text)
-        l = F.binary_cross_entropy_with_logits(outs, label)
-        return l
 
-    def submission(self, test_iter, fname):
-        print ('saving to', fname)
-        upload = []
-        for batch in test_iter:
-            probs = F.sigmoid(self.forward(batch.text.data)) + 1
-            upload.extend(list(probs.data.numpy().round().astype(int).flatten()))
-        with open(fname, 'w') as f:
-            f.write('Id,Cat\n')
-            for u_ix,u in enumerate(upload):
-                f.write(str(u_ix) + ',' + str(u) + '\n')
 
 class CBOW(nn.Module):
     def __init__(self, V, embed):
