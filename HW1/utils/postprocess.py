@@ -4,10 +4,10 @@ def print_important(w, TEXT, k):
     bad_vals, bad_ixes = torch.topk(w, k, largest=True)
     good_vals, good_ixes = torch.topk(w, k, largest=False)
     print('BAD')
-    for val,ix in zip(bad_vals, bad_ixes):
+    for val,ix in zip(bad_vals.numpy(), bad_ixes.numpy()):
         print(TEXT.vocab.itos[ix], ' ', val)
     print ('\n', 'GOOD')
-    for val,ix in zip(good_vals, good_ixes):
+    for val,ix in zip(good_vals.numpy(), good_ixes.numpy()):
         print(TEXT.vocab.itos[ix], ' ', val)
     print('\n')
 
