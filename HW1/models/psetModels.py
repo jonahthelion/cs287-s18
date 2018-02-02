@@ -79,7 +79,7 @@ class CBOW(nn.Module):
 
         self.w = nn.Sequential(
 
-            nn.Linear(50, 1),
+            nn.Linear(300, 1),
             )
 
     def forward(self, text):
