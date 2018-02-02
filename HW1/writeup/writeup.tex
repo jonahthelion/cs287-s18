@@ -242,7 +242,7 @@ bad & dull & mess  & worst & too &flat & stupid&? \\
 
 \begin{subsection}{Continuous bag of Words}
 
-In the Continuous bag of words (CBOW) model, one-hot vectors $x_i$ for each word are mapped to a dense vector by ab embedding $\mcE$ in a lower dimensional feature space. These lower dimensional vectors are then summed or averaged. The order of the words is therefore lost during the transformation $\phi(\boldx_i)$ as it is in the naive bayes model. The model is trained with an Adam optimizer of learning rate 0.00002 and batch size 100 for 350 epochs. The embedding is initialized to AWS word vectors but allowed to change during training. The embeddings improve the accuracy of the model over logistic regression and naive bayes as shown in Table $\ref{tab:cbowtab}$ regardless of whether sum or max pooling is used.
+In the Continuous bag of words (CBOW) model, one-hot vectors $x_i$ for each word are mapped to a dense vector by ab embedding $\mcE$ in a lower dimensional feature space. These lower dimensional vectors are then summed or averaged. The order of the words is therefore lost during the transformation $\phi(\boldx_i)$ as it is in the naive bayes model. The model is trained with an Adam optimizer of learning rate 0.00002 and batch size 100 for 350 epochs. The embedding is initialized to AWS word vectors but allowed to change during training. The embeddings improve the accuracy of the model over logistic regression and naive bayes as shown in Table $\ref{tab:cbowtab}$ regardless of whether sum or max pooling is used. Figure \ref{fig:cbowfit} shows the objective and validation accuracy during training of the model with max pooling.
 
 \begin{table}[h]
 \centering
@@ -252,10 +252,17 @@ In the Continuous bag of words (CBOW) model, one-hot vectors $x_i$ for each word
  \midrule
  \textsc{Mean} & & 0.824 & 0.416 & 0.898\\
  \textsc{Sum} & & 0.816  & 0.448 & 0.886\\
+  \textsc{Max} & & 0.798  & 0.447 & 0.880\\
  \bottomrule
 \end{tabular}
 \caption{\label{tab:cbowtab} The word vectors improve the accuracy of the model.}
 \end{table}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=6cm]{imgs/cbowtrain}
+  \caption{\label{fig:logtrain} The left is the binary cross entropy recorded during training of CBOW and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.}
+\end{figure}
 
 \end{subsection}
 

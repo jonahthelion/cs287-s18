@@ -107,50 +107,16 @@ class Conv(nn.Module):
             nn.Conv1d(in_channels=300, out_channels=300, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm1d(300),
             nn.ReLU(inplace=True),
-            nn.MaxPool1d(2, 1, 0),
 
-            nn.Conv1d(in_channels=300, out_channels=300, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm1d(300),
-            nn.ReLU(inplace=True),
+            nn.AdaptiveAvgPool1d(1),
 
-            nn.AdaptiveMaxPool1d(1),
-
-            # nn.Conv1d(500, 300, 1),
-            # nn.BatchNorm1d(300),
-            # nn.ReLU(inplace=True),
-            nn.Dropout(p=0.3, inplace=True),
-            nn.Conv1d(300, 1, 1),
+            nn.Linear(300, 1),
             )
 
     def forward(self, text):
-        if text.shape[1] == 1:
-            text = torch.stack([text[:,0], torch.zeros(text.shape[0]).long()], dim=1)
-            embeds = torch.stack([torch.t(self.embed(text[:,i])) for i in range(text.shape[1])])[0].unsqueeze(0)
-        else:
-            embeds = torch.stack([torch.t(self.embed(text[:,i])) for i in range(text.shape[1])])
+        embeds = self.embed(Variable(text.cuda()))
+        return self.w(embeds)  
 
-        return self.w(embeds).view(-1)    
-
-    def evalu_loss(self, label, text):
-        outs = self.forward(text)
-        l = F.binary_cross_entropy_with_logits(outs, label)
-        return l
-
-    def evalu(self, train_iter):
-        all_actual = []
-        all_preds = []
-        for epoch in range(1):
-            for batch_num,batch in enumerate(train_iter):
-                preds = self.forward(batch.text.data)
-                preds = F.sigmoid(preds)
-                all_actual.append(batch.label.data - 1)
-                all_preds.append(preds.data)
-        all_actual = torch.cat(all_actual).numpy()
-        all_preds = torch.cat(all_preds).numpy()
-
-        print(metrics.classification_report(all_actual, all_preds.round()))
-
-        return all_actual, all_preds
 
 
 

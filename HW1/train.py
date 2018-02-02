@@ -28,7 +28,8 @@ vis_windows = None
 # define model
 # chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False, 'batch_size': 50}
 # chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
-chosen_model = {'type': 'CBOW', 'batch_size': 100, 'pool': 'max'}
+# chosen_model = {'type': 'CBOW', 'batch_size': 100, 'pool': 'max'}
+chosen_model = {'type': 'Conv', 'batch_size': 100}
 print(chosen_model)
 
 # get data
@@ -122,32 +123,28 @@ if chosen_model['type'] == 'CBOW':
         bce,roc,acc = evaluate_model(model, test_iter)
         print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
 
-if chosen_model['type'] == 'conv':
+if chosen_model['type'] == 'Conv':
     model = Conv(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=5e-4)
-    model.train()
-    for epoch in range(5):
-        model.train()
+    model.cuda()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.00002)
+    for epoch in range(350):
         for batch_num,batch in enumerate(train_iter):
+            model.train()
             optimizer.zero_grad()
-            outs = model(batch.text.data)
-            l = F.binary_cross_entropy_with_logits(outs, batch.label.float() - 1)
+            preds = model(batch.text.data)
+            l = F.binary_cross_entropy_with_logits(preds.view(-1), (batch.label - 1).float().cuda())
             l.backward()
             optimizer.step()
+            model.eval()
 
-            if batch_num % 100 != 0 and batch_num % 40 == 0:
-                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
-            else:
-                lvals = []
-                for batch in val_iter:
-                    lvals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
-                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), sum(lvals)/float(len(lvals)))
-        print('saving', str(epoch) + '_' + 'conv.p')
-        torch.save(model, str(epoch) + '_' + 'conv.p')
-
-        model.eval()
-        model.evalu(test_iter)
-
+            if batch_num % 160*4 == 0:
+                bce, roc, acc = evaluate_model(model, val_iter)
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
+            if batch_num % 64*4 == 0 and batch_num % 160*4 != 0:
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+ 
+        bce,roc,acc = evaluate_model(model, test_iter)
+        print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
 
 
 
