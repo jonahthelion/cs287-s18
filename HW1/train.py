@@ -28,7 +28,7 @@ vis_windows = None
 # define model
 # chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False, 'batch_size': 50}
 # chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
-chosen_model = {'type': 'CBOW', 'batch_size': 150}
+chosen_model = {'type': 'CBOW', 'batch_size': 100}
 print(chosen_model)
 
 # get data
@@ -102,7 +102,7 @@ if chosen_model['type'] == 'log_reg':
 if chosen_model['type'] == 'CBOW':
     model = CBOW(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
     model.cuda()
-    optimizer = torch.optim.Adam(model.w.parameters(), lr=0.0001, weight_decay=5e-4)
+    optimizer = torch.optim.Adam(model.w.parameters(), lr=0.00001, weight_decay=5e-4)
     for epoch in range(500):
         for batch_num,batch in enumerate(train_iter):
             model.train()
