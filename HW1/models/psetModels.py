@@ -70,10 +70,11 @@ class LogReg(nn.Module):
 
 
 class CBOW(nn.Module):
-    def __init__(self, V, embed):
+    def __init__(self, V, embed, pool):
         super(CBOW, self).__init__()
 
         self.V = V
+        self.pool = pool
         self.embed = nn.Embedding(V, 300)
         self.embed.weight.data = embed
 
@@ -84,7 +85,12 @@ class CBOW(nn.Module):
 
     def forward(self, text):
         embeds = self.embed(Variable(text.cuda()))
-        return self.w(embeds.sum(0))
+        if self.pool == 'sum':
+            return self.w(embeds.sum(0))
+        if self.pool == 'mean':
+            return self.w(embeds.mean(0))
+        if self.pool == 'max':
+            return self.w(embeds.max(0)[0])
 
 
 
