@@ -110,22 +110,12 @@ class Conv(nn.Module):
 
             nn.AdaptiveAvgPool1d(1),
 
-            nn.Linear(300, 1),
+            nn.Conv1d(300, 1, 1, 1, 0),
             )
 
     def forward(self, text):
-        print(text.shape)
         embeds = self.embed(Variable(text.cuda()))
-        print(embeds.permute(1,2,0).shape)
-        x = self.w[0](embeds.permute(1,2,0))
-        print(x.shape)
-        x = self.w[1](x)
-        print(x.shape)
-        x = self.w[2](x)
-        print(x.shape)
-        x = self.w[3](x)
-        print(x.shape)
-        return x
+        return self.w(embeds.permuete(1,2,0))
 
 
 
