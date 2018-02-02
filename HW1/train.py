@@ -74,7 +74,7 @@ if chosen_model['type'] == 'log_reg':
 
             if batch_num % 10 == 0:
                 bce, roc, acc = evaluate_model(model, val_iter)
-                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), bce)
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
             if batch_num % 4 == 0 and batch_num % 10 != 0:
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
 
