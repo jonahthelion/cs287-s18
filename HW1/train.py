@@ -19,21 +19,24 @@ vis.env = 'train'
 vis_windows = None
 
 # define model
-chosen_model = {'type': 'MNB'}
+chosen_model = {'type': 'MNB', 'alpha':np.linspace(.05, 3, 20)}
 
 # get data
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
 
 
 if chosen_model['type'] == 'MNB':
-    model = MNB(V=len(TEXT.vocab), alpha=.1)
+    all_scores = []
+    for alpha in chosen_model['alpha']:
+        model = MNB(V=len(TEXT.vocab), alpha=.1)
 
-    for batch_num,batch in enumerate(tqdm(train_iter)):
-        model.train_sample(batch.label.data - 1, batch.text.data)
-    model.postprocess()
-    # print_important(model.w.weight.data.cpu().squeeze(0), TEXT, 15)
-    bce, roc, acc = evaluate_model(model, val_iter)
-    print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
+        for batch_num,batch in enumerate(tqdm(train_iter)):
+            model.train_sample(batch.label.data - 1, batch.text.data)
+        model.postprocess()
+        # print_important(model.w.weight.data.cpu().squeeze(0), TEXT, 15)
+        bce, roc, acc = evaluate_model(model, val_iter)
+        print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
+        all_scores.append((bce, roc, acc))
 
     # bad_vals, bad_ixes, good_vals, good_ixes = model.find_important_words(k=10)
     # print_important(TEXT, bad_vals, bad_ixes, good_vals, good_ixes)
