@@ -72,11 +72,11 @@ if chosen_model['type'] == 'log_reg':
             l.backward()
             optimizer.step()
 
-            if batch_num % 40 == 0:
-                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
             if batch_num % 100 == 0:
                 bce, roc, acc = evaluate_model(model, val_iter)
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), bce)
+            if batch_num % 40 == 0 and batch_num % 100 != 0:
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
 
     #         l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
     #         if batch_num % 100 != 0 and batch_num % 40 == 0:
