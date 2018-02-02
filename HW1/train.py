@@ -113,10 +113,10 @@ if chosen_model['type'] == 'CBOW':
             optimizer.step()
             model.eval()
 
-            if batch_num % 160 == 0:
+            if batch_num % 160*4 == 0:
                 bce, roc, acc = evaluate_model(model, val_iter)
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
-            if batch_num % 64 == 0 and batch_num % 160 != 0:
+            if batch_num % 64*4 == 0 and batch_num % 160*4 != 0:
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
  
 
