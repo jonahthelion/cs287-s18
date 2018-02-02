@@ -26,7 +26,7 @@ vis.env = 'train'
 vis_windows = None
 
 # define model
-chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False}
+chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False}
 
 # get data
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
@@ -35,14 +35,14 @@ TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
 if chosen_model['type'] == 'MNB':
     all_scores = []
     for alpha in chosen_model['alpha']:
-        model = MNB(V=len(TEXT.vocab), alpha=.1)
+        model = MNB(V=len(TEXT.vocab), alpha=.1, chosen_model['counts'])
 
         for batch_num,batch in enumerate(tqdm(train_iter)):
             model.train_sample(batch.label.data - 1, batch.text.data)
         model.postprocess()
         # print_important(model.w.weight.data.cpu().squeeze(0), TEXT, 15)
         bce, roc, acc = evaluate_model(model, test_iter)
-        print(alpha)
+        print('alpha:', alpha)
         print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
         all_scores.append((bce, roc, acc))
 

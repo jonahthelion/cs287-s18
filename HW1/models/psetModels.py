@@ -6,11 +6,12 @@ import torch.nn.functional as F
 from sklearn import metrics
 
 class MNB(nn.Module):
-    def __init__(self, V, alpha):
+    def __init__(self, V, alpha, counts):
         super(MNB, self).__init__()
 
         self.V = V
         self.alpha = alpha
+        self.counts = counts
 
         # initialize counts
         self.w_counts = torch.zeros(2, V) + alpha
@@ -21,7 +22,10 @@ class MNB(nn.Module):
         for phrase_ix in range(text.shape[1]):
             c = Counter(text[:,phrase_ix].numpy())
             for val in c:
-                self.w_counts[label[phrase_ix], val] += 1
+                if not self.counts:
+                    self.w_counts[label[phrase_ix], val] += 1
+                else:
+                    self.w_counts[label[phrase_ix], val] += c[val]
             self.label_counts[label[phrase_ix]] += 1
 
     def postprocess(self):
@@ -40,22 +44,11 @@ class MNB(nn.Module):
         for phrase_ix in range(text.shape[1]):
             c = Counter(text[:,phrase_ix].numpy())
             for val in c:
-                word_vecs[phrase_ix, val] += 1
+                if not self.counts:
+                    word_vecs[phrase_ix, val] += 1
+                else:
+                    word_vecs[phrase_ix, val] += c[val]
         return self.w(Variable(word_vecs.cuda()))
-
-    def evalu(self, train_iter):
-        all_actual = []
-        all_preds = []
-        for epoch in range(1):
-            for batch_num,batch in enumerate(train_iter):
-                preds = self.forward(batch.text.data)
-                preds = F.sigmoid(preds)
-                all_actual.append(batch.label.data - 1)
-                all_preds.append(preds)
-        all_actual = torch.cat(all_actual).numpy()
-        all_preds = torch.cat(all_preds).numpy()
-
-        return all_actual, all_preds
 
     def submission(self, test_iter, fname):
         print ('saving to', fname)
