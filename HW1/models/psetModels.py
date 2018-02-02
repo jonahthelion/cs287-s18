@@ -78,9 +78,9 @@ class CBOW(nn.Module):
         self.embed.weight.data = embed
 
         self.w = nn.Sequential(
+            nn.Dropout(.8, inplace=True),
             nn.Linear(300, 300),
             nn.BatchNorm1d(300),
-            nn.Dropout(.5, inplace=True),
             nn.ReLU(inplace=True),
 
             # nn.Linear(300, 300),
