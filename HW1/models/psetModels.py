@@ -121,8 +121,8 @@ class Conv(nn.Module):
 
 
         self.w = nn.Sequential(
-            nn.Dropout(.6),
-            nn.Conv1d(100, 1, 1, 1, 0),
+            nn.Dropout(.5),
+            nn.Conv1d(200, 1, 1, 1, 0),
             )
 
 
