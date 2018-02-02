@@ -81,12 +81,10 @@ class CBOW(nn.Module):
             nn.Linear(300, 100),
             nn.ReLU(inplace=True),
 
-            # nn.Linear(300, 300),
-            # nn.BatchNorm1d(300),
-            # nn.Dropout(.5, inplace=True),
-            # nn.ReLU(inplace=True),
+            nn.Linear(100, 50),
+            nn.ReLU(inplace=True),
 
-            nn.Linear(100, 1),
+            nn.Linear(50, 1),
             )
 
     def forward(self, text):
