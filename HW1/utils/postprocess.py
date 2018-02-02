@@ -7,7 +7,7 @@ def print_important(w, TEXT, k):
     for val_ix,val,ix in zip(range(len(bad_vals)), bad_vals.numpy(), bad_ixes.numpy()):
         print(val_ix, TEXT.vocab.itos[ix], ' ', val)
     print ('\n', 'GOOD')
-    for val_ix,val,ix in zip(range(good_vals), good_vals.numpy(), good_ixes.numpy()):
+    for val_ix,val,ix in zip(range(len(good_vals)), good_vals.numpy(), good_ixes.numpy()):
         print(val_ix,TEXT.vocab.itos[ix], ' ', val)
     print('\n')
 
