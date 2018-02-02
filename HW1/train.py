@@ -68,7 +68,7 @@ if chosen_model['type'] == 'log_reg':
         for batch_num,batch in enumerate(train_iter):
             optimizer.zero_grad()
             preds = model(batch.text.data)
-            l = F.binary_cross_entropy_with_logits(preds.view(-1), Variable((batch.label - 1).float().cuda()))
+            l = F.binary_cross_entropy_with_logits(preds.view(-1), (batch.label - 1).float().cuda())
             l.backward()
             optimizer.step()
 
