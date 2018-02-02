@@ -86,10 +86,6 @@ class CBOW(nn.Module):
             nn.BatchNorm1d(50),
             nn.ReLU(inplace=True),
 
-            nn.Linear(50, 50),
-            nn.BatchNorm1d(50),
-            nn.ReLU(inplace=True),
-
             nn.Linear(50, 1),
             )
 
