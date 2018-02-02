@@ -81,57 +81,19 @@ class CBOW(nn.Module):
             nn.Linear(300, 300),
             nn.ReLU(inplace=True),
             nn.BatchNorm1d(300),
-            nn.Linear(300, 1, bias=False)
+
+            nn.Linear(300, 300),
+            nn.ReLU(inplace=True),
+            nn.BatchNorm1d(300),
+
+            nn.Linear(300, 1),
             )
 
     def forward(self, text):
-        if text.shape[1] == 1:
-            text = torch.stack([text[:,0], torch.zeros(text.shape[0]).long()], dim=1)
-            embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])[0].unsqueeze(0)
-        else:
-            embeds = torch.stack([self.embed(text[:,i]).mean(0) for i in range(text.shape[1])])
-        return self.w(embeds).view(-1)
+        embeds = self.embed(text.cuda())
+        return self.w(embeds)
 
-    def train_sample(self, label, text, optimizer):
-        optimizer.zero_grad()
-        outs = self.forward(text)
-        l = F.binary_cross_entropy_with_logits(outs, label)
-        l.backward()
-        optimizer.step()
 
-        return l
-
-    def evalu_loss(self, label, text):
-        outs = self.forward(text)
-        l = F.binary_cross_entropy_with_logits(outs, label)
-        return l
-
-    def submission(self, test_iter, fname):
-        print ('saving to', fname)
-        upload = []
-        for batch in test_iter:
-            probs = F.sigmoid(self.forward(batch.text.data)) + 1
-            upload.extend(list(probs.data.numpy().round().astype(int).flatten()))
-        with open(fname, 'w') as f:
-            f.write('Id,Cat\n')
-            for u_ix,u in enumerate(upload):
-                f.write(str(u_ix) + ',' + str(u) + '\n')
-
-    def evalu(self, train_iter):
-        all_actual = []
-        all_preds = []
-        for epoch in range(1):
-            for batch_num,batch in enumerate(train_iter):
-                preds = self.forward(batch.text.data)
-                preds = F.sigmoid(preds)
-                all_actual.append(batch.label.data - 1)
-                all_preds.append(preds.data)
-        all_actual = torch.cat(all_actual).numpy()
-        all_preds = torch.cat(all_preds).numpy()
-
-        print(metrics.classification_report(all_actual, all_preds.round()))
-
-        return all_actual, all_preds
 
 
 class Conv(nn.Module):

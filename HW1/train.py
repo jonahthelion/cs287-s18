@@ -27,7 +27,8 @@ vis_windows = None
 
 # define model
 # chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False, 'batch_size': 50}
-chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':True}
+# chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
+chosen_model = {'type': 'CBOW', 'batch_size': 150}
 print(chosen_model)
 
 # get data
@@ -47,8 +48,6 @@ if chosen_model['type'] == 'MNB':
         print('alpha:', alpha)
         print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
         all_scores.append((bce, roc, acc))
-    print('saving', 'MNB.p')
-    torch.save(model, 'MNB.p')
     if chosen_model['should_plot']:
         fig = plt.figure(figsize=(10,6))
         plt.plot(chosen_model['alpha'], [all_score[2] for all_score in all_scores])
@@ -100,29 +99,26 @@ if chosen_model['type'] == 'log_reg':
     #     print_important(TEXT, bad_vals.squeeze(), bad_ixes.squeeze(), good_vals.squeeze(), good_ixes.squeeze())
 
 
-
-
-
 if chosen_model['type'] == 'CBOW':
-    model = torch.load('4_cbow.p')
     model = CBOW(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=5e-4)
+    model.cuda()
+    optimizer = torch.optim.Adam(model.w.parameters(), lr=0.0001, weight_decay=5e-4)
     for epoch in range(5):
-        model.train()
         for batch_num,batch in enumerate(train_iter):
-            l = model.train_sample(batch.label.float() - 1, batch.text.data, optimizer)
-            if batch_num % 100 != 0 and batch_num % 40 == 0:
-                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)))
-            else:
-                lvals = []
-                for batch in val_iter:
-                    lvals.append(model.evalu_loss(batch.label.float() - 1, batch.text.data).data.numpy()[0])
-                vis_windows = vis_display(vis, vis_windows, l.data.numpy()[0], epoch + batch_num/float(len(train_iter)), sum(lvals)/float(len(lvals)))
-        print('saving', str(epoch) + '_' + 'cbow.p')
-        torch.save(model, str(epoch) + '_' + 'cbow.p')
+            model.train()
+            optimizer.zero_grad()
+            preds = model(batch.text.data)
+            l = F.binary_cross_entropy_with_logits(preds.view(-1), (batch.label - 1).float().cuda())
+            l.backward()
+            optimizer.step()
+            model.eval()
 
-        model.eval()
-        model.evalu(test_iter)
+            if batch_num % 40 == 0:
+                bce, roc, acc = evaluate_model(model, val_iter)
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
+            if batch_num % 16 == 0 and batch_num % 40 != 0:
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+ 
 
 
 if chosen_model['type'] == 'conv':
