@@ -1,5 +1,6 @@
 import torch
 import torch.nn.functional as F
+from torch.autograd import Variable
 
 def print_important(w, TEXT, k):
     bad_vals, bad_ixes = torch.topk(w, k, largest=True)
