@@ -90,7 +90,7 @@ class CBOW(nn.Module):
             )
 
     def forward(self, text):
-        embeds = self.embed(text.cuda())
+        embeds = self.embed(Variable(text.cuda()))
         return self.w(embeds)
 
 
