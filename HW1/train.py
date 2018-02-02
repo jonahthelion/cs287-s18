@@ -19,7 +19,7 @@ vis_windows = {'train_bce': None}
 
 
 
-chosen_model = {'type': 'CBOW'}
+chosen_model = {'type': 'MNB'}
 
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
 url = 'https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.simple.vec'
@@ -111,6 +111,7 @@ if chosen_model['type'] == 'conv':
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=5e-4)
     model.train()
     for epoch in range(5):
+        model.train()
         for batch_num,batch in enumerate(train_iter):
             optimizer.zero_grad()
             outs = model(batch.text.data)
@@ -128,6 +129,7 @@ if chosen_model['type'] == 'conv':
         print('saving', str(epoch) + '_' + 'conv.p')
         torch.save(model, str(epoch) + '_' + 'conv.p')
 
+        model.eval()
         model.evalu(test_iter)
 
 
