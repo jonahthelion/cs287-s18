@@ -11,6 +11,7 @@ import visdom
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
+import numpy as np
 plt.style.use('ggplot')
 plt.rcParams['font.serif'] = 'Ubuntu'
 plt.rcParams.update({'font.size': 18})
