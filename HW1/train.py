@@ -26,12 +26,12 @@ vis.env = 'train'
 vis_windows = None
 
 # define model
-# chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False}
-chosen_model = {'type': 'log_reg'}
+# chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False, 'batch_size': 50}
+chosen_model = {'type': 'log_reg', 'batch_size': 100}
 print(chosen_model)
 
 # get data
-TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=50)
+TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=chosen_model['batch_size'])
 
 
 if chosen_model['type'] == 'MNB':
