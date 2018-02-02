@@ -34,7 +34,7 @@ print(chosen_model)
 
 # get data
 TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=chosen_model['batch_size'])
-
+assert False
 
 if chosen_model['type'] == 'MNB':
     all_scores = []
