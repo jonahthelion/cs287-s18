@@ -18,6 +18,6 @@ def get_data(batch_size):
         (train, val, test), batch_size=batch_size, device=-1, repeat=False)
 
     url = 'https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.simple.vec'
-    TEXT.vocab.load_vectors(vectors=Vectors('wiki.simple.vec', url=url))
+    TEXT.vocab.load_vectors('glove.6B.300d') # vectors=Vectors('wiki.simple.vec', url=url))
 
     return TEXT, LABEL, train_iter, val_iter, test_iter
