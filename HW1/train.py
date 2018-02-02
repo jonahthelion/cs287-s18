@@ -64,7 +64,7 @@ if chosen_model['type'] == 'log_reg':
     model = LogReg(V=len(TEXT.vocab))
     model.cuda()
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0006, weight_decay=5e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0004, weight_decay=5e-4)
 
     for epoch in range(150):
         for batch_num,batch in enumerate(train_iter):
