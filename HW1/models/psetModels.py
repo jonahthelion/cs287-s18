@@ -110,7 +110,7 @@ class Conv(nn.Module):
 
             nn.AdaptiveMaxPool1d(1),
 
-            nn.Conv1d(300, 1, 1, 1, 0),
+            nn.Conv1d(100, 1, 1, 1, 0),
             )
 
     def forward(self, text):
