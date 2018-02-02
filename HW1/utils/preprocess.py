@@ -17,4 +17,7 @@ def get_data(batch_size):
     train_iter, val_iter, test_iter = torchtext.data.BucketIterator.splits(
         (train, val, test), batch_size=batch_size, device=-1, repeat=False)
 
+    url = 'https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.simple.vec'
+    TEXT.vocab.load_vectors(vectors=Vectors('wiki.simple.vec', url=url))
+
     return TEXT, LABEL, train_iter, val_iter, test_iter
