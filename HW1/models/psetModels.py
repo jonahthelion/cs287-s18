@@ -115,7 +115,7 @@ class Conv(nn.Module):
 
     def forward(self, text):
         embeds = self.embed(Variable(text.cuda()))
-        return self.w(embeds)  
+        return self.w(embeds.permute(1, 2, 0))  
 
 
 
