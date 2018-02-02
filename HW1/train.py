@@ -9,6 +9,7 @@ from tqdm import tqdm
 from sklearn import metrics
 import visdom
 import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 plt.rcParams['font.serif'] = 'Ubuntu'
@@ -44,7 +45,7 @@ if chosen_model['type'] == 'MNB':
         all_scores.append((bce, roc, acc))
     fig = plt.figure(figsize=(10,6))
     plt.plot(chosen_model['alpha'], [all_score[2] for all_score in all_scores])
-    plt.savefig('alpha.pdf')
+    plt.savefig('writeup/imgs/alpha.pdf')
     plt.close(fig)
 
 
