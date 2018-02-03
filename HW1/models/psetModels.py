@@ -4,6 +4,7 @@ from torch.autograd import Variable
 from collections import Counter
 import torch.nn.functional as F
 from sklearn import metrics
+import torchvision.models as models
 
 class MNB(nn.Module):
     def __init__(self, V, alpha, counts):
@@ -136,6 +137,8 @@ class Conv(nn.Module):
 class Resnet(nn.Module):
     def __init__(self):
         super(Resnet, self).__init__()
+
+        self.trunk = models.resnet18(pretrained=True)
 
 
 
