@@ -33,5 +33,5 @@ def get_data(chosen_model):
 def text_to_img(text, TEXT):
     sample_ix = 0
     img_text = " ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix])
-    print(img_text)
+    # print(img_text)
 
