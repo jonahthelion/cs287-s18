@@ -46,7 +46,7 @@ def get_data(chosen_model):
 
 def text_to_img(text, TEXT):
     imgs = []
-    for sample_ix in text.shape[1]:
+    for sample_ix in range(text.shape[1]):
         img_text = textwrap.wrap(" "*np.random.randint(0, 26) + " ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix]), 27)
         img_text = "".join([ row + "\n" for row in img_text])
 
