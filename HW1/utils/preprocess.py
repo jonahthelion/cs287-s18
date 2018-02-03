@@ -22,7 +22,7 @@ def get_data(chosen_model):
     if not 'embed_type' in chosen_model or chosen_model['embed_type'] is 'wiki':
         url = 'https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.simple.vec'
         TEXT.vocab.load_vectors(vectors=Vectors('wiki.simple.vec', url=url)) # 'glove.6B.300d' # vectors=Vectors('wiki.simple.vec', url=url))
-    else:
+    elif chosen_model['embed_type'] is 'glove':
         TEXT.vocab.load_vectors(vectors='glove.6B.300d')
 
 

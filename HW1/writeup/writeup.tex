@@ -277,13 +277,26 @@ Following \href{http://aclweb.org/anthology/D/D14/D14-1181.pdf}{Yoon's CNN paper
 \item 300$\rightarrow$ 25, kernel 5, stride 1, padding 1
 \end{itemize}
 
-Each convolution layer consists of the convolution, then ReLU, then single output max pool. We concatenate the resultant features and output a fully connected layer with 0.5 dropout. As an experiment, we train first using the wikipedia 300d embedding and second using the GloVe 6B 300d embedding. The optimizer is an Adam optimizer of learning rate .00006 in both cases. We treat the embeddings as fixed. The model is trained for 150 epochs with batch size 50. Training and validation metrics tracked during training are shown in Figure \ref{fig:conv}.
+Each convolution layer consists of the convolution, then ReLU, then single output max pool. We concatenate the resultant features and output a fully connected layer with 0.5 dropout. As an experiment, we train first using the wikipedia 300d embedding and second using the GloVe 6B 300d embedding. The optimizer is an Adam optimizer of learning rate .00006 in both cases. We treat the embeddings as fixed. The model is trained for 150 epochs with batch size 50. Training and validation metrics tracked during training are shown in Figure \ref{fig:conv}. Results for the two different embeddings are shown in Table \ref{tab:convtab}.
 
 \begin{figure}
   \centering
   \includegraphics[width=6cm]{imgs/convtrain}
-  \caption{\label{fig:logtrain} The left is the binary cross entropy recorded during training of Conv net with wikipedia word embeddings and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.}
+  \caption{\label{fig:conv} The left is the binary cross entropy recorded during training of Conv net with wikipedia word embeddings and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.}
 \end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llrrr}
+ \toprule
+ Model &  & Acc. & Bce. & Roc.\\
+ \midrule
+ \textsc{Wiki} & & 0.800 & 0.533 & 0.877\\
+ \textsc{GloVe} & & 0.816  & 0.448 & 0.886\\
+ \bottomrule
+\end{tabular}
+\caption{\label{tab:cbowtab} The word vectors improve the accuracy of the model.}
+\end{table}
 
 \end{subsection}
 
