@@ -277,7 +277,7 @@ Following \href{http://aclweb.org/anthology/D/D14/D14-1181.pdf}{Yoon's CNN paper
 \item 300$\rightarrow$ 25, kernel 5, stride 1, padding 1
 \end{itemize}
 
-Each convolution layer consists of the convolution, then ReLU, then single output max pool. We concatenate the resultant features and output a fully connected layer with 0.5 dropout. As an experiment, we train first using the wikipedia 300d embedding and second using the GloVe 6B 300d embedding. The optimizer is an Adam optimizer of learning rate .00006 in both cases. We treat the embeddings as fixed. The model is trained for 150 epochs with batch size 50. Training and validation metrics tracked during training are shown in Figure \ref{fig:conv}. Results for the two different embeddings are shown in Table \ref{tab:convtab}.
+Each convolution layer consists of the convolution, then ReLU, then single output max pool. We concatenate the resultant features and output a fully connected layer with 0.5 dropout. As an experiment, we train first using the wikipedia 300d embedding and second using the GloVe 6B 300d embedding. The optimizer is an Adam optimizer of learning rate .00006 in both cases. We treat the embeddings as fixed. The model is trained for 250 epochs with batch size 50 on wikipedia word vectors, and for 350 epochs with batch size 50 on GloVe word vectors. Training and validation metrics tracked during training are shown in Figure \ref{fig:conv}. Results for the two different embeddings are shown in Table \ref{tab:convtab}.
 
 \begin{figure}
   \centering
@@ -292,10 +292,10 @@ Each convolution layer consists of the convolution, then ReLU, then single outpu
  Model &  & Acc. & Bce. & Roc.\\
  \midrule
  \textsc{Wiki} & & 0.800 & 0.533 & 0.877\\
- \textsc{GloVe} & & 0.816  & 0.448 & 0.886\\
+ \textsc{GloVe} & & 0.833  & 0.577 & 0.907\\
  \bottomrule
 \end{tabular}
-\caption{\label{tab:cbowtab} The word vectors improve the accuracy of the model.}
+\caption{\label{tab:convtab} Higher quality word vectors improve the model.}
 \end{table}
 
 \end{subsection}

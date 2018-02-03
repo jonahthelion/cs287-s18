@@ -16,7 +16,7 @@ plt.style.use('ggplot')
 plt.rcParams['font.serif'] = 'Ubuntu'
 plt.rcParams.update({'font.size': 18})
 
-from utils.preprocess import get_data
+from utils.preprocess import get_data, text_to_img
 from models.psetModels import MNB, LogReg, CBOW, Conv
 from utils.postprocess import print_important, vis_display, evaluate_model
 
@@ -29,7 +29,8 @@ vis_windows = None
 # chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False, 'batch_size': 50}
 # chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
 # chosen_model = {'type': 'CBOW', 'batch_size': 100, 'pool': 'max'}
-chosen_model = {'type': 'Conv', 'batch_size': 50, 'embed_type': 'glove'}
+# chosen_model = {'type': 'Conv', 'batch_size': 50, 'embed_type': 'glove'}
+chosen_model = {'type': 'resnet'}
 print(chosen_model)
 
 # get data
@@ -145,5 +146,21 @@ if chosen_model['type'] == 'Conv':
         bce,roc,acc = evaluate_model(model, test_iter)
         print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
 
+if chosen_model['type'] == 'resnet':
+    model = Resnet()
+    model.cuda()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.00006)
+    for epoch in range(350):
+        for batch_num,batch in enumerate(train_iter):
+            model.train()
+            optimizer.zero_grad()
+
+            text_to_img(batch.text.data, TEXT)
+            # preds = model(batch.text.data)
+            # l = F.binary_cross_entropy_with_logits(preds.view(-1), (batch.label - 1).float().cuda())
+            # l.backward()
+            # optimizer.step()
+
+            model.eval()
 
 

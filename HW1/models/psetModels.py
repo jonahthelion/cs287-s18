@@ -133,7 +133,9 @@ class Conv(nn.Module):
 
         return self.w(out)
 
-
+class Resnet(nn.Module):
+    def __init__(self):
+        super(Resnet, self).__init__()
 
 
 

@@ -1,6 +1,8 @@
 import torchtext
 from torchtext.vocab import Vectors, GloVe
 
+import matplotlib.pyplot as plt
+
 def get_data(chosen_model):
     batch_size = chosen_model['batch_size']
 
@@ -27,3 +29,9 @@ def get_data(chosen_model):
 
 
     return TEXT, LABEL, train_iter, val_iter, test_iter
+
+def text_to_img(text, TEXT):
+    sample_ix = 0
+    img_text = " ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix])
+    pinrt(img_text)
+
