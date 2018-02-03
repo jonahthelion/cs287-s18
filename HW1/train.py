@@ -58,7 +58,6 @@ if chosen_model['type'] == 'MNB':
         plt.savefig('writeup/imgs/alpha.pdf')
         plt.close(fig)
 
-
 if chosen_model['type'] == 'log_reg':
 
     model = LogReg(V=len(TEXT.vocab), counts=chosen_model['counts'])
@@ -98,7 +97,6 @@ if chosen_model['type'] == 'log_reg':
     #     bad_vals,bad_ixes = torch.topk(model.w.weight.data, 10, largest=True)
     #     good_vals,good_ixes = torch.topk(model.w.weight.data, 10, largest=False)
     #     print_important(TEXT, bad_vals.squeeze(), bad_ixes.squeeze(), good_vals.squeeze(), good_ixes.squeeze())
-
 
 if chosen_model['type'] == 'CBOW':
     model = CBOW(V=len(TEXT.vocab), embed=TEXT.vocab.vectors, pool=chosen_model['pool'])
