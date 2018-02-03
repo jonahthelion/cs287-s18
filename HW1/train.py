@@ -150,7 +150,7 @@ if chosen_model['type'] == 'resnet':
     model.cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
     all_lens = []
-    for epoch in range(100):
+    for epoch in range(500):
         for batch_num,batch in enumerate(train_iter):
             model.train()
             optimizer.zero_grad()
