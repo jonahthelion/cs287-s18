@@ -31,7 +31,7 @@ vis_windows = None
 # chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
 # chosen_model = {'type': 'CBOW', 'batch_size': 100, 'pool': 'max'}
 # chosen_model = {'type': 'Conv', 'batch_size': 50, 'embed_type': 'glove'}
-chosen_model = {'type': 'resnet', 'batch_size': 2}
+chosen_model = {'type': 'resnet', 'batch_size': 4}
 print(chosen_model)
 
 # get data
@@ -150,7 +150,7 @@ if chosen_model['type'] == 'resnet':
     model.cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.00006)
     all_lens = []
-    for epoch in range(1):
+    for epoch in range(100):
         for batch_num,batch in enumerate(train_iter):
             model.train()
             optimizer.zero_grad()
