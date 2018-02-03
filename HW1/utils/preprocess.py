@@ -6,6 +6,7 @@ import PIL
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
+import textwrap
 
 sily = 0
 font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12)
@@ -41,14 +42,14 @@ def text_to_img(text, TEXT):
     global sily, font
     sample_ix = 0
 
-    img_text = "hello\nhello"
-    # .join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix])
+    img_text = textwrap.wrap(" ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix]))
+    img_text = "\n".join(img_text)
 
     img = Image.new('RGBA', (200, 200), (120,20,20))
     draw = ImageDraw.Draw(img)
     draw.text((0,0), img_text, (255,255,0), font=font)
     draw = ImageDraw.Draw(img)
-    
+
     print('saving', str(sily) + '.png')
     img.save(str(sily) + '.png')
     sily += 1
