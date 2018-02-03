@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  3 FEB 2018 11:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  3 FEB 2018 13:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -375,11 +375,7 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip61
 )
-(./writeup.aux
-
-LaTeX Warning: Label `fig:logtrain' multiply defined.
-
-)
+(./writeup.aux)
 \openout1 = `writeup.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
@@ -405,7 +401,6 @@ Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count134
@@ -512,31 +507,24 @@ File: omsppl.fd
 )
 LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 17.
-LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 152.
-LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 154.
-
-
-LaTeX Warning: Reference `tab:bnwords' on page 1 undefined on input line 154.
-
-[1
-
-{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<imgs/alpha.pdf, id=61, 722.7pt x 433.62pt>
-File: imgs/alpha.pdf Graphic file (type pdf)
- <use imgs/alpha.pdf>
-Package pdftex.def Info: imgs/alpha.pdf used on input line 160.
-(pdftex.def)             Requested size: 170.71652pt x 102.43002pt.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 161.
-
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 83.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 152.
+ [1
+
+{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<imgs/alpha.pdf, id=63, 722.7pt x 433.62pt>
+File: imgs/alpha.pdf Graphic file (type pdf)
+ <use imgs/alpha.pdf>
+Package pdftex.def Info: imgs/alpha.pdf used on input line 160.
+(pdftex.def)             Requested size: 170.71652pt x 102.43002pt.
 LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <10.95> not available
 (Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 161.
- [2 <./imgs/alpha.pdf>] <imgs/logtrain.png, id=101, 788.9475pt x 379.4175pt>
+ [2 <./imgs/alpha.pdf>] <imgs/logtrain.png, id=103, 788.9475pt x 379.4175pt>
 File: imgs/logtrain.png Graphic file (type png)
 
 <use imgs/logtrain.png>
@@ -548,82 +536,76 @@ Overfull \hbox (2.73637pt too wide) in paragraph at lines 225--235
  []
 
 
-LaTeX Warning: Reference `fig:cbowfit' on page 3 undefined on input line 245.
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<imgs/cbowtrain.png, id=107, 765.86125pt x 365.365pt>
+File: imgs/cbowtrain.png Graphic file (type png)
+ <use imgs/cbowtrain.png>
+Package pdftex.def Info: imgs/cbowtrain.png used on input line 264.
+(pdftex.def)             Requested size: 170.71652pt x 81.43979pt.
+
+[3 <./imgs/logtrain.png>] <imgs/convtrain.png, id=120, 774.895pt x 369.38pt>
+File: imgs/convtrain.png Graphic file (type png)
+
+<use imgs/convtrain.png>
+Package pdftex.def Info: imgs/convtrain.png used on input line 285.
+(pdftex.def)             Requested size: 170.71652pt x 81.37657pt.
+ [4 <./imgs/cbowtrain.png>]
+<imgs/0.png, id=131, 224.84pt x 224.84pt>
+File: imgs/0.png Graphic file (type png)
+ <use imgs/0.png>
+Package pdftex.def Info: imgs/0.png used on input line 318.
+(pdftex.def)             Requested size: 170.71652pt x 170.72235pt.
+
+<imgs/1.png, id=132, 224.84pt x 224.84pt>
+File: imgs/1.png Graphic file (type png)
+ <use imgs/1.png>
+Package pdftex.def Info: imgs/1.png used on input line 319.
+(pdftex.def)             Requested size: 170.71652pt x 170.72235pt.
+
+<imgs/restrain.png, id=133, 766.865pt x 366.36874pt>
+File: imgs/restrain.png Graphic file (type png)
+ <use imgs/restrain.png>
+Package pdftex.def Info: imgs/restrain.png used on input line 325.
+(pdftex.def)             Requested size: 170.71652pt x 81.55731pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<imgs/cbowtrain.png, id=104, 765.86125pt x 365.365pt>
-File: imgs/cbowtrain.png Graphic file (type png)
- <use imgs/cbowtrain.png>
-Package pdftex.def Info: imgs/cbowtrain.png used on input line 263.
-(pdftex.def)             Requested size: 170.71652pt x 81.43979pt.
-
-[3 <./imgs/logtrain.png>] <imgs/convtrain.png, id=117, 774.895pt x 369.38pt>
-File: imgs/convtrain.png Graphic file (type png)
-
-<use imgs/convtrain.png>
-Package pdftex.def Info: imgs/convtrain.png used on input line 284.
-(pdftex.def)             Requested size: 170.71652pt x 81.37657pt.
- [4 <./imgs/cbowtrain.png>]
-<imgs/0.png, id=127, 224.84pt x 224.84pt>
-File: imgs/0.png Graphic file (type png)
- <use imgs/0.png>
-Package pdftex.def Info: imgs/0.png used on input line 316.
-(pdftex.def)             Requested size: 170.71652pt x 170.72235pt.
-
-<imgs/1.png, id=128, 224.84pt x 224.84pt>
-File: imgs/1.png Graphic file (type png)
- <use imgs/1.png>
-Package pdftex.def Info: imgs/1.png used on input line 317.
-(pdftex.def)             Requested size: 170.71652pt x 170.72235pt.
-
-<imgs/restrain.png, id=129, 766.865pt x 366.36874pt>
-File: imgs/restrain.png Graphic file (type png)
- <use imgs/restrain.png>
-Package pdftex.def Info: imgs/restrain.png used on input line 323.
-(pdftex.def)             Requested size: 170.71652pt x 81.55731pt.
-
+[5 <./imgs/convtrain.png> <./imgs/0.png> <./imgs/1.png>]
 No file writeup.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 375.
-[5 <./imgs/convtrain.png> <./imgs/0.png> <./imgs/1.png>] [6 <./imgs/restrain.pn
-g>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 375.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 406.
+[6 <./imgs/restrain.png>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 406.
  (./writeup.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 375.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 375.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 406.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 406.
 Package rerunfilecheck Info: File `writeup.out' has not changed.
 (rerunfilecheck)             Checksum: 170A42DA8CD8B0D34AA0C5C56304772D;555.
-
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 375.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 406.
  ) 
 Here is how much of TeX's memory you used:
- 8723 strings out of 492995
- 128388 string characters out of 6132704
- 217272 words of memory out of 5000000
- 12092 multiletter control sequences out of 15000+600000
- 35663 words of font info for 98 fonts, out of 8000000 for 9000
+ 8728 strings out of 492995
+ 128440 string characters out of 6132704
+ 217851 words of memory out of 5000000
+ 12093 multiletter control sequences out of 15000+600000
+ 36178 words of font info for 100 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,7n,40p,870b,449s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,7n,40p,794b,422s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/tex
 live/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texl
 ive/2017/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/local/texlive/
-2017/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/local/texlive/2017/te
-xmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2017/texmf-dis
-t/fonts/type1/urw/palatino/uplbi8a.pfb></usr/local/texlive/2017/texmf-dist/font
-s/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1
-/urw/palatino/uplri8a.pfb>
-Output written on writeup.pdf (6 pages, 192220 bytes).
+2017/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2017/tex
+mf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/local/texlive/2017/texmf-dist
+/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/
+type1/urw/palatino/uplbi8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/
+urw/palatino/uplr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/pal
+atino/uplri8a.pfb>
+Output written on writeup.pdf (6 pages, 202342 bytes).
 PDF statistics:
- 180 PDF objects out of 1000 (max. 8388607)
- 132 compressed objects within 2 object streams
- 29 named destinations out of 1000 (max. 500000)
+ 191 PDF objects out of 1000 (max. 8388607)
+ 142 compressed objects within 2 object streams
+ 31 named destinations out of 1000 (max. 500000)
  116 words of extra memory for PDF output out of 10000 (max. 10000000)
 

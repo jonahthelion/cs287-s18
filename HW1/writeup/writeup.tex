@@ -80,7 +80,7 @@ For all models, a sentence $\boldx_i$ is encoded as a sequence $x_1,...,x_n$ whe
 
 \section{Model and Algorithms}
 
-All models are trained on the \href{https://nlp.stanford.edu/~socherr/EMNLP2013_RNTN.pdf}{Stanford Sentiment Treebank} (SST1). Unless otherwise specified, models requiring gradient descent are trained with an Adam optimizer of learning rate 0.001 and weight decay 0.0005.  Training loss and validation loss are recorded in real time with \href{https://github.com/facebookresearch/visdom}{visdom}.
+All models are trained on the \href{https://nlp.stanford.edu/~socherr/EMNLP2013_RNTN.pdf}{Stanford Sentiment Treebank} (SST1). For models requiring gradient descent, training loss and validation loss are recorded in real time with \href{https://github.com/facebookresearch/visdom}{visdom}. Final accuracy, roc score, and binary cross entropy which are displayed in the tables are calculated on the test set. These metrics are calculated using \texttt{sklearn.metric}.
 
 %Here you specify the model itself. This section should formally
 %describe the model used to solve the task proposed in the previous
@@ -150,15 +150,15 @@ All models are trained on the \href{https://nlp.stanford.edu/~socherr/EMNLP2013_
 \section{Experiments}
 
 \begin{subsection}{Naive Bayes}
-All words for both labels are initialized to a count of $\alpha$. Figure \ref{fig:clusters} shows that performance of the algorithm on the validation set is robust to changes in $\alpha$. With $\alpha=.5$, performance on the test set using binarized and count word vectors are analyzed in Table \ref{tab:nb}.\\
-The weight vector determined by Naive Bayes can be interpreted as the sentiment associated with particular words. The most positive and most negative words and their weights for binarized bag of words are shown in Table \ref{tab:bnwords}.
+Word counts for positive and negative labels are all initialized to a global initial count of $\alpha$. Figure \ref{fig:clusters} shows that performance of the algorithm on the validation set is robust to changes in $\alpha$. With $\alpha=.5$, performance on the test set using binarized and count word vectors are analyzed in Table \ref{tab:nb}.\\
+The weight vector determined by Naive Bayes can be interpreted as the sentiment associated with particular words. The most positive and most negative words and their weights for binarized bag of words are shown in Table \ref{tab:nbwords}.
 
 
 
 \begin{figure}
   \centering
   \includegraphics[width=6cm]{imgs/alpha}
-  \caption{\label{fig:clusters} Affect of global smoothing parameter $\alpha$ on validation accuracy. Validation accuracy is calculated using sklearn's \texttt{accuracy\_score}. The performance is not sensitive to $\alpha$.}
+  \caption{\label{fig:clusters} Effect of global smoothing parameter $\alpha$ on validation accuracy for the count model. Validation accuracy is calculated using sklearn's \texttt{accuracy\_score}. The performance is not sensitive to $\alpha$.}
 \end{figure}
 
 \begin{table}[h]
@@ -242,7 +242,8 @@ bad & dull & mess  & worst & too &flat & stupid&? \\
 
 \begin{subsection}{Continuous bag of Words}
 
-In the Continuous bag of words (CBOW) model, one-hot vectors $x_i$ for each word are mapped to a dense vector by ab embedding $\mcE$ in a lower dimensional feature space. These lower dimensional vectors are then summed or averaged. The order of the words is therefore lost during the transformation $\phi(\boldx_i)$ as it is in the naive bayes model. The model is trained with an Adam optimizer of learning rate 0.00002 and batch size 100 for 350 epochs. The embedding is initialized to AWS word vectors but allowed to change during training. The embeddings improve the accuracy of the model over logistic regression and naive bayes as shown in Table $\ref{tab:cbowtab}$ regardless of whether sum or max pooling is used. Figure \ref{fig:cbowfit} shows the objective and validation accuracy during training of the model with max pooling.
+In the Continuous bag of words (CBOW) model, one-hot vectors $x_i$ for each word are mapped to a dense vector by ab embedding $\mcE$ in a lower dimensional feature space. These lower dimensional vectors are then pooled. The order of the words is therefore lost during the transformation $\phi(\boldx_i)$ as it is in the naive bayes model.\\
+The model is trained with an Adam optimizer of learning rate 0.00002 and batch size 100 for 350 epochs. The embedding is initialized to Wikipedia word vectors but allowed to change during training. The embeddings improve the accuracy of the model over logistic regression and naive bayes as shown in Table $\ref{tab:cbowtab}$ regardless of whether sum or max pooling is used. Figure \ref{fig:cbowfit} shows the objective and validation accuracy during training of the model with max pooling.
 
 \begin{table}[h]
 \centering
@@ -261,7 +262,7 @@ In the Continuous bag of words (CBOW) model, one-hot vectors $x_i$ for each word
 \begin{figure}
   \centering
   \includegraphics[width=6cm]{imgs/cbowtrain}
-  \caption{\label{fig:logtrain} The left is the binary cross entropy recorded during training of CBOW and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.}
+  \caption{\label{fig:cbowfit} The left is the binary cross entropy recorded during training of CBOW and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.}
 \end{figure}
 
 \end{subsection}
@@ -282,7 +283,7 @@ Each convolution layer consists of the convolution, then ReLU, then single outpu
 \begin{figure}
   \centering
   \includegraphics[width=6cm]{imgs/convtrain}
-  \caption{\label{fig:conv} The left is the binary cross entropy recorded during training of Conv net with wikipedia word embeddings and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.}
+  \caption{\label{fig:conv} The left is the binary cross entropy recorded during training of Conv net with wikipedia word embeddings and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model performs better than any other model tested in this writeup.}
 \end{figure}
 
 \begin{table}[h]
@@ -306,23 +307,36 @@ Each convolution layer consists of the convolution, then ReLU, then single outpu
 
 \begin{subsection}{ResNet}
 
-I fine-tune ResNet18 to classify images of the text of movie reviews. I'd argue that this problem is strictly harder than any of the above problems because now the network has to learn how to read in addition ot learning how to interpret.\\
+ResNet18is fine-tuned to classify images of the text of movie reviews. This problem is strictly harder than any of the above problems in that the network has to learn how to ``read" in addition to learning how to interpret.\\
 To create the images, I use DejaVuSansMono size 14 font and make images of size (224,224), which is the smallest recommended size to feed to ResNet18. The text is white on a black background and begins at a random location in the row line of the image. Example images are shown in Figure \ref{fig:restext}.\\
 The only modification made to the ResNet18 architecture is I change the fully convolution output layer from 512$\rightarrow$ 1000 to 512$\rightarrow$ 1.\\
-The network memorizes the training data fairly quickly as seen in Figure \ref{fig:restrain}. However, in order to memorize, the network still manages to learn features which allow it to generalize to near naive bayes performance on the validation and test sets. The final results are shown in Table \ref{tab:resres}.
+The model is trained for 225 epochs with batch size 4, and Adam optimizer of learning rate 0.0001.\\
+The network memorizes the training data fairly quickly as seen in Figure \ref{fig:restrain}. However, in order to memorize, the network still manages to learn features which allow it to generalize to near naive bayes performance on the validation and test sets.\\ The final results are shown in Table \ref{tab:resres}. Without doing more evaluation, it is not clear to me if the performance of this model is surprising or not.
 
 \begin{figure}
   \centering
   \includegraphics[width=6cm]{imgs/0.png}
   \includegraphics[width=6cm]{imgs/1.png}
-  \caption{\label{fig:restext} Images are white, mono text on a black blackground. The text has a random indent do make it more difficult for the network to memorize the training text. }
+  \caption{\label{fig:restext} Images are white, mono text on a black blackground. As shown above, the text has a random indent to make it more difficult for the network to memorize the training text. }
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=6cm]{imgs/restrain}
-  \caption{\label{fig:restrain} Images are white, mono text on a black blackground. The text has a random indent do make it more difficult for the network to memorize the training text. }
+  \caption{\label{fig:restrain} After 50 epochs, the network has affectively memorized the training set despite the randomization of text alignment. After 50 epochs, the gradient is small and the network asymptotes at a validation accuracy of about .74. }
 \end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llrrr}
+ \toprule
+ Model &  & Acc. & Bce. & Roc.\\
+ \midrule
+ \textsc{ResNet18} & & 0.774 & 0.685 & 0.855\\
+ \bottomrule
+\end{tabular}
+\caption{\label{tab:resres} ResNet learns features straight from the image of the text which generalize to near-naive bayes accuracy on the test set. }
+\end{table}
 
 \end{subsection}
 
@@ -367,7 +381,24 @@ The network memorizes the training data fairly quickly as seen in Figure \ref{fi
 
 \section{Conclusion}
 
-End the write-up with a very short recap of the main experiments and the main results. Describe any challenges you may have faced, and what could have been improved in the model.
+Four standard NLP models and a fifth model which has no predefined understanding of a vocabulary are trained and evaluated on SST1. The best results from all models are shown in Figure \ref{tab:conc}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llrrr}
+ \toprule
+ Model &  & Acc. & Bce. & Roc.\\
+ \midrule
+ \textsc{NB Counts} & & 0.793  & 0.686 & 0.867\\
+ \textsc{Binarized LR} & & 0.789 & 0.496 & 0.876\\
+ \textsc{Mean CBOW} & & 0.824 & 0.416 & 0.898\\
+ \textsc{GloVe CNN} & & 0.833  & 0.577 & 0.907\\
+ \midrule
+ \textsc{ResNet18} & & 0.774 & 0.685 & 0.855\\
+ \bottomrule
+\end{tabular}
+\caption{\label{tab:conc} }
+\end{table}
 
 \bibliographystyle{apalike}
 \bibliography{writeup}

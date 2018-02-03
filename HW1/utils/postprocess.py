@@ -37,8 +37,8 @@ def evaluate_model(model, val_iter, TEXT=None):
         else:
             imgs = text_to_img(batch.text.data, TEXT).cpu()
             all_preds.append(model(imgs.cuda()).squeeze().cpu())
-            # if batch_ix == 115:
-            #     break
+            if batch_ix == 115:
+                break
 
     all_actual = Variable(torch.cat(all_actual))
     all_preds = torch.cat(all_preds)

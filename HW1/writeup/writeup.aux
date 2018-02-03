@@ -19,9 +19,9 @@
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Problem Description}{1}{section.2}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Model and Algorithms}{1}{section.3}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Affect of global smoothing parameter $\alpha $ on validation accuracy. Validation accuracy is calculated using sklearn's \texttt  {accuracy\_score}. The performance is not sensitive to $\alpha $.\relax }}{2}{figure.caption.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Effect of global smoothing parameter $\alpha $ on validation accuracy for the count model. Validation accuracy is calculated using sklearn's \texttt  {accuracy\_score}. The performance is not sensitive to $\alpha $.\relax }}{2}{figure.caption.1}}
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:clusters}{{1}{2}{Affect of global smoothing parameter $\alpha $ on validation accuracy. Validation accuracy is calculated using sklearn's \texttt {accuracy\_score}. The performance is not sensitive to $\alpha $.\relax }{figure.caption.1}{}}
+\newlabel{fig:clusters}{{1}{2}{Effect of global smoothing parameter $\alpha $ on validation accuracy for the count model. Validation accuracy is calculated using sklearn's \texttt {accuracy\_score}. The performance is not sensitive to $\alpha $.\relax }{figure.caption.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Experiments}{2}{section.4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Naive Bayes}{2}{subsection.4.1}}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces  Binarizing or counting words does not significantly affect the performance of the model on the test set.\relax }}{2}{table.caption.2}}
@@ -39,17 +39,21 @@
 \@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces  The word vectors improve the accuracy of the model.\relax }}{4}{table.caption.7}}
 \newlabel{tab:cbowtab}{{5}{4}{The word vectors improve the accuracy of the model.\relax }{table.caption.7}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  The left is the binary cross entropy recorded during training of CBOW and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.\relax }}{4}{figure.caption.8}}
-\newlabel{fig:logtrain}{{3}{4}{The left is the binary cross entropy recorded during training of CBOW and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.\relax }{figure.caption.8}{}}
+\newlabel{fig:cbowfit}{{3}{4}{The left is the binary cross entropy recorded during training of CBOW and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.\relax }{figure.caption.8}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}CNN}{4}{subsection.4.4}}
 \@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces  Higher quality word vectors improve the model.\relax }}{4}{table.caption.10}}
 \newlabel{tab:convtab}{{6}{4}{Higher quality word vectors improve the model.\relax }{table.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  The left is the binary cross entropy recorded during training of Conv net with wikipedia word embeddings and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model performs better than any other model tested in this writeup.\relax }}{5}{figure.caption.9}}
+\newlabel{fig:conv}{{4}{5}{The left is the binary cross entropy recorded during training of Conv net with wikipedia word embeddings and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model performs better than any other model tested in this writeup.\relax }{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  Images are white, mono text on a black blackground. As shown above, the text has a random indent to make it more difficult for the network to memorize the training text. \relax }}{5}{figure.caption.11}}
+\newlabel{fig:restext}{{5}{5}{Images are white, mono text on a black blackground. As shown above, the text has a random indent to make it more difficult for the network to memorize the training text. \relax }{figure.caption.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}ResNet}{5}{subsection.4.5}}
 \bibstyle{apalike}
 \bibdata{writeup}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  The left is the binary cross entropy recorded during training of Conv net with wikipedia word embeddings and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.\relax }}{5}{figure.caption.9}}
-\newlabel{fig:conv}{{4}{5}{The left is the binary cross entropy recorded during training of Conv net with wikipedia word embeddings and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is significantly better than naive bayes.\relax }{figure.caption.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  Images are white, mono text on a black blackground. The text has a random indent do make it more difficult for the network to memorize the training text. \relax }}{5}{figure.caption.11}}
-\newlabel{fig:restext}{{5}{5}{Images are white, mono text on a black blackground. The text has a random indent do make it more difficult for the network to memorize the training text. \relax }{figure.caption.11}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}ResNet}{5}{subsection.4.5}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{5}{section.5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces  Images are white, mono text on a black blackground. The text has a random indent do make it more difficult for the network to memorize the training text. \relax }}{6}{figure.caption.12}}
-\newlabel{fig:restrain}{{6}{6}{Images are white, mono text on a black blackground. The text has a random indent do make it more difficult for the network to memorize the training text. \relax }{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces  After 50 epochs, the network has affectively memorized the training set despite the randomization of text alignment. After 50 epochs, the gradient is small and the network asymptotes at a validation accuracy of about .74. \relax }}{6}{figure.caption.12}}
+\newlabel{fig:restrain}{{6}{6}{After 50 epochs, the network has affectively memorized the training set despite the randomization of text alignment. After 50 epochs, the gradient is small and the network asymptotes at a validation accuracy of about .74. \relax }{figure.caption.12}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces  ResNet learns features straight from the image of the text which generalize to near-naive bayes accuracy on the test set. \relax }}{6}{table.caption.13}}
+\newlabel{tab:resres}{{7}{6}{ResNet learns features straight from the image of the text which generalize to near-naive bayes accuracy on the test set. \relax }{table.caption.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{6}{section.5}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces  \relax }}{6}{table.caption.14}}
+\newlabel{tab:conc}{{8}{6}{\relax }{table.caption.14}{}}

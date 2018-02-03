@@ -146,35 +146,35 @@ if chosen_model['type'] == 'Conv':
         print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
 
 if chosen_model['type'] == 'resnet':
-    model = torch.load('225_res.p')
-    bce,roc,acc = evaluate_model(model, test_iter, TEXT)
-    print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
+    # model = torch.load('225_res.p')
+    # bce,roc,acc = evaluate_model(model, test_iter, TEXT)
+    # print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
 
-    # model = Resnet()
-    # model.cuda()
-    # optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
-    # all_lens = []
-    # for epoch in range(500):
-    #     for batch_num,batch in enumerate(train_iter):
-    #         model.train()
-    #         optimizer.zero_grad()
-    #         imgs = text_to_img(batch.text.data, TEXT)
-    #         preds = model(imgs)
-    #         l = F.binary_cross_entropy_with_logits(preds.view(-1), (batch.label - 1).float().cuda())
-    #         l.backward()
-    #         optimizer.step()
-    #         model.eval()
+    model = Resnet()
+    model.cuda()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+    all_lens = []
+    for epoch in range(500):
+        for batch_num,batch in enumerate(train_iter):
+            model.train()
+            optimizer.zero_grad()
+            imgs = text_to_img(batch.text.data, TEXT)
+            preds = model(imgs)
+            l = F.binary_cross_entropy_with_logits(preds.view(-1), (batch.label - 1).float().cuda())
+            l.backward()
+            optimizer.step()
+            model.eval()
 
-    #         if batch_num % 160*32 == 0:
-    #             bce, roc, acc = evaluate_model(model, val_iter, TEXT)
-    #             vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
-    #         if batch_num % 64*32 == 0 and batch_num % 160*32 != 0:
-    #             vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
-    #     bce,roc,acc = evaluate_model(model, test_iter, TEXT)
-    #     print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
+            if batch_num % 160*32 == 0:
+                bce, roc, acc = evaluate_model(model, val_iter, TEXT)
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
+            if batch_num % 64*32 == 0 and batch_num % 160*32 != 0:
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+        bce,roc,acc = evaluate_model(model, test_iter, TEXT)
+        print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
 
-    #     if epoch % 5 == 0:
-    #         print('saving', str(epoch) + '_res.p')
-    #         torch.save(model, str(epoch) + '_res.p')
+        if epoch % 5 == 0:
+            print('saving', str(epoch) + '_res.p')
+            torch.save(model, str(epoch) + '_res.p')
 
 
