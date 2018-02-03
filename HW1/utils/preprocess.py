@@ -10,6 +10,7 @@ from PIL import ImageDraw
 import textwrap
 from torchvision import transforms
 import torch
+from torch.autograd import Variable
 
 font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf', 14)
 normalize = transforms.Compose([
