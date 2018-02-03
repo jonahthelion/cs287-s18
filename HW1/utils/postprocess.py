@@ -3,6 +3,7 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 from sklearn import metrics
 from .preprocess import text_to_img
+from tqdm import tqdm
 
 def print_important(w, TEXT, k):
     bad_vals, bad_ixes = torch.topk(w, k, largest=True)
@@ -29,12 +30,11 @@ def vis_display(vis, vis_windows, train_l, x_coord, val_l=None):
 def evaluate_model(model, val_iter, TEXT=None):
     all_actual, all_preds = [],[]
 
-    for batch in val_iter:
+    for batch in tqdm(val_iter):
         if TEXT is None:
             all_preds.append(model(batch.text.data).squeeze().cpu())
         else:
             imgs = text_to_img(batch.text.data, TEXT)
-            print(imgs)
             all_preds.append(model(imgs).squeeze().cpu())
         all_actual.append(batch.label.data - 1)
 
