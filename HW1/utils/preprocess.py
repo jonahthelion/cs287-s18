@@ -8,6 +8,7 @@ from PIL import Image
 from PIL import ImageDraw
 
 sily = 0
+font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12)
 
 def get_data(chosen_model):
     batch_size = chosen_model['batch_size']
@@ -40,11 +41,13 @@ def text_to_img(text, TEXT):
     sample_ix = 0
     img_text = " ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix])
 
-    font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12)
     img = Image.new('RGBA', (200, 200), (120,20,20))
-    draw = ImageDraw(img)
+    print('img', img)
+    draw = ImageDraw.Draw(img)
+    print('draw', draw)
     draw.text((0,0), 'Something important', (255,255,0), font=font)
     draw = ImageDraw.Draw(img)
+    print('saving', str(sily) + '.png')
     img.save(str(sily) + '.png')
     sily += 1
     # print(img_text)
