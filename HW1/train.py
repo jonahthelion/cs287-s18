@@ -154,16 +154,18 @@ if chosen_model['type'] == 'resnet':
         for batch_num,batch in enumerate(train_iter):
             model.train()
             optimizer.zero_grad()
-
             imgs = text_to_img(batch.text.data, TEXT)
-
-            assert False
-
-            # preds = model(batch.text.data)
-            # l = F.binary_cross_entropy_with_logits(preds.view(-1), (batch.label - 1).float().cuda())
-            # l.backward()
-            # optimizer.step()
-
+            preds = model(imgs)
+            l = F.binary_cross_entropy_with_logits(preds.view(-1), (batch.label - 1).float().cuda())
+            l.backward()
+            optimizer.step()
             model.eval()
+
+            if batch_num % 160*32 == 0:
+                bce, roc, acc = evaluate_model(model, val_iter)
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
+            if batch_num % 64*32 == 0 and batch_num % 160*32 != 0:
+                vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+
 
 

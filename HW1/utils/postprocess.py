@@ -2,6 +2,7 @@ import torch
 import torch.nn.functional as F
 from torch.autograd import Variable
 from sklearn import metrics
+from .preprocess import text_to_img
 
 def print_important(w, TEXT, k):
     bad_vals, bad_ixes = torch.topk(w, k, largest=True)
@@ -25,11 +26,15 @@ def vis_display(vis, vis_windows, train_l, x_coord, val_l=None):
             vis.line(Y=torch.Tensor([float(val_l)]) , X=torch.Tensor([x_coord]), win=vis_windows['val_bce'], update='append', opts=dict(title='Validation Accuracy'))
     return vis_windows
 
-def evaluate_model(model, val_iter):
+def evaluate_model(model, val_iter, TEXT=None):
     all_actual, all_preds = [],[]
 
     for batch in val_iter:
-        all_preds.append(model(batch.text.data).squeeze())
+        if TEXT is None:
+            all_preds.append(model(batch.text.data).squeeze())
+        else:
+            imgs = text_to_img(batch.text.data, TEXT)
+            all_preds.append(model(imgs).squeeze())
         all_actual.append(batch.label.data - 1)
 
     all_actual = Variable(torch.cat(all_actual).cuda())
