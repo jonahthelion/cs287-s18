@@ -47,7 +47,7 @@ def text_to_img(text, TEXT):
     img_text = [" "*np.random.randint(0, 35 - len(row)) + row + "\n" for row in img_text]
     print(img_text)
     if len(img_text) < 34:
-        img_text = "\n"*np.random.randint(0, 35 - len(img_text)) +  "".join(img_text)
+        img_text = "\n"*np.random.randint(0, 25 - len(img_text)) +  "".join(img_text)
 
     img = Image.new('RGBA', (200, 200), (120,20,20))
     draw = ImageDraw.Draw(img)
