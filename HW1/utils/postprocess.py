@@ -34,8 +34,8 @@ def evaluate_model(model, val_iter, TEXT=None):
         if TEXT is None:
             all_preds.append(model(batch.text.data).squeeze().cpu())
         else:
-            imgs = text_to_img(batch.text.data, TEXT)
-            all_preds.append(model(imgs).squeeze().cpu())
+            imgs = text_to_img(batch.text.data, TEXT).cpu()
+            all_preds.append(model(imgs.cuda()).squeeze().cpu())
         all_actual.append(batch.label.data - 1)
 
     all_actual = Variable(torch.cat(all_actual))
