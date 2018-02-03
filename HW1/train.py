@@ -17,7 +17,7 @@ plt.rcParams['font.serif'] = 'Ubuntu'
 plt.rcParams.update({'font.size': 18})
 
 from utils.preprocess import get_data, text_to_img
-from models.psetModels import MNB, LogReg, CBOW, Conv
+from models.psetModels import MNB, LogReg, CBOW, Conv, Resnet
 from utils.postprocess import print_important, vis_display, evaluate_model
 
 # set up visdom
