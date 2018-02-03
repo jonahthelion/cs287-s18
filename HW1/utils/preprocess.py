@@ -2,6 +2,12 @@ import torchtext
 from torchtext.vocab import Vectors, GloVe
 
 import matplotlib.pyplot as plt
+import PIL
+from PIL import ImageFont
+from PIL import Image
+from PIL import ImageDraw
+
+sily = 0
 
 def get_data(chosen_model):
     batch_size = chosen_model['batch_size']
@@ -33,5 +39,13 @@ def get_data(chosen_model):
 def text_to_img(text, TEXT):
     sample_ix = 0
     img_text = " ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix])
+
+    font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12)
+    img = Image.new('RGBA', (200, 200), (120,20,20))
+    draw = ImageDraw(img)
+    draw.text((0,0), 'Something important', (255,255,0), font=font)
+    draw = ImageDraw.Draw(img)
+    img.save(str(sily) + '.png')
+    sily += 1
     # print(img_text)
 

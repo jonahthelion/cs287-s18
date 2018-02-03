@@ -155,7 +155,6 @@ if chosen_model['type'] == 'resnet':
         for batch_num,batch in enumerate(train_iter):
             model.train()
             optimizer.zero_grad()
-            all_lens.append(batch.text.data.shape[0])
 
             text_to_img(batch.text.data, TEXT)
             # preds = model(batch.text.data)
@@ -164,6 +163,5 @@ if chosen_model['type'] == 'resnet':
             # optimizer.step()
 
             model.eval()
-    print('max', max(all_lens))
 
 
