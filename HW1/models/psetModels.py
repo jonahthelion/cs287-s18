@@ -139,23 +139,9 @@ class Resnet(nn.Module):
         super(Resnet, self).__init__()
 
         self.trunk = models.resnet18(pretrained=True)
-
-        self.fc = nn.Linear(512, 1)
+        self.trunk.fc = nn.Linear(512, 1)
 
     def forward(self, x):
-        x = self.trunk.conv1(x)
-        x = self.trunk.bn1(x)
-        x = self.trunk.relu(x)
-        x = self.trunk.maxpool(x)
-
-        x = self.trunk.layer1(x)
-        x = self.trunk.layer2(x)
-        x = self.trunk.layer3(x)
-        x = self.trunk.layer4(x)
-
-        x = self.trunk.avgpool(x)
-        x = self.fc(x)
-
-        return x
+        return self.trunk(x)
 
 
