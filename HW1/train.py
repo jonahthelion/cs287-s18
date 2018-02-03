@@ -162,9 +162,11 @@ if chosen_model['type'] == 'resnet':
             model.eval()
 
             if batch_num % 160*32 == 0:
+                model.zero_grad()
                 bce, roc, acc = evaluate_model(model, val_iter, TEXT)
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
             if batch_num % 64*32 == 0 and batch_num % 160*32 != 0:
+                model.zero_grad()
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
 
 
