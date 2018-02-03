@@ -40,14 +40,15 @@ def get_data(chosen_model):
 def text_to_img(text, TEXT):
     global sily, font
     sample_ix = 0
-    img_text = " ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix])
+
+    img_text = "hello\nhello"
+    # .join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix])
 
     img = Image.new('RGBA', (200, 200), (120,20,20))
-    print('img', img)
     draw = ImageDraw.Draw(img)
-    print('draw', draw)
-    draw.text((0,0), "".join(map(str,range(100))), (255,255,0), font=font)
+    draw.text((0,0), img_text, (255,255,0), font=font)
     draw = ImageDraw.Draw(img)
+    
     print('saving', str(sily) + '.png')
     img.save(str(sily) + '.png')
     sily += 1
