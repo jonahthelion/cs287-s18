@@ -57,6 +57,6 @@ def text_to_img(text, TEXT):
         draw = ImageDraw.Draw(img)
 
         imgs.append(normalize(img))
-    return torch.stack(imgs)
+    return Variable(torch.stack(imgs).cuda())
 
 

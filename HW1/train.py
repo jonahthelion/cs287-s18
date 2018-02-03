@@ -156,16 +156,9 @@ if chosen_model['type'] == 'resnet':
             optimizer.zero_grad()
 
             imgs = text_to_img(batch.text.data, TEXT)
-            for img_ix,img in enumerate(imgs):
-                img = transforms.ToPILImage()(img)
-                fig = plt.figure()
-                plt.imshow(img)
-                print('saving', str(batch_num) + '_' + str(img_ix) + '.png')
-                plt.savefig(str(batch_num) + '_' + str(img_ix) + '.png')
-                plt.close(fig)
 
-            if batch_num == 10:
-                assert False
+            assert False
+
             # preds = model(batch.text.data)
             # l = F.binary_cross_entropy_with_logits(preds.view(-1), (batch.label - 1).float().cuda())
             # l.backward()
