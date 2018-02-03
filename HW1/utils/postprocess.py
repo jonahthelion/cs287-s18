@@ -31,22 +31,22 @@ def evaluate_model(model, val_iter, TEXT=None):
 
     for batch in val_iter:
         if TEXT is None:
-            all_preds.append(model(batch.text.data).squeeze())
+            all_preds.append(model(batch.text.data).squeeze().cpu())
         else:
             imgs = text_to_img(batch.text.data, TEXT)
-            all_preds.append(model(imgs).squeeze())
+            all_preds.append(model(imgs).squeeze().cpu())
         all_actual.append(batch.label.data - 1)
 
-    all_actual = Variable(torch.cat(all_actual).cuda())
+    all_actual = Variable(torch.cat(all_actual))
     all_preds = torch.cat(all_preds)
 
     # binary cross entropy loss
     bce_l = F.binary_cross_entropy_with_logits(all_preds, all_actual.float())
 
     # accuracy and roc_auc
-    all_preds = F.sigmoid(all_preds).data.cpu().numpy()
-    all_actual = all_actual.data.cpu().numpy()
+    all_preds = F.sigmoid(all_preds).data.numpy()
+    all_actual = all_actual.data.numpy()
     roc_auc = metrics.roc_auc_score(all_actual, all_preds)
     acc = metrics.accuracy_score(all_actual, all_preds.round())
 
-    return bce_l.data.cpu().numpy()[0], roc_auc, acc
+    return bce_l.data.numpy()[0], roc_auc, acc
