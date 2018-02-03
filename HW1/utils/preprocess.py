@@ -55,7 +55,7 @@ def text_to_img(text, TEXT):
         draw.text((0,0), img_text, (255,255,255), font=font)
         draw = ImageDraw.Draw(img)
 
-        img.append(normalize(img))
+        imgs.append(normalize(img))
     return torch.stack(imgs)
 
 
