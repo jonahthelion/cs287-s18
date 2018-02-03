@@ -38,6 +38,7 @@ def get_data(chosen_model):
     return TEXT, LABEL, train_iter, val_iter, test_iter
 
 def text_to_img(text, TEXT):
+    global sily, font
     sample_ix = 0
     img_text = " ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix])
 
