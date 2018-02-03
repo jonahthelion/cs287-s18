@@ -44,7 +44,7 @@ def text_to_img(text, TEXT):
     sample_ix = 0
 
     img_text = textwrap.wrap(" ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix]), 34)
-    # img_text = [" "*np.random.randint(0, 35 - len(row)) + row + "\n" for row in img_text]
+    img_text = [ row + "\n" for row in img_text]
     print(img_text)
     img_text =  "".join(img_text)
 
