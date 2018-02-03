@@ -34,6 +34,7 @@ def evaluate_model(model, val_iter, TEXT=None):
             all_preds.append(model(batch.text.data).squeeze().cpu())
         else:
             imgs = text_to_img(batch.text.data, TEXT)
+            print(imgs)
             all_preds.append(model(imgs).squeeze().cpu())
         all_actual.append(batch.label.data - 1)
 
