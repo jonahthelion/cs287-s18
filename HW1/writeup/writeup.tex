@@ -306,6 +306,24 @@ Each convolution layer consists of the convolution, then ReLU, then single outpu
 
 \begin{subsection}{ResNet}
 
+I fine-tune ResNet18 to classify images of the text of movie reviews. I'd argue that this problem is strictly harder than any of the above problems because now the network has to learn how to read in addition ot learning how to interpret.\\
+To create the images, I use DejaVuSansMono size 14 font and make images of size (224,224), which is the smallest recommended size to feed to ResNet18. The text is white on a black background and begins at a random location in the row line of the image. Example images are shown in Figure \ref{fig:restext}.\\
+The only modification made to the ResNet18 architecture is I change the fully convolution output layer from 512$\rightarrow$ 1000 to 512$\rightarrow$ 1.\\
+The network memorizes the training data fairly quickly as seen in Figure \ref{fig:restrain}. However, in order to memorize, the network still manages to learn features which allow it to generalize to near naive bayes performance on the validation and test sets. The final results are shown in Table \ref{tab:resres}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=6cm]{imgs/0.png}
+  \includegraphics[width=6cm]{imgs/1.png}
+  \caption{\label{fig:restext} Images are white, mono text on a black blackground. The text has a random indent do make it more difficult for the network to memorize the training text. }
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=6cm]{imgs/restrain}
+  \caption{\label{fig:restrain} Images are white, mono text on a black blackground. The text has a random indent do make it more difficult for the network to memorize the training text. }
+\end{figure}
+
 \end{subsection}
 
 
