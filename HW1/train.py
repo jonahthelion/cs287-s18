@@ -147,7 +147,7 @@ if chosen_model['type'] == 'Conv':
 
 if chosen_model['type'] == 'resnet':
     model = Resnet()
-    # model.cuda()
+    model.cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.00006)
     all_lens = []
     for epoch in range(1):
