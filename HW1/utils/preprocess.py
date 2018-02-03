@@ -10,7 +10,7 @@ from PIL import ImageDraw
 import textwrap
 
 sily = 0
-font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12)
+font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf', 12)
 
 def get_data(chosen_model):
     batch_size = chosen_model['batch_size']
