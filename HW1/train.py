@@ -31,7 +31,7 @@ vis_windows = None
 # chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
 # chosen_model = {'type': 'CBOW', 'batch_size': 100, 'pool': 'max'}
 # chosen_model = {'type': 'Conv', 'batch_size': 50, 'embed_type': 'glove'}
-chosen_model = {'type': 'resnet', 'batch_size': 1}
+chosen_model = {'type': 'resnet', 'batch_size': 2}
 print(chosen_model)
 
 # get data
@@ -162,11 +162,9 @@ if chosen_model['type'] == 'resnet':
             model.eval()
 
             if batch_num % 160*32 == 0:
-                model.zero_grad()
                 bce, roc, acc = evaluate_model(model, val_iter, TEXT)
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
             if batch_num % 64*32 == 0 and batch_num % 160*32 != 0:
-                model.zero_grad()
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
 
 

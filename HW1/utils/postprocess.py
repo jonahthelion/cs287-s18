@@ -30,13 +30,15 @@ def vis_display(vis, vis_windows, train_l, x_coord, val_l=None):
 def evaluate_model(model, val_iter, TEXT=None):
     all_actual, all_preds = [],[]
 
-    for batch in tqdm(val_iter):
+    for batch_ix,batch in enumerate(tqdm(val_iter)):
+        all_actual.append(batch.label.data - 1)
         if TEXT is None:
             all_preds.append(model(batch.text.data).squeeze().cpu())
         else:
             imgs = text_to_img(batch.text.data, TEXT).cpu()
             all_preds.append(model(imgs.cuda()).squeeze().cpu())
-        all_actual.append(batch.label.data - 1)
+            if batch_ix == 200:
+                break
 
     all_actual = Variable(torch.cat(all_actual))
     all_preds = torch.cat(all_preds)
