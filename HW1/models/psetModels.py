@@ -140,6 +140,8 @@ class Resnet(nn.Module):
 
         self.trunk = models.resnet18(pretrained=True)
 
+        self.fc = nn.Linear(512, 1)
+
     def forward(self, x):
         x = self.trunk.conv1(x)
         x = self.trunk.bn1(x)
@@ -150,6 +152,9 @@ class Resnet(nn.Module):
         x = self.trunk.layer2(x)
         x = self.trunk.layer3(x)
         x = self.trunk.layer4(x)
+
+        x = self.trunk.avgpool(x)
+        x = self.fc(x)
 
         return x
 
