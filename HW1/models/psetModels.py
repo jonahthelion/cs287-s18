@@ -142,6 +142,6 @@ class Resnet(nn.Module):
         self.trunk.fc = nn.Linear(512, 1)
 
     def forward(self, x):
-        return self.trunk(imgs)
+        return self.trunk(x)
 
 
