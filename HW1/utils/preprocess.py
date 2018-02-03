@@ -46,7 +46,7 @@ def text_to_img(text, TEXT):
     print('img', img)
     draw = ImageDraw.Draw(img)
     print('draw', draw)
-    draw.text((0,0), ''.join(range(10) + range(10) + range(10) + range(10) + range(10) + range(10)), (255,255,0), font=font)
+    draw.text((0,0), ''.join(list(range(10)) + list(range(10)) + list(range(10)) + list(range(10)) + list(range(10)) + list(range(10))), (255,255,0), font=font)
     draw = ImageDraw.Draw(img)
     print('saving', str(sily) + '.png')
     img.save(str(sily) + '.png')
