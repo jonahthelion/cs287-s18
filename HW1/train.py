@@ -148,7 +148,7 @@ if chosen_model['type'] == 'Conv':
 if chosen_model['type'] == 'resnet':
     model = Resnet()
     model.cuda()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.00006)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
     all_lens = []
     for epoch in range(100):
         for batch_num,batch in enumerate(train_iter):
@@ -166,6 +166,11 @@ if chosen_model['type'] == 'resnet':
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)), acc)
             if batch_num % 64*32 == 0 and batch_num % 160*32 != 0:
                 vis_windows = vis_display(vis, vis_windows, l.cpu().data.numpy()[0], epoch + batch_num/float(len(train_iter)))
+        bce,roc,acc = evaluate_model(model, test_iter, TEXT)
+        print('BCE:', bce, '  ROC:',roc,'  ACC:', acc)
 
+        if epoch % 5 == 0:
+            print('saving', str(epoch) + '_res.p')
+            torch.save(model, str(epoch) + '_res.p')
 
 
