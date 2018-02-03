@@ -4,6 +4,7 @@ from torchtext.vocab import Vectors, GloVe
 from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as F
+from torchvision import transforms
 
 from tqdm import tqdm
 from sklearn import metrics
@@ -146,7 +147,7 @@ if chosen_model['type'] == 'Conv':
 
 if chosen_model['type'] == 'resnet':
     model = Resnet()
-    model.cuda()
+    # model.cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.00006)
     all_lens = []
     for epoch in range(1):
@@ -154,7 +155,14 @@ if chosen_model['type'] == 'resnet':
             model.train()
             optimizer.zero_grad()
 
-            text_to_img(batch.text.data, TEXT)
+            imgs = text_to_img(batch.text.data, TEXT)
+            for img_ix,img in enumerate(imgs):
+                img = transforms.ToPILImage()(img)
+                fig = plt.figure()
+                plt.imshow(img)
+                print('saving', str(batch_num) + '_' + str(img_ix) + '.png')
+                plt.savefig(str(batch_num) + '_' + str(img_ix) + '.png')
+                plt.close(fig)
 
             if batch_num == 10:
                 assert False

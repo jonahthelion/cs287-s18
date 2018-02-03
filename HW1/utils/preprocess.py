@@ -8,9 +8,14 @@ from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 import textwrap
+from torchvision import transforms
 
-sily = 0
 font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf', 14)
+normalize = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225]),
+            ])
 
 def get_data(chosen_model):
     batch_size = chosen_model['batch_size']
@@ -40,19 +45,17 @@ def get_data(chosen_model):
     return TEXT, LABEL, train_iter, val_iter, test_iter
 
 def text_to_img(text, TEXT):
-    global sily, font
-    sample_ix = 0
+    imgs = []
+    for sample_ix in text.shape[1]:
+        img_text = textwrap.wrap(" "*np.random.randint(0, 26) + " ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix]), 27)
+        img_text = "".join([ row + "\n" for row in img_text])
 
-    img_text = textwrap.wrap(" "*np.random.randint(0, 26) + " ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix]), 27)
-    img_text = "".join([ row + "\n" for row in img_text])
+        img = Image.new('RGBA', (224, 224), (0,0,0))
+        draw = ImageDraw.Draw(img)
+        draw.text((0,0), img_text, (255,255,255), font=font)
+        draw = ImageDraw.Draw(img)
 
-    img = Image.new('RGBA', (224, 224), (0,0,0))
-    draw = ImageDraw.Draw(img)
-    draw.text((0,0), img_text, (255,255,255), font=font)
-    draw = ImageDraw.Draw(img)
+        img.append(normalize(img))
+    return torch.stack(imgs)
 
-    print('saving', str(sily) + '.png')
-    img.save(str(sily) + '.png')
-    sily += 1
-    # print(img_text)
 
