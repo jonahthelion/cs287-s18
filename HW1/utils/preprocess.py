@@ -10,7 +10,7 @@ from PIL import ImageDraw
 import textwrap
 
 sily = 0
-font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf', 12)
+font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf', 14)
 
 def get_data(chosen_model):
     batch_size = chosen_model['batch_size']
@@ -46,7 +46,7 @@ def text_to_img(text, TEXT):
     img_text = textwrap.wrap(" "*np.random.randint(0, 26) + " ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix]), 27)
     img_text = "".join([ row + "\n" for row in img_text])
 
-    img = Image.new('RGBA', (200, 200), (0,0,0))
+    img = Image.new('RGBA', (224, 224), (0,0,0))
     draw = ImageDraw.Draw(img)
     draw.text((0,0), img_text, (255,255,255), font=font)
     draw = ImageDraw.Draw(img)
