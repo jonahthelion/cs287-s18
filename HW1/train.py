@@ -126,7 +126,7 @@ if chosen_model['type'] == 'Conv':
     model = Conv(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
     model.cuda()
     optimizer = torch.optim.Adam(list(model.w3.parameters()) + list(model.w4.parameters()) + list(model.w5.parameters()) + list(model.w.parameters()), lr=0.00004) # list(model.w3.parameters()) + list(model.w4.parameters()) + list(model.w5.parameters()) + list(model.w.parameters()
-    for epoch in range(150):
+    for epoch in range(250):
         for batch_num,batch in enumerate(train_iter):
             model.train()
             optimizer.zero_grad()
