@@ -30,7 +30,7 @@ vis_windows = None
 # chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
 # chosen_model = {'type': 'CBOW', 'batch_size': 100, 'pool': 'max'}
 # chosen_model = {'type': 'Conv', 'batch_size': 50, 'embed_type': 'glove'}
-chosen_model = {'type': 'resnet'}
+chosen_model = {'type': 'resnet', 'batch_size': 2}
 print(chosen_model)
 
 # get data
