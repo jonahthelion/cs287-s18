@@ -269,6 +269,16 @@ In the Continuous bag of words (CBOW) model, one-hot vectors $x_i$ for each word
 
 \begin{subsection}{CNN}
 
+Following \href{http://aclweb.org/anthology/D/D14/D14-1181.pdf}{Yoon's CNN paper}, we train a simple CNN with one layer of convolution. The convolution layer includes
+
+\begin{itemize}
+\item 300$\rightarrow$ 50, kernel 3, stride 1, padding 1
+\item 300$\rightarrow$ 25, kernel 4, stride 1, padding 1
+\item 300$\rightarrow$ 25, kernel 5, stride 1, padding 1
+\end{itemize}
+
+Each convolution layer consists of the convolution, then ReLU, then single output max pool. We concatenate the resultant features and output a fully connected layer. As an experiment, we train first using the AWS 300d embedding and second using the GloVe 6B 300d embedding. The optimizer is an Adam optimizer of learning rate .00004 in both cases. We treat the embeddings as fixed. The model is trained for 150 epochs with batch size 50.
+
 \end{subsection}
 
 

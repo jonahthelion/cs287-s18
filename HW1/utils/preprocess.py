@@ -1,7 +1,9 @@
 import torchtext
 from torchtext.vocab import Vectors, GloVe
 
-def get_data(batch_size):
+def get_data(chosen_model):
+    batch_size = chosen_model['batch_size']
+
 
     TEXT = torchtext.data.Field()
 
@@ -17,7 +19,11 @@ def get_data(batch_size):
     train_iter, val_iter, test_iter = torchtext.data.BucketIterator.splits(
         (train, val, test), batch_size=batch_size, device=-1, repeat=False)
 
-    url = 'https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.simple.vec'
-    TEXT.vocab.load_vectors(vectors=Vectors('wiki.simple.vec', url=url)) # 'glove.6B.300d' # vectors=Vectors('wiki.simple.vec', url=url))
+    if not 'embed_type' in chosen_model or chosen_model['embed_type'] is 'wiki':
+        url = 'https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.simple.vec'
+        TEXT.vocab.load_vectors(vectors=Vectors('wiki.simple.vec', url=url)) # 'glove.6B.300d' # vectors=Vectors('wiki.simple.vec', url=url))
+    else:
+        TEXT.vocab.load_vectors(vectors='glove.6B.300d')
+
 
     return TEXT, LABEL, train_iter, val_iter, test_iter

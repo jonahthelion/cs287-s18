@@ -29,11 +29,11 @@ vis_windows = None
 # chosen_model = {'type': 'MNB', 'alpha':[.5], 'should_plot':False, 'counts': False, 'batch_size': 50}
 # chosen_model = {'type': 'log_reg', 'batch_size': 150, 'counts':False}
 # chosen_model = {'type': 'CBOW', 'batch_size': 100, 'pool': 'max'}
-chosen_model = {'type': 'Conv', 'batch_size': 50}
+chosen_model = {'type': 'Conv', 'batch_size': 50, 'embed_type': 'wiki'}
 print(chosen_model)
 
 # get data
-TEXT, LABEL, train_iter, val_iter, test_iter = get_data(batch_size=chosen_model['batch_size']) 
+TEXT, LABEL, train_iter, val_iter, test_iter = get_data(chosen_model) 
 
 if chosen_model['type'] == 'MNB':
     all_scores = []
@@ -126,7 +126,7 @@ if chosen_model['type'] == 'Conv':
     model = Conv(V=len(TEXT.vocab), embed=TEXT.vocab.vectors)
     model.cuda()
     optimizer = torch.optim.Adam(list(model.w3.parameters()) + list(model.w4.parameters()) + list(model.w5.parameters()) + list(model.w.parameters()), lr=0.00004) # list(model.w3.parameters()) + list(model.w4.parameters()) + list(model.w5.parameters()) + list(model.w.parameters()
-    for epoch in range(1000):
+    for epoch in range(150):
         for batch_num,batch in enumerate(train_iter):
             model.train()
             optimizer.zero_grad()
