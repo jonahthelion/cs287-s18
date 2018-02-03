@@ -44,7 +44,7 @@ def text_to_img(text, TEXT):
     sample_ix = 0
 
     img_text = textwrap.wrap(" ".join(TEXT.vocab.itos[ix] for ix in text[:,sample_ix]), 27)
-    img_text = "".join([ row + "\n" for row in img_text])
+    img_text = " "*np.random.randint(0, 26) + "".join([ row + "\n" for row in img_text])
 
     img = Image.new('RGBA', (200, 200), (120,20,20))
     draw = ImageDraw.Draw(img)
