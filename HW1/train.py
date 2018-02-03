@@ -157,6 +157,9 @@ if chosen_model['type'] == 'resnet':
             optimizer.zero_grad()
 
             text_to_img(batch.text.data, TEXT)
+
+            if batch_num == 10:
+                assert False
             # preds = model(batch.text.data)
             # l = F.binary_cross_entropy_with_logits(preds.view(-1), (batch.label - 1).float().cuda())
             # l.backward()
