@@ -30,7 +30,7 @@ def evaluate(model, test_iter):
 
 def write_submission(model, fout, TEXT):
     test = torchtext.datasets.LanguageModelingDataset(path="PSET/input.txt",text_field=TEXT)
-    samples = [row.rstrip().split(" ") if row_ix == 1 else row.rstrip().split(" ")[1:] for row_ix,row in enumerate(' '.join(test[0].text).split('___ <eos>'))][:-1]
+    samples = [row.rstrip().split(" ") if row_ix == 0 else row.rstrip().split(" ")[1:] for row_ix,row in enumerate(' '.join(test[0].text).split('___ <eos>'))][:-1]
     
     return samples
 
