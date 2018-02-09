@@ -2,25 +2,20 @@ import torchtext
 from torchtext.vocab import Vectors
 
 from utils.models import TriGram
+from utils.preprocess import get_data, get_model
 
-max_size = 10002 # max is 10001
-batch_size = 10
-bptt_len = 32
-model_dict = {'type': 'trigram', 'alpha': [.1, .5, .4]}
 
-TEXT = torchtext.data.Field()
+model_dict = {'max_size': 100, # max is 10001
+                'batch_size': 10, 
+                'bptt_len': 32,
 
-train, val, test = torchtext.datasets.LanguageModelingDataset.splits(
-    path="PSET", 
-    train="train.txt", validation="valid.txt", test="valid.txt", text_field=TEXT)
+                'type': 'trigram', 
+                'alpha': [.1, .5, .4]}
 
-TEXT.build_vocab(train, max_size=max_size)
+train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 
-train_iter, val_iter, test_iter = torchtext.data.BPTTIterator.splits(
-    (train, val, test), batch_size=batch_size, device=-1, bptt_len=bptt_len, repeat=False)
-
-if model_dict['type'] == 'trigram':
-    model = TriGram(model_dict)
+model = get_model(model_dict)
 
 for batch in train_iter:
-    assert False
+    model.train()
+    preds = model.train_predict(batch.text.cuda())
