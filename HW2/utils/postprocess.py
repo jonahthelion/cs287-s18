@@ -36,11 +36,12 @@ def write_submission(model, fout, TEXT):
 
     preds = model.predict ( Variable(samples).cuda() ).cpu()
     _,top_ranks = preds.data.topk(20,1)
+    print(top_ranks.shape[0])
 
     with open(fout, 'w') as writer:
         writer.write('id,word\n')
         for row_ix,row in enumerate(top_ranks):
-            writer.write(str(row_ix) + ',')
+            writer.write(str(row_ix+1) + ',')
             for counter,word_ix in enumerate(row):
                 if counter != len(row) - 1:
                     writer.write(str(TEXT.vocab.itos[word_ix]) + ' ')
