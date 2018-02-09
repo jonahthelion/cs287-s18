@@ -11,6 +11,7 @@ class TriGram(nn.Module):
 
         self.alpha = model_dict['alpha']
         assert(sum(self.alpha) == 1), self.alpha
+        assert(model_dict['num_epochs'] == 1), model_dict['num_epochs']
         self.V = model_dict['max_size'] + 2
 
         self.unary_counts = torch.zeros(self.V)
@@ -32,7 +33,7 @@ class TriGram(nn.Module):
         self.binary_counts = F.normalize(self.binary_counts, p=1, dim=1)
         self.tert_counts = F.normalize(self.tert_counts, p=1, dim=2)
 
-    def forward(self, text):
+    def predict(self, text):
         text = text.data.cpu().numpy()
         probs = torch.zeros(text.shape[1], self.V)
         for i in range(text.shape[1]):
