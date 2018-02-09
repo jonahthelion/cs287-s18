@@ -14,7 +14,8 @@ def evaluate(model, test_iter):
 
         all_actuals.extend(labels)
         all_preds.extend(preds)
+    
 
-    return all_actuals, all_preds
+    return torch.stack(all_actuals).squeeze(), torch.stack(all_preds)
 
 
