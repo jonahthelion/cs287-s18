@@ -10,7 +10,7 @@ class TriGram(nn.Module):
         super(TriGram, self).__init__()
 
         self.alpha = model_dict['alpha']
-        assert(sum(self.alpha) == 1), self.alpha
+        assert(abs(sum(self.alpha) - 1) < .001), self.alpha
         assert(model_dict['num_epochs'] == 1), model_dict['num_epochs']
         self.V = model_dict['max_size'] + 2
 
