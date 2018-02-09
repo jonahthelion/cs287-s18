@@ -36,7 +36,6 @@ def write_submission(model, fout, TEXT):
 
     preds = model.predict ( Variable(samples).cuda() ).cpu()
     _,top_ranks = preds.data.topk(20,1)
-    print(top_ranks.shape[0])
 
     with open(fout, 'w') as writer:
         writer.write('id,word\n')
