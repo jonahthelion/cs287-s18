@@ -9,7 +9,7 @@ class TriGram(nn.Module):
 
         self.alpha = model_dict['alpha']
         assert(sum(self.alpha) == 1), self.alpha
-        self.V = model_dict['max_size'] + 1
+        self.V = model_dict['max_size'] + 2
 
         self.unary_counts = torch.zeros(self.V)
 
