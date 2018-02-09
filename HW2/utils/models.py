@@ -27,16 +27,16 @@ class TriGram(nn.Module):
         return
 
     def postprocess(self):
-        model.unary_counts = F.normalize(model.unary_counts, p=1, dim=0)
-        model.binary_counts = F.normalize(model.binary_counts, p=1, dim=1)
-        model.tert_counts = F.normalize(model.tert_counts, p=1, dim=2)
+        self.unary_counts = F.normalize(self.unary_counts, p=1, dim=0)
+        self.binary_counts = F.normalize(self.binary_counts, p=1, dim=1)
+        self.tert_counts = F.normalize(self.tert_counts, p=1, dim=2)
 
     def forward(self, text):
         text = text.data.cpu().numpy()
         probs = torch.zeros(text.shape[1], self.V)
         for i in range(text.shape[1]):
             col = text[:,i]
-            
+
             probs[i] += self.alpha[2] * self.unary_counts
             probs[i] += self.alpha[1] * self.binary_counts[col[-1]]
             probs[i] += self.alpha[0] * self.tert_counts[col[-2], col[-1]]
