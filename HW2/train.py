@@ -25,5 +25,5 @@ for epoch in range(model_dict['num_epochs']):
         preds = model.train_predict(batch.text.cuda())
 model.postprocess()
 
-all_actuals, all_preds = evaluate(model, test_iter)
+nll_l, MAP = evaluate(model, test_iter)
 
