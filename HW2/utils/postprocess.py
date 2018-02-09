@@ -1,5 +1,7 @@
 import torch
 
+from tqdm import tqdm
+
 def evaluate(model, test_iter):
     all_actuals = []
     all_preds = []
