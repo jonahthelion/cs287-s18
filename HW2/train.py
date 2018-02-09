@@ -1,7 +1,7 @@
 import torchtext
 from torchtext.vocab import Vectors
 
-max_size = 1000
+max_size = 10002 # max is 10001
 batch_size = 10
 bptt_len = 32
 
