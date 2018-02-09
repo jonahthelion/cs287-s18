@@ -1,6 +1,7 @@
 import torchtext
 from torchtext.vocab import Vectors
 from tqdm import tqdm
+import numpy as np
 
 from utils.models import TriGram
 from utils.preprocess import get_data, get_model
