@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+from collections import Counter
+
 class TriGram(nn.Module):
     def __init__(self, model_dict):
         super(TriGram, self).__init__()
@@ -12,4 +14,9 @@ class TriGram(nn.Module):
         self.unary_counts = torch.zeros(self.V)
 
     def train_predict(self, text):
-        pass
+        text = text.data.cpu().numpy().flatten()
+        c = Counter(text)
+        for key in c:
+            self.unary_counts[key] += c[key]
+
+        return
