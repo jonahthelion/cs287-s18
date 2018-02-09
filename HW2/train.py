@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 from utils.models import TriGram
 from utils.preprocess import get_data, get_model
-from utils.postprocess import evaluate
+from utils.postprocess import evaluate, write_submission
 
 # NOTE: success of TriGram will depend weakly on batch size
 model_dict = {'max_size': 100, # max is 10001
