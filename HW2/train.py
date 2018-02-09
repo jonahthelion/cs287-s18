@@ -18,7 +18,7 @@ for alpha1 in [0.05,.1,.2,.3,.4,.5,.6,.7,.8,.9]:
                         'output': 'simple0.txt',
 
                         'type': 'trigram', 
-                        'alpha': [alpha1, alph2, 1-alpha1-alpha2],}
+                        'alpha': [alpha1, alpha2, 1-alpha1-alpha2],}
 
         train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 
