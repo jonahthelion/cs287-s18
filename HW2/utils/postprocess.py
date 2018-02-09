@@ -1,5 +1,6 @@
 import torch
 import torch.nn.functional as F
+import torchtext
 
 import numpy as np
 from tqdm import tqdm
