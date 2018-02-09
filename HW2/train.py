@@ -19,3 +19,5 @@ model = get_model(model_dict)
 for batch in train_iter:
     model.train()
     preds = model.train_predict(batch.text.cuda())
+
+    assert False

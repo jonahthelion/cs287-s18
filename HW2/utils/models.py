@@ -12,3 +12,4 @@ class TriGram(nn.Module):
         self.unary_counts = torch.zeros(self.V, self.V)
 
     def train_predict(text):
+        pass
