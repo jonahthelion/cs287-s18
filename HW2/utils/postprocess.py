@@ -33,6 +33,9 @@ def write_submission(model, fout, TEXT):
     samples = [row.rstrip().split(" ") if row_ix == 0 else row.rstrip().split(" ")[1:] for row_ix,row in enumerate(' '.join(test[0].text).split('___ <eos>'))][:-1]
     samples = torch.stack([torch.Tensor([TEXT.vocab.stoi[ix] for ix in row]).long() for row in samples], 1)
 
+    preds = model.predict ( Variable(samples).cuda() ).cpu()
+    _,top_ranks = preds.data.topk(20,1)
+
     return samples
 
 def precision_at_k(r, k):
