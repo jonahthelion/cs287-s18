@@ -27,6 +27,11 @@ def evaluate(model, test_iter):
 
     return nll_l, MAP
 
+def write_submission(model, fout, TEXT):
+    test = torchtext.datasets.LanguageModelingDataset(path="PSET/input.txt",text_field=TEXT)
+    samples = [row.rstrip().split(" ") else row_ix == 1 else row.rstrip().split(" ")[1:] for row_ix,row in enumerate(' '.join(test[0].text).split('___ <eos>'))][:-1]
+    
+    return samples
 
 def precision_at_k(r, k):
     """Score is precision @ k

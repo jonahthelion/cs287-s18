@@ -12,6 +12,8 @@ model_dict = {'max_size': 100, # max is 10001
                 'bptt_len': 32,
                 'num_epochs': 1,
 
+                'output': 'simple0.txt',
+
                 'type': 'trigram', 
                 'alpha': [.1, .5, .4],}
 
@@ -26,4 +28,5 @@ for epoch in range(model_dict['num_epochs']):
 model.postprocess()
 
 nll_l, MAP = evaluate(model, test_iter)
+samples = write_submission(model, model_dict['output'], TEXT)
 
