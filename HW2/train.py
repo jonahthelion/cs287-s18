@@ -7,7 +7,7 @@ from utils.models import TriGram
 from utils.preprocess import get_data, get_model
 from utils.postprocess import evaluate, write_submission
 
-for alpha1 in []
+
 # NOTE: success of TriGram will depend weakly on batch size
 model_dict = {'max_size': 100, # max is 10001
                 'batch_size': 10, 
