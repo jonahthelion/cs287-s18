@@ -37,6 +37,15 @@ def write_submission(model, fout, TEXT):
     preds = model.predict ( Variable(samples).cuda() ).cpu()
     _,top_ranks = preds.data.topk(20,1)
 
+    with open(fout, 'wb') as writer:
+        writer.write('id,word\n')
+        for row_ix,row in enumerate(top_ranks):
+            writer.write(str(row_ix) + ',')
+            for counter,word_ix in enumerate(row):
+                if counter != len(row) - 1:
+                    writer.write(str(TEXT.vocab.itos[word_ix]) + ' ')
+                else:
+                    writer.write(str(TEXT.vocab.itos[word_ix]) + '\n')
     return samples, top_ranks
 
 def precision_at_k(r, k):
