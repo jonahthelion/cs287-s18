@@ -3,7 +3,7 @@ from torchtext.vocab import Vectors
 
 max_size = 1000
 batch_size = 10
-bptt_len = 20
+bptt_len = 32
 
 TEXT = torchtext.data.Field()
 
