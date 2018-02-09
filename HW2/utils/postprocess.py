@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 import torchtext
+from torch.autograd import Variable
 
 import numpy as np
 from tqdm import tqdm
@@ -36,7 +37,7 @@ def write_submission(model, fout, TEXT):
     preds = model.predict ( Variable(samples).cuda() ).cpu()
     _,top_ranks = preds.data.topk(20,1)
 
-    return samples
+    return samples, top_ranks
 
 def precision_at_k(r, k):
     """Score is precision @ k
