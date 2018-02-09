@@ -17,9 +17,13 @@ class TriGram(nn.Module):
 
     def train_predict(self, text):
         text = text.data.cpu().numpy().flatten('F')
-        for i in range(text.shape[0] - 2):
-            self.unary_counts[text[i]] += 1
-            self.binary_counts[text[i], text[i+1]] += 1
-            self.tert_counts[text[i], text[i+1], text[i+2]] += 1
+        for i in range(2, text.shape[0]):
+            if not text[i] == 3:
+                self.unary_counts[text[i]] += 1
+                self.binary_counts[text[i-1], text[i]] += 1
+                self.tert_counts[text[i-2], text[i-1], text[i]] += 1
 
+        return
+
+    def postprocess(self):
         return

@@ -20,3 +20,4 @@ model = get_model(model_dict)
 for batch in tqdm(train_iter):
     model.train()
     preds = model.train_predict(batch.text.cuda())
+model.postprocess()
