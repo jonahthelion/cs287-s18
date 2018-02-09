@@ -19,7 +19,7 @@ train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 
 model = get_model(model_dict)
 
-for epoch in xrange(model_dict['num_epochs']):
+for epoch in range(model_dict['num_epochs']):
     for batch in tqdm(train_iter):
         model.train()
         preds = model.train_predict(batch.text.cuda())
