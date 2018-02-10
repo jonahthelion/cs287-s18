@@ -21,7 +21,7 @@ class TriGram(nn.Module):
     def train_predict(self, text):
         text = text.data.cpu().numpy().flatten('F')
         for i in range(2, text.shape[0]):
-            if not text[i] == 3:
+            if not text[i] in [0,1,3]:
                 self.unary_counts[text[i]] += 1
                 self.binary_counts[text[i-1], text[i]] += 1
                 self.tert_counts[text[i-2], text[i-1], text[i]] += 1
@@ -33,6 +33,7 @@ class TriGram(nn.Module):
         self.binary_counts = F.normalize(self.binary_counts, p=1, dim=1)
         self.tert_counts = F.normalize(self.tert_counts, p=1, dim=2)
 
+    # input is batch.text.cuda() (cuda Variable), output is cuda variable (Nbatch, V)
     def predict(self, text):
         text = text.data.cpu().numpy()
         probs = torch.zeros(text.shape[1], self.V)
