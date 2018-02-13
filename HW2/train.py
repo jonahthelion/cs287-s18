@@ -16,7 +16,7 @@ from utils.postprocess import evaluate, write_submission, vis_display
 model_dict = {'max_size': 10001, # max is 10001
                 'batch_size': 30, 
                 'bptt_len': 32,
-                'num_epochs': 1,
+                'num_epochs': 100,
 
                 'output': 'simple0.txt',
 
