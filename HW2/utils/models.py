@@ -73,7 +73,7 @@ class NN(nn.Module):
             )
 
     def train_predict(self, text):
-        probs = Variable(torch.zeros(text.shape[1], 300*3).cuda())
+        probs = torch.zeros(text.shape[1], 300*3).cuda()
         embeds = self.embed(text[-3:]).data
 
         for i in range(text.shape[1]):
