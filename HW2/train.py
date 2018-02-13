@@ -63,7 +63,7 @@ for alpha1 in np.linspace(0,.3, 5):
     for alpha2 in np.linspace(0, .5-alpha1, 5):
         model.alpha = [alpha1, alpha2, 1-alpha1-alpha2]
         MAP = evaluate(model, val_iter)
-        print(alpha, MAP)
+        print(model.alpha, MAP)
 #write_submission(model, model_dict['output'], TEXT)
 
 
