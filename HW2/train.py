@@ -32,6 +32,7 @@ for epoch in range(model_dict['num_epochs']):
     for batch in tqdm(train_iter):
         model.train()
         probs = model.train_predict(batch.text.cuda())
+        actuals = batch.text[-1].cuda()
         assert False
 model.postprocess()
 

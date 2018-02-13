@@ -73,7 +73,7 @@ class NN(nn.Module):
             )
 
     def train_predict(self, text):
-        embeds = self.embed(text[-3:])
+        embeds = self.embed(text[-4:-1])
 
         probs = torch.stack([torch.cat([row for row in embeds[:,i]]) for i in range(text.shape[1])])
 
