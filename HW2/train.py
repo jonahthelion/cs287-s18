@@ -1,5 +1,7 @@
 import torchtext
 from torchtext.vocab import Vectors
+import torch.nn.functional as F
+
 from tqdm import tqdm
 import numpy as np
 
@@ -28,12 +30,22 @@ train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 
 model = get_model(model_dict)
 
+optimizer = torch.optim.Adam(model.parameters(), lr=0.0002, weight_decay=5e-4)
+
 for epoch in range(model_dict['num_epochs']):
-    for batch in tqdm(train_iter):
+    for batch_num,batch in enumerate(tqdm(train_iter)):
         model.train()
+        optimizer.zero_grad()
         probs = model.train_predict(batch.text.cuda())
         actuals = batch.text[-1].cuda()
-        assert False
+        loss = F.cross_entropy(probs, actuals)
+        loss.backward()
+        optimizer.step()
+        
+        if batch_num % 20 == 0:
+            loss_l = loss.data.cpu().numpy()[0]
+            print(batch_num, loss_l)
+
 model.postprocess()
 
 
