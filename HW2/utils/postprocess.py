@@ -49,7 +49,7 @@ def write_submission(model, fout, TEXT):
 def vis_display(vis, vis_windows, x_coord, train_l):
     if vis_windows is None:
         vis_windows = {}
-        vis_windows['train_ce'] = vis.line(Y=torch.Tensor([train_l]), X=torch.Tensor([x_coord]), opts=dict(title='Train CE'))
+        vis_windows['train_ce'] = vis.line(Y=torch.Tensor([float(train_l)]), X=torch.Tensor([x_coord]), opts=dict(title='Train CE'))
     else:
-        vis.line(Y=torch.Tensor([train_l]), X=torch.Tensor([x_coord]), win=vis_windows['train_ce'], update='append', opts=dict(title='Train CE'))
+        vis.line(Y=torch.Tensor([float(train_l)]), X=torch.Tensor([x_coord]), win=vis_windows['train_ce'], update='append', opts=dict(title='Train CE'))
 
