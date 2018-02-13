@@ -23,7 +23,7 @@ class TriGram(nn.Module):
         for i in range(2, text.shape[0]):
             self.unary_counts[text[i]] += 1
             self.binary_counts[text[i-1], text[i]] += 1
-            self.tert_counts[text[i-2], text[i-1], text[i]] += 1
+            self.tert_counts.to_dense()[text[i-2], text[i-1], text[i]] += 1
 
         return
 
