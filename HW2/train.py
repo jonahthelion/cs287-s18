@@ -9,7 +9,7 @@ from utils.postprocess import evaluate, write_submission
 
 
 # NOTE: success of TriGram will depend weakly on batch size
-model_dict = {'max_size': 100, # max is 10001
+model_dict = {'max_size': 10001, # max is 10001
                 'batch_size': 10, 
                 'bptt_len': 32,
                 'num_epochs': 1,
