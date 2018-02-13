@@ -61,7 +61,7 @@ class TriGram(nn.Module):
         return Variable(probs.cuda())
 
 
-def NN(nn.Module):
+class NN(nn.Module):
     def __init__(self, model_dict):
         self.V = model_dict['max_size'] + 2
 
