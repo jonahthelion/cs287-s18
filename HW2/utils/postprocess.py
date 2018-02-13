@@ -46,10 +46,12 @@ def write_submission(model, fout, TEXT):
                     writer.write(str(TEXT.vocab.itos[word_ix]) + '\n')
     return samples, top_ranks
 
-def vis_display(vis, vis_windows, x_coord, train_l):
+def vis_display(vis, vis_windows, x_coord, train_l, MAP):
     if vis_windows is None:
         vis_windows = {}
         vis_windows['train_ce'] = vis.line(Y=torch.Tensor([float(train_l)]), X=torch.Tensor([x_coord]), opts=dict(title='Train CE'))
+        vis_windows['val_ce'] = vis.line(Y=torch.Tensor([float(MAP)]), X=torch.Tensor([x_coord]), opts=dict(title='Validation MAP'))
     else:
         vis.line(Y=torch.Tensor([float(train_l)]), X=torch.Tensor([x_coord]), win=vis_windows['train_ce'], update='append', opts=dict(title='Train CE'))
+        vis.line(Y=torch.Tensor([float(MAP)]), X=torch.Tensor([x_coord]), win=vis_windows['val_ce'], update='append', opts=dict(title='Validation MAP'))
     return vis_windows
