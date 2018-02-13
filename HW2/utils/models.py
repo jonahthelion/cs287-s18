@@ -16,21 +16,24 @@ class TriGram(nn.Module):
 
         self.unary_counts = torch.zeros(self.V)
         self.binary_counts = torch.zeros(self.V, self.V)
-        self.tert_counts = torch.sparse.FloatTensor(self.V, self.V, self.V)
+        self.tert_counts = {}
 
     def train_predict(self, text):
         text = text.data.cpu().numpy().flatten('F')
         for i in range(2, text.shape[0]):
             self.unary_counts[text[i]] += 1
             self.binary_counts[text[i-1], text[i]] += 1
-            self.tert_counts.to_dense()[text[i-2], text[i-1], text[i]] += 1
+            if not (text[i-2], text[i-1]) in self.tert_counts:
+                self.tert_counts[text[i-2], text[i-1]] = torch.zeros(self.V)
+            self.tert_counts[text[i-2], text[i-1]][text[i]] += 1
 
         return
 
     def postprocess(self):
         self.unary_counts = F.normalize(self.unary_counts, p=1, dim=0)
         self.binary_counts = F.normalize(self.binary_counts, p=1, dim=1)
-        self.tert_counts = F.normalize(self.tert_counts, p=1, dim=2)
+        for key in self.tert_counts:
+            self.tert_counts[key] = F.normalize(self.tert_counts[key], p=1, dim=0)
 
     # input is batch.text.cuda() (cuda Variable), output is cuda variable (Nbatch, V)
     def predict(self, text):
@@ -41,7 +44,10 @@ class TriGram(nn.Module):
 
             probs[i] += self.alpha[2] * self.unary_counts
             probs[i] += self.alpha[1] * self.binary_counts[col[-1]]
-            probs[i] += self.alpha[0] * self.tert_counts[col[-2], col[-1]]
+            if (col[-2], col[-1]) in self.tert_counts:
+                probs[i] += self.alpha[0] * self.tert_counts[col[-2], col[-1]]
+            else:
+                probs[i] += self.alpha[0] * torch.ones(self.V) / float(self.V)
 
         return Variable(probs.cuda())
 
