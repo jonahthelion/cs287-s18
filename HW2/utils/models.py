@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 
 from collections import Counter
+from tqdm import tqdm
 
 class TriGram(nn.Module):
     def __init__(self, model_dict):
