@@ -8,7 +8,7 @@ import numpy as np
 
 from utils.models import TriGram
 from utils.preprocess import get_data, get_model
-from utils.postprocess import evaluate, write_submission
+from utils.postprocess import evaluate, write_submission, vis_display
 
 
 # NOTE: success of TriGram will depend weakly on batch size
@@ -26,6 +26,11 @@ model_dict = {'max_size': 10001, # max is 10001
 
 
                 }
+
+# visdom
+vis_windows = None
+vis = visdom.Visdom()
+vis.env = 'train'
 
 train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 
@@ -46,6 +51,7 @@ for epoch in range(model_dict['num_epochs']):
         if batch_num % 20 == 0:
             loss_l = loss.data.cpu().numpy()[0]
             print(batch_num, loss_l)
+            vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_l)
 
 model.postprocess()
 
