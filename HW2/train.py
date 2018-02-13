@@ -18,10 +18,10 @@ model_dict = {'max_size': 10001, # max is 10001
                 'bptt_len': 32,
                 'num_epochs': 1,
 
-                'output': 'simple0.txt',
+                'output': 'simple1.txt',
 
                 'type': 'trigram', 
-                'alpha': [.1, .5, .4],
+                'alpha': [.225, .275, .5],
 
                 # 'type': 'NN',
 
@@ -59,12 +59,8 @@ for epoch in range(model_dict['num_epochs']):
 
 model.postprocess()
 
-for alpha1 in np.linspace(0,.3, 5):
-    for alpha2 in np.linspace(0, .5-alpha1, 5):
-        model.alpha = [alpha1, alpha2, 1-alpha1-alpha2]
-        MAP = evaluate(model, val_iter)
-        print(model.alpha, MAP)
-#write_submission(model, model_dict['output'], TEXT)
+
+write_submission(model, model_dict['output'], TEXT)
 
 
 
