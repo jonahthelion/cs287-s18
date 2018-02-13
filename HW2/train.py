@@ -31,7 +31,7 @@ model.postprocess()
 
 assert False
 
-nll_l, MAP = evaluate(model, test_iter)
+nll_l, MAP = evaluate(model, val_iter)
 print(model_dict['alpha'])
 print(nll_l, MAP)
 # samples, top_ranks = write_submission(model, model_dict['output'], TEXT)

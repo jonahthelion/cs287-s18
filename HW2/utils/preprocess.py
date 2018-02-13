@@ -15,6 +15,8 @@ def get_data(model_dict):
     train_iter, val_iter, test_iter = torchtext.data.BPTTIterator.splits(
         (train, val, test), batch_size=model_dict['batch_size'], device=-1, bptt_len=model_dict['bptt_len'], repeat=False)
 
+    val_iter = torchtext.data.BPTTIterator(val, train=False, batch_size=10, device=-1, bptt_len=11)
+
     return train_iter, val_iter, test_iter, TEXT
 
 
