@@ -1,4 +1,5 @@
 import torchtext
+import torch
 from torchtext.vocab import Vectors
 import torch.nn.functional as F
 
