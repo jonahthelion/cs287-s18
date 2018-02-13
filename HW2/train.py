@@ -31,5 +31,4 @@ model.postprocess()
 
 
 nll_l, MAP = evaluate(model, val_iter)
-print(nll_l, MAP)
 

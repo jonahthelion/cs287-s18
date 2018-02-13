@@ -20,7 +20,10 @@ def evaluate(model, test_iter):
 
     nll_l = F.nll_loss(all_preds.log(), all_actuals).data.numpy()[0]
 
-    return nll_l, MAP
+    _,top_ranks = all_preds.data.topk(20,1)
+
+
+    return nll_l, top_ranks
 
 def write_submission(model, fout, TEXT):
     test = torchtext.datasets.LanguageModelingDataset(path="PSET/input.txt",text_field=TEXT)
