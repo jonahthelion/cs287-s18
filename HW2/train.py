@@ -5,6 +5,7 @@ import torch.nn.functional as F
 
 from tqdm import tqdm
 import numpy as np
+import visdom
 
 from utils.models import TriGram
 from utils.preprocess import get_data, get_model
