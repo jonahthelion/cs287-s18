@@ -32,7 +32,7 @@ class TriGram(nn.Module):
     def postprocess(self):
         self.unary_counts = F.normalize(self.unary_counts, p=1, dim=0)
         self.binary_counts = F.normalize(self.binary_counts, p=1, dim=1)
-        for key in self.tert_counts:
+        for key in tqdm(self.tert_counts):
             self.tert_counts[key] = F.normalize(self.tert_counts[key], p=1, dim=0)
 
     # input is batch.text.cuda() (cuda Variable), output is cuda variable (Nbatch, V)
@@ -43,11 +43,19 @@ class TriGram(nn.Module):
             col = text[:,i]
 
             probs[i] += self.alpha[2] * self.unary_counts
-            probs[i] += self.alpha[1] * self.binary_counts[col[-1]]
+
+            if self.binary_counts[col[-1]].sum() > .1:
+                probs[i] += self.alpha[1] * self.binary_counts[col[-1]]
+            else:
+                probs[i] += self.alpha[1] * self.unary_counts
+
             if (col[-2], col[-1]) in self.tert_counts:
                 probs[i] += self.alpha[0] * self.tert_counts[col[-2], col[-1]]
             else:
-                probs[i] += self.alpha[0] * torch.ones(self.V) / float(self.V)
+                if self.binary_counts[col[-1]].sum() > .1:
+                    probs[i] += self.alpha[0] * self.binary_counts[col[-1]]
+                else:
+                    probs[i] += self.alpha[0] * self.unary_counts
 
         return Variable(probs.cuda())
 
