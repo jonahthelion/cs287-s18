@@ -51,7 +51,7 @@ for epoch in range(model_dict['num_epochs']):
         
         if batch_num % 200 == 0:
             loss_l = loss.data.cpu().numpy()[0]
-            if batch_num % 1000 == 0:
+            if batch_num % 500 == 0:
                 MAP = evaluate(model, val_iter)
             vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_l, MAP)
 
