@@ -28,7 +28,7 @@ def evaluate(model, test_iter):
         MAP.append((vals * dotted).sum())
 
 
-    return nll_l, MAP
+    return nll_l, np.mean(MAP), all_preds, all_actuals
 
 def write_submission(model, fout, TEXT):
     test = torchtext.datasets.LanguageModelingDataset(path="PSET/input.txt",text_field=TEXT)
