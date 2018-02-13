@@ -21,8 +21,14 @@ def evaluate(model, test_iter):
 
     _,top_ranks = all_preds.data.topk(20,1)
 
+    dotted = 1./torch.arange(1, 21)
+    MAP = []
+    for row_ix in range(len(all_actuals)):
+        vals = (all_actuals[row_ix].data == top_ranks[row_ix]).float()
+        MAP.append((vals * dotted).sum())
 
-    return nll_l, top_ranks,all_actuals
+
+    return nll_l, MAP
 
 def write_submission(model, fout, TEXT):
     test = torchtext.datasets.LanguageModelingDataset(path="PSET/input.txt",text_field=TEXT)
