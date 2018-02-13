@@ -63,6 +63,7 @@ class TriGram(nn.Module):
 
 class NN(nn.Module):
     def __init__(self, model_dict):
+        super(NN, self).__init__()
         self.V = model_dict['max_size'] + 2
 
         self.embed = nn.Embedding(self.V, 300)
