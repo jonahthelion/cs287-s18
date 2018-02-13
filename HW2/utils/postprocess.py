@@ -16,14 +16,13 @@ def evaluate(model, test_iter):
 
     all_actuals = torch.stack(all_actuals).squeeze()
     all_preds = torch.stack(all_preds)
-    print(all_actuals.shape, all_preds.shape)
 
     nll_l = F.nll_loss(all_preds.log(), all_actuals).data.numpy()[0]
 
     _,top_ranks = all_preds.data.topk(20,1)
 
 
-    return nll_l, top_ranks
+    return nll_l, top_ranks,all_actuals
 
 def write_submission(model, fout, TEXT):
     test = torchtext.datasets.LanguageModelingDataset(path="PSET/input.txt",text_field=TEXT)

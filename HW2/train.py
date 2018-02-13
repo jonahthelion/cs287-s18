@@ -30,5 +30,5 @@ for epoch in range(model_dict['num_epochs']):
 model.postprocess()
 
 
-nll_l, MAP = evaluate(model, val_iter)
+nll_l, MAP,all_actuals = evaluate(model, val_iter)
 
