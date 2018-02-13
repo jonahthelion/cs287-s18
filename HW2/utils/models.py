@@ -80,6 +80,9 @@ class NN(nn.Module):
     def postprocess(self):
         pass
 
+    def predict(self, text):
+        return F.softmax(self.train_predict(text), 1)
+
 
 
 
