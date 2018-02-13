@@ -20,10 +20,10 @@ model_dict = {'max_size': 10001, # max is 10001
 
                 'output': 'simple0.txt',
 
-                # 'type': 'trigram', 
-                # 'alpha': [.1, .5, .4],
+                'type': 'trigram', 
+                'alpha': [.1, .5, .4],
 
-                'type': 'NN',
+                # 'type': 'NN',
 
 
                 }
@@ -44,19 +44,27 @@ for epoch in range(model_dict['num_epochs']):
         model.train()
         optimizer.zero_grad()
         probs = model.train_predict(batch.text.cuda())
-        actuals = batch.text[-1].cuda()
-        loss = F.cross_entropy(probs, actuals)
-        loss.backward()
-        optimizer.step()
-        
-        if batch_num % 200 == 0:
-            loss_l = loss.data.cpu().numpy()[0]
-            if batch_num % 500 == 0:
-                MAP = evaluate(model, val_iter)
-            vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_l, MAP)
+
+        if not probs is None:
+            actuals = batch.text[-1].cuda()
+            loss = F.cross_entropy(probs, actuals)
+            loss.backward()
+            optimizer.step()
+            
+            if batch_num % 200 == 0:
+                loss_l = loss.data.cpu().numpy()[0]
+                if batch_num % 500 == 0:
+                    MAP = evaluate(model, val_iter)
+                vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_l, MAP)
 
 model.postprocess()
 
+for alpha1 in np.linspace(0,.3, 5):
+    for alpha2 in np.linspace(0, .5-alpha1, 5):
+        model.alpha = [alpha1, alpha2, 1-alpha1-alpha2]
+        MAP = evaluate(model, val_iter)
+        print(alpha, MAP)
+#write_submission(model, model_dict['output'], TEXT)
 
-MAP = evaluate(model, val_iter)
-print('MAP', MAP)
+
+
