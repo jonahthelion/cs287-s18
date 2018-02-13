@@ -77,7 +77,7 @@ class NN(nn.Module):
 
         probs = torch.stack([torch.cat([row for row in embeds[:,i]]) for i in range(text.shape[1])])
 
-        return probs, embeds
+        return self.head(probs)
 
 
 
