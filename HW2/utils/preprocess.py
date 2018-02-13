@@ -1,7 +1,7 @@
 import torch
 import torchtext
 
-from .models import TriGram
+from .models import TriGram, NN
 
 def get_data(model_dict):
     TEXT = torchtext.data.Field()
@@ -24,5 +24,8 @@ def get_model(model_dict):
     print(model_dict)
     if model_dict['type'] == 'trigram':
         model = TriGram(model_dict)
+
+    if model_dict['type'] == 'NN':
+        model = NN(model_dict)
 
     return model

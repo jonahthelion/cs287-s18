@@ -25,7 +25,7 @@ def evaluate(model, test_iter):
         vals = (all_actuals[row_ix].data == top_ranks[row_ix]).float()
         MAP.append((vals * dotted).sum())
 
-    return np.mean(MAP), all_preds, all_actuals
+    return np.mean(MAP)
 
 def write_submission(model, fout, TEXT):
     test = torchtext.datasets.LanguageModelingDataset(path="PSET/input.txt",text_field=TEXT)

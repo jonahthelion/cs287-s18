@@ -16,8 +16,13 @@ model_dict = {'max_size': 10001, # max is 10001
 
                 'output': 'simple0.txt',
 
-                'type': 'trigram', 
-                'alpha': [.1, .5, .4],}
+                # 'type': 'trigram', 
+                # 'alpha': [.1, .5, .4],
+
+                'type': 'NN',
+
+
+                }
 
 train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 
@@ -30,5 +35,5 @@ for epoch in range(model_dict['num_epochs']):
 model.postprocess()
 
 
-nll_l, MAP, all_preds, all_actuals = evaluate(model, val_iter)
-
+MAP = evaluate(model, val_iter)
+print('MAP', MAP)
