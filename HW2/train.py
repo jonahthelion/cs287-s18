@@ -14,7 +14,7 @@ from utils.postprocess import evaluate, write_submission, vis_display
 
 # NOTE: success of TriGram will depend weakly on batch size
 model_dict = {'max_size': 10001, # max is 10001
-                'batch_size': 40, 
+                'batch_size': 41, 
                 'bptt_len': 4,
                 'num_epochs': 5000,
 
