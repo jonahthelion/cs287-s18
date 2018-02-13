@@ -73,11 +73,10 @@ class NN(nn.Module):
             )
 
     def train_predict(self, text):
-        probs = Variable(torch.zeros(text.shape[1], 300*3).cuda())
         embeds = self.embed(text[-3:])
 
-        # for i in range(text.shape[1]):
-        #     probs[i] += embeds[:,i].contiguous().view(-1)
+        probs = torch.stack([torch.cat([row for row in embeds[:,i]]) for i in range(text.shape[1])])
+
         return probs, embeds
 
 
