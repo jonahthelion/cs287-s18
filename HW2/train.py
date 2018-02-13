@@ -37,7 +37,7 @@ train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 
 model = get_model(model_dict)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=0.0004)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.0002)
 
 for epoch in range(model_dict['num_epochs']):
     for batch_num,batch in enumerate(tqdm(train_iter)):
@@ -53,7 +53,6 @@ for epoch in range(model_dict['num_epochs']):
             loss_l = loss.data.cpu().numpy()[0]
             if batch_num % 1000 == 0:
                 MAP = evaluate(model, val_iter)
-            print(batch_num, loss_l)
             vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_l, MAP)
 
 model.postprocess()
