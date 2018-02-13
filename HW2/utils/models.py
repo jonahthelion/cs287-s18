@@ -16,7 +16,7 @@ class TriGram(nn.Module):
 
         self.unary_counts = torch.zeros(self.V)
         self.binary_counts = torch.zeros(self.V, self.V)
-        self.tert_counts = torch.zeros(self.V, self.V, self.V)
+        self.tert_counts = torch.sparse.FloatTensor(self.V, self.V, self.V)
 
     def train_predict(self, text):
         text = text.data.cpu().numpy().flatten('F')
