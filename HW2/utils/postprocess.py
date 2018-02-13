@@ -10,22 +10,15 @@ def evaluate(model, test_iter):
     all_actuals = []
     all_preds = []
     for batch in tqdm(test_iter):
-        text = torch.stack([ batch.text[:,i] for i in range(batch.text.shape[1]) if batch.text.data[-1, i] != 3]).t() 
+        all_preds.extend(model.predict(batch.text[:-1].cuda()).cpu())
+        all_actuals.extend(batch.text[-1])
 
-        preds = model.predict(text.cuda()).cpu()
 
-        labels = text[-1]
-
-        all_actuals.extend(labels)
-        all_preds.extend(preds)
     all_actuals = torch.stack(all_actuals).squeeze()
     all_preds = torch.stack(all_preds)
+    print(all_actuals.shape, all_preds.shape)
 
     nll_l = F.nll_loss(all_preds.log(), all_actuals).data.numpy()[0]
-
-    _,top_ranks = all_preds.data.topk(20,1)
-    rs = ( top_ranks == (all_actuals.data.view(-1, 1)*torch.ones(1, 20).long()) )
-    MAP = mean_average_precision(rs.numpy())
 
     return nll_l, MAP
 

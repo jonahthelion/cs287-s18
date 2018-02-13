@@ -29,10 +29,7 @@ for epoch in range(model_dict['num_epochs']):
         preds = model.train_predict(batch.text.cuda())
 model.postprocess()
 
-assert False
 
 nll_l, MAP = evaluate(model, val_iter)
-print(model_dict['alpha'])
 print(nll_l, MAP)
-# samples, top_ranks = write_submission(model, model_dict['output'], TEXT)
 
