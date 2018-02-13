@@ -16,7 +16,7 @@ from utils.postprocess import evaluate, write_submission, vis_display
 model_dict = {'max_size': 10001, # max is 10001
                 'batch_size': 30, 
                 'bptt_len': 32,
-                'num_epochs': 100,
+                'num_epochs': 5000,
 
                 'output': 'simple0.txt',
 
@@ -37,7 +37,7 @@ train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 
 model = get_model(model_dict)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=0.0002, weight_decay=5e-4)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.0004)
 
 for epoch in range(model_dict['num_epochs']):
     for batch_num,batch in enumerate(tqdm(train_iter)):
@@ -49,9 +49,9 @@ for epoch in range(model_dict['num_epochs']):
         loss.backward()
         optimizer.step()
         
-        if batch_num % 20 == 0:
+        if batch_num % 200 == 0:
             loss_l = loss.data.cpu().numpy()[0]
-            if batch_num % 200 == 0:
+            if batch_num % 1000 == 0:
                 MAP = evaluate(model, val_iter)
             print(batch_num, loss_l)
             vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_l, MAP)
