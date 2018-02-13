@@ -65,6 +65,8 @@ def NN(nn.Module):
     def __init__(self, model_dict):
         self.V = model_dict['max_size'] + 2
 
+        self.embed = nn.Embedding(self.V, 300)
+
 
 
 
