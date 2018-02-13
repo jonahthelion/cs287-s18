@@ -68,6 +68,9 @@ class NN(nn.Module):
 
         self.embed = nn.Embedding(self.V, 300)
 
+    def train_predict(self, text):
+        return self.embed(text)
+
 
 
 

@@ -27,5 +27,6 @@ def get_model(model_dict):
 
     if model_dict['type'] == 'NN':
         model = NN(model_dict)
+        model.cuda()
 
     return model
