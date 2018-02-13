@@ -68,8 +68,14 @@ class NN(nn.Module):
 
         self.embed = nn.Embedding(self.V, 300)
 
+        self.head = nn.Sequential(
+                nn.Linear(300*3, self.V),
+            )
+
     def train_predict(self, text):
-        return self.embed(text)
+        probs = Variable(torch.zeros(text.shape[1], 300*3).cuda())
+        embeds = self.embed(text[-3:])
+        return probs, embeds
 
 
 

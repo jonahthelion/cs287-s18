@@ -31,7 +31,7 @@ model = get_model(model_dict)
 for epoch in range(model_dict['num_epochs']):
     for batch in tqdm(train_iter):
         model.train()
-        preds = model.train_predict(batch.text.cuda())
+        probs, embeds = model.train_predict(batch.text.cuda())
         assert False
 model.postprocess()
 
