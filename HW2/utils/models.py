@@ -170,7 +170,7 @@ class NNLSTM(nn.Module):
 
     def internal(self, text):
         embeds = self.embed(text[-self.lookback:])
-        probs = self.lstm(embeds)
+        probs = self.lstm(embeds)[1][0]
         print(probs.shape)
         return self.head(probs)
 
