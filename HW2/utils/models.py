@@ -85,25 +85,27 @@ model_dict = {'max_size': 10001, # max is 10001
                 'output': 'simple3.txt',
 
                 'type': 'NN', 
+                'lookback': 3,
                 }
 
 class NN(nn.Module):
     def __init__(self, model_dict):
         super(NN, self).__init__()
         self.V = model_dict['max_size'] + 2
+        self.lookback = model_dict['lookback']
 
         self.embed = nn.Embedding(self.V, 300)
 
         self.head = nn.Sequential(
-                nn.Linear(300*3, 300*3),
+                nn.Linear(300*self.lookback, 300*self.lookback),
                 nn.ReLU(inplace=True),
-                nn.BatchNorm1d(300*3),
+                nn.BatchNorm1d(300*self.lookback),
 
-                nn.Linear(300*3, self.V),
+                nn.Linear(300*self.lookback, self.V),
             )
 
     def internal(self, text):
-        embeds = self.embed(text[-3:])
+        embeds = self.embed(text[-self.lookback:])
         probs = torch.stack([torch.cat([row for row in embeds[:,i]]) for i in range(text.shape[1])])
         return self.head(probs)
 
