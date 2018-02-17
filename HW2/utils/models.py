@@ -157,7 +157,7 @@ class NNLSTM(nn.Module):
 
         self.embed = nn.Embedding(self.V, self.d)
 
-        self.lstm = torch.nn.LSTM(self.d, self.d)
+        self.lstm = torch.nn.LSTM(self.d, self.d, dropout=.2)
 
         self.head = nn.Sequential(
             nn.Linear(self.d, self.d),
@@ -178,6 +178,9 @@ class NNLSTM(nn.Module):
 
     def predict(self, text):
         return F.softmax(self.internal(text), 1)
+
+    def postprocess(self):
+        pass
 
 
 
