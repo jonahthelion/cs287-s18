@@ -259,21 +259,7 @@ Finally, the output of the best Trigram model is linearly interpolated with the 
   \caption{\label{fig:clusters} Training the NN with $lookback=3$}
 \end{figure}
 
-\begin{table}[h]
-\centering
-\begin{tabular}{llrrrrr}
- \toprule
- input &  &  &  & \\
- \midrule
- \textsc{NB Counts} & & 0.793  & 0.686 & 0.867 & &\\
- \textsc{Binarized LR} & & 0.789 & 0.496 & 0.876& &\\
- \textsc{Mean CBOW} & & 0.824 & 0.416 & 0.898& &\\
- \textsc{GloVe CNN} & & 0.833  & 0.577 & 0.907& &\\
- \textsc{ResNet18} & & 0.774 & 0.685 & 0.855& &\\
- \bottomrule
-\end{tabular}
-\caption{\label{tab:conc} }
-\end{table}
+
 
 The word vectors learned by this procedure are not particularly good. Closest vectors as measured by cosine distance are below\\
 \centerline{\underline{good:} ['good',
@@ -302,9 +288,27 @@ The word vectors learned by this procedure are not particularly good. Closest ve
 \end{subsection}
 
 \begin{subsection}{LSTM language model}
+In this model the embedding word vectors are fed to an LSTM. We use 2 LSTM stacked on top of each other with dropout .2. An MLP is used for the output head. The MLP has dropout .2 on its final layer and a single hidden layer of size $d$.\\
+Training is shown in Figure ~\ref{fig:lstmtrain}. The result is shown in Table ~\ref{tab:lstm}.
 
+\begin{table}
+  \begin{center}
+    \begin{tabular}{@{}lll@{}}
+      \toprule
+      & model & MAP\\
+      \midrule
+      & LSTM & 0.227 \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \caption{\label{tab:lstm} The LSTM does not do better on its own than trigram.}
+ \end{table}
 
-
+ \begin{figure}
+  \centering
+  \includegraphics[width=6cm]{imgs/lstmtrain}
+  \caption{\label{fig:lstmtrain} Training the LSTM. I test only 1 architecture.}
+\end{figure}
 
 \end{subsection}
 
@@ -365,27 +369,6 @@ The word vectors learned by this procedure are not particularly good. Closest ve
 
 
 \section{Conclusion}
-
-Four standard NLP models and a fifth model which has no predefined understanding of a vocabulary are trained and evaluated on SST1. The best results from all models are shown in Figure \ref{tab:conc}.
-
-\begin{table}[h]
-\centering
-\begin{tabular}{llrrr}
- \toprule
- Model &  & Acc. & Bce. & Roc.\\
- \midrule
- \textsc{NB Counts} & & 0.793  & 0.686 & 0.867\\
- \textsc{Binarized LR} & & 0.789 & 0.496 & 0.876\\
- \textsc{Mean CBOW} & & 0.824 & 0.416 & 0.898\\
- \textsc{GloVe CNN} & & 0.833  & 0.577 & 0.907\\
- \midrule
- \textsc{ResNet18} & & 0.774 & 0.685 & 0.855\\
- \bottomrule
-\end{tabular}
-\caption{\label{tab:conc} }
-\end{table}
-
-\bibliographystyle{apalike}
-\bibliography{writeup}
+Ran out of time to do this as thoroughly as I should.
 
 \end{document}
