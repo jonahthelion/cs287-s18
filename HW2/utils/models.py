@@ -163,7 +163,7 @@ class NNLSTM(nn.Module):
             nn.Linear(self.d, self.d),
             nn.ReLU(inplace=True),
             # nn.BatchNorm1d(self.d*self.lookback),
-            nn.Dropout( inplace=True),
+            nn.Dropout(p=.2 , inplace=True),
 
             nn.Linear(self.d, self.V),
         )
