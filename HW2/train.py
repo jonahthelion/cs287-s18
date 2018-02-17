@@ -12,9 +12,6 @@ from utils.preprocess import get_data, get_model
 from utils.postprocess import evaluate, write_submission, vis_display
 
 
-# NOTE: success of TriGram will depend weakly on batch size
-
-
 # visdom
 vis_windows = None
 vis = visdom.Visdom()
@@ -24,7 +21,7 @@ train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 
 model = get_model(model_dict)
 
-# optimizer = torch.optim.Adam(model.parameters(), lr=0.0002)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.0002)
 
 for epoch in range(model_dict['num_epochs']):
     for batch_num,batch in enumerate(tqdm(train_iter)):
