@@ -153,6 +153,7 @@ class NNLSTM(nn.Module):
         super(NNLSTM, self).__init__()
         self.V = model_dict['max_size'] + 2
         self.d = model_dict['d']
+        self.lookback = model_dict['lookback']
 
         self.embed = nn.Embedding(self.V, self.d)
 
