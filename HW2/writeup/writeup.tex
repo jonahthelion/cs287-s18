@@ -234,7 +234,7 @@ In the neural language model, we map the sparse one-hot vectors used to represen
 We train the NN with an Adam optimizer of learning rate .0003 for five epochs on batches of size 140 and bptt\_len 6. The network architecture is\\
 \centerline{ Embedding \rightarrow Linear(D $\cdot lookback$, D $\cdot lookback$) \rightarrow Dropout(0.3) \rightarrow Linear(D $\cdot lookback$, $\mcV$) }
 where $D$ is the dimension of the embeddings, and $lookback$ is the number of words that are concatenated. The MAP is recorded in Table ~\ref{tab:NN} for a lookback of 3, 4, and 5 all with $D=300$.\\
-Finally, the output of the best Trigram model is linearly interpolated with the best NN model.
+Finally, the output of the best Trigram model is linearly interpolated with the best NN model.\\
 
 \begin{table}
   \begin{center}
@@ -246,9 +246,11 @@ Finally, the output of the best Trigram model is linearly interpolated with the 
       & 4 & 0.255 \\
       & 5 & 0.250 \\
       \bottomrule
+      & Trigram + NN & 0.300\\ 
+      \bottomrule
     \end{tabular}
   \end{center}
-  \caption{\label{tab:NN} The NN does about the same on its own independent of $lookback$. }
+  \caption{\label{tab:NN} The NN does about the same on its own independent of $lookback$. The ensemble with Trigram waited by 0.643 and NN weighted 1-0.643 achieves higher accuracy than the Trigram model on its own.}
  \end{table}
  
  \begin{figure}
@@ -256,6 +258,46 @@ Finally, the output of the best Trigram model is linearly interpolated with the 
   \includegraphics[width=6cm]{imgs/nntrain}
   \caption{\label{fig:clusters} Training the NN with $lookback=3$}
 \end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llrrrrr}
+ \toprule
+ input &  &  &  & \\
+ \midrule
+ \textsc{NB Counts} & & 0.793  & 0.686 & 0.867 & &\\
+ \textsc{Binarized LR} & & 0.789 & 0.496 & 0.876& &\\
+ \textsc{Mean CBOW} & & 0.824 & 0.416 & 0.898& &\\
+ \textsc{GloVe CNN} & & 0.833  & 0.577 & 0.907& &\\
+ \textsc{ResNet18} & & 0.774 & 0.685 & 0.855& &\\
+ \bottomrule
+\end{tabular}
+\caption{\label{tab:conc} }
+\end{table}
+
+The word vectors learned by this procedure are not particularly good. Closest vectors as measured by cosine distance are below\\
+\centerline{\underline{good:} ['good',
+ 'shea',
+ 'opted',
+ 'marine',
+ 'warren',
+ 'pcs',
+ "'m",
+ 'affiliate',
+ 'owner',
+ 'appearances']}
+ 
+ \centerline{\underline{bad:} ['bad',
+ 'mexico',
+ 'accurate',
+ 'banco',
+ 'rolled',
+ 'acknowledge',
+ 'market',
+ 'kemp',
+ 'federated',
+ 'greed']}
+
 
 \end{subsection}
 
