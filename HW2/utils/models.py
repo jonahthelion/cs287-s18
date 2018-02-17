@@ -123,6 +123,18 @@ class NN(nn.Module):
     def predict(self, text):
         return F.softmax(self.internal(text), 1)
 
+class Ensemb(object):
+    def __init__(self, models, alpha):
+        self.models = models
+        self.alpha = alpha
+        assert( abs(sum(self.alpha) - 1) < .001)
+
+    def predict(self, text):
+        outs = self.alpha[0] * self.models[0].predict(text)
+        for i in range(1, len(self.alpha)):
+            outs += self.alpha[i] * self.models[i].predict(text)
+        return outs
+
 
 
 
