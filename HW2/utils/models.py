@@ -78,7 +78,7 @@ class TriGram(nn.Module):
 
 
 model_dict = {'max_size': 10001, # max is 10001
-                'batch_size': 80, 
+                'batch_size': 120, 
                 'bptt_len': 4,
                 'num_epochs': 5,
 

@@ -23,7 +23,7 @@ model = get_model(model_dict)
 
 trainable = False
 if len(list(model.parameters())) > 0:
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0002)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
     trainable = True
 
 for epoch in range(model_dict['num_epochs']):
@@ -42,9 +42,9 @@ for epoch in range(model_dict['num_epochs']):
             loss.backward()
             optimizer.step()
             
-            if batch_num % 200 == 0:
+            if batch_num % 100 == 0:
                 loss_l = loss.data.cpu().numpy()[0]
-                if batch_num % 500 == 0:
+                if batch_num % 250 == 0:
                     MAP = evaluate(model, val_iter)
                 vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_l, MAP)
 
@@ -52,7 +52,7 @@ model.postprocess()
 
 
 MAP = evaluate(model, val_iter)
-print("MAP FINAL", MAP, alpha)
+print("MAP FINAL", MAP)
 #write_submission(model, model_dict['output'], TEXT)
 
 
