@@ -92,14 +92,14 @@ class NN(nn.Module):
         super(NN, self).__init__()
         self.V = model_dict['max_size'] + 2
 
-        self.embed = nn.Embedding(self.V, 300)
+        self.embed = nn.Embedding(self.V, 100)
 
         self.head = nn.Sequential(
-                nn.Linear(300*3, 300*3),
+                nn.Linear(100*3, 100*3),
                 nn.ReLU(inplace=True),
-                nn.BatchNorm1d(300*3),
+                nn.BatchNorm1d(100*3),
 
-                nn.Linear(300*3, self.V),
+                nn.Linear(100*3, self.V),
             )
 
     def internal(self, text):
