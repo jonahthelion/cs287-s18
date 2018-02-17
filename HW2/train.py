@@ -47,6 +47,7 @@ for epoch in range(model_dict['num_epochs']):
                 if batch_num % 250 == 0:
                     model.eval()
                     MAP = evaluate(model, val_iter)
+                    print(epoch, batch_num, MAP)
                 vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_l, MAP)
 
 model.postprocess()
@@ -54,6 +55,7 @@ model.eval()
 
 
 MAP = evaluate(model, val_iter)
+print(model_dict)
 print("MAP FINAL", MAP)
 #write_submission(model, model_dict['output'], TEXT)
 

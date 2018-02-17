@@ -86,6 +86,8 @@ model_dict = {'max_size': 10001, # max is 10001
 
                 'type': 'NN', 
                 'lookback': 3,
+                'd': 100,
+
                 }
 
 class NN(nn.Module):
@@ -93,15 +95,16 @@ class NN(nn.Module):
         super(NN, self).__init__()
         self.V = model_dict['max_size'] + 2
         self.lookback = model_dict['lookback']
+        self.d = model_dict['d']
 
-        self.embed = nn.Embedding(self.V, 300)
+        self.embed = nn.Embedding(self.V, self.d)
 
         self.head = nn.Sequential(
-                nn.Linear(300*self.lookback, 300*self.lookback),
+                nn.Linear(self.d*self.lookback, self.d*self.lookback),
                 nn.ReLU(inplace=True),
-                nn.BatchNorm1d(300*self.lookback),
+                nn.BatchNorm1d(self.d*self.lookback),
 
-                nn.Linear(300*self.lookback, self.V),
+                nn.Linear(self.d*self.lookback, self.V),
             )
 
     def internal(self, text):
