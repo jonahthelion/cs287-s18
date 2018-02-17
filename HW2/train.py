@@ -43,7 +43,7 @@ for epoch in range(model_dict['num_epochs']):
             actuals = batch.text[-1].cuda()
             loss = F.cross_entropy(probs, actuals)
             loss.backward()
-            nn.utils.clip_grad(model.parameters(), 1.)
+            torch.nn.utils.clip_grad(model.parameters(), 1.)
             optimizer.step()
             
             if batch_num % 100 == 0:
