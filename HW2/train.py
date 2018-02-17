@@ -17,7 +17,7 @@ vis_windows = None
 vis = visdom.Visdom()
 vis.env = 'train'
 
-for lookback in [3,4,5]:
+for lookback in [4]:
     model_dict['lookback'] = lookback
 
     train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
@@ -50,7 +50,7 @@ for lookback in [3,4,5]:
                     if batch_num % 250 == 0:
                         model.eval()
                         MAP = evaluate(model, val_iter)
-                        print(epoch, batch_num, lookback, MAP)
+                        print(epoch, batch_num, lookback, FirMAP)
                     vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_l, MAP)
 
     model.postprocess()
