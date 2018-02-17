@@ -86,7 +86,7 @@ model_dict = {'max_size': 10001, # max is 10001
 
                 'type': 'NN', 
                 'lookback': 5,
-                'd': 150,
+                'd': 300,
 
                 }
 
