@@ -29,6 +29,8 @@ if len(list(model.parameters())) > 0:
 for epoch in range(model_dict['num_epochs']):
     for batch_num,batch in enumerate(tqdm(train_iter)):
         if trainable:
+            if len(batch.text) < 4:
+                continue
             model.train()
             optimizer.zero_grad()
 
