@@ -101,8 +101,8 @@ class NN(nn.Module):
         self.embed = nn.Embedding(self.V, self.d)
 
         self.head = nn.Sequential(
-                nn.Linear(self.d*self.lookback, self.d*self.lookback),
-                nn.ReLU(inplace=True),
+                # nn.Linear(self.d*self.lookback, self.d*self.lookback),
+                # nn.ReLU(inplace=True),
                 # nn.BatchNorm1d(self.d*self.lookback),
                 nn.Dropout(p=0.5, inplace=True),
 
