@@ -157,7 +157,7 @@ class NNLSTM(nn.Module):
 
         self.embed = nn.Embedding(self.V, self.d)
 
-        self.lstm = torch.nn.LSTM(self.d, self.d, num_layers=2)
+        self.lstm = torch.nn.LSTM(self.d, self.d,dropout=.2, num_layers=2)
 
         self.head = nn.Sequential(
             nn.Linear(self.d, self.d),
