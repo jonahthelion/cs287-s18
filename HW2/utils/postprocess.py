@@ -28,6 +28,7 @@ def evaluate(model, test_iter):
     return np.mean(MAP)
 
 def write_submission(model, fout, TEXT):
+    print("writing submission", fout)
     test = torchtext.datasets.LanguageModelingDataset(path="PSET/input.txt",text_field=TEXT)
     samples = [row.rstrip().split(" ") if row_ix == 0 else row.rstrip().split(" ")[1:] for row_ix,row in enumerate(' '.join(test[0].text).split('___ <eos>'))][:-1]
     samples = torch.stack([torch.Tensor([TEXT.vocab.stoi[ix] for ix in row]).long() for row in samples], 1)

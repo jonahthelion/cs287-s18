@@ -18,7 +18,7 @@ model_dict = {'max_size': 10001, # max is 10001
                 'bptt_len': 32,
                 'num_epochs': 1,
 
-                'output': 'simple2.txt',
+                'output': 'simple3.txt',
 
                 'type': 'trigram', 
                 'alpha': [0.4306712668382596, 0.4897915705677378, 0.07953716259400256],
@@ -59,19 +59,11 @@ for epoch in range(model_dict['num_epochs']):
 
 model.postprocess()
 
-# best = [0,model.alpha]
-# for trial in range(1000):
-#     alpha1 = np.random.uniform(0, 1)
-#     alpha2 = np.random.uniform(alpha1, 1)
-#     model.alpha = [alpha1, alpha2, 1-alpha1-alpha2]
-#     MAP = evaluate(model, val_iter)
-#     if MAP > best[0]:
-#         best = [MAP, model.alpha]
-#     print(best)
-
-MAP = evaluate(model, val_iter)
-print("MAP", MAP)
-write_submission(model, model_dict['output'], TEXT)
+for alpha in [[1,0,0], [0,1,0], [0,0,1], [.3333,.3333,.3333], [0.4306712668382596, 0.4897915705677378, 0.07953716259400256]]:
+    model.alpha = alpha
+    MAP = evaluate(model, val_iter)
+    print("MAP", MAP, alpha)
+#write_submission(model, model_dict['output'], TEXT)
 
 
 

@@ -45,8 +45,8 @@ And just for fun
 
 
 \section{Problem Description}
-
-For all models, a sentence $\boldx_i$ is encoded as a sequence $x_1,...,x_n$ where each $x_j$ is a one-hot vector of length the vocabulary $\mcV$. The model outputs a categorical distribution over the vocabulary $\mcV$. Embeddings $\mcE_d$ map a one hot vector $x_j$ to a dense vector of size $d$.
+Given 10 consecutive words, we would like to predict the next word.
+For all models, a sentence $\boldx_i$ is encoded as a sequence $x_1,...,x_n$ where each $x_j$ is a one-hot vector of length the vocabulary $\mcV$. The model outputs a categorical distribution over the vocabulary $\mcV$. Embeddings $\mcE_d$ map a one hot vector $x_j$ to a dense vector of size $d$. 
 
 %In general, homeworks will be specified using informal
 %language. As part of the assignment, we expect you to write-out a
@@ -82,7 +82,17 @@ For all models, a sentence $\boldx_i$ is encoded as a sequence $x_1,...,x_n$ whe
 
 \section{Model and Algorithms}
 
-All models are trained on the \href{http://aclweb.org/anthology/J93-2004}{Penn Treebank}. For models requiring gradient descent, training loss and validation loss are recorded in real time with \href{https://github.com/facebookresearch/visdom}{visdom}. Final accuracy, roc score, and binary cross entropy which are displayed in the tables are calculated on the test set. These metrics are calculated using \texttt{sklearn.metric}.
+All models are trained on the \href{http://aclweb.org/anthology/J93-2004}{Penn Treebank}. For models requiring gradient descent, training loss and validation loss are recorded in real time with \href{https://github.com/facebookresearch/visdom}{visdom}. Final Mean Average Precision (MAP) is calculated on a validation set. 
+
+\subsection{Evaluation}
+\begin{enumerate}
+\item All models have a \ttfamily{predict} function which given a batch of sentence fragments outputs an array containing the probabilities for the next word for all batches.
+
+\item All models are tested with the same evaluation function. The function evaluates the model on batches of size 67 of bptt\_len 11 of ``valid.txt". The first 10 words of the batch are fed into the predict function and the 11th word is treated as ground truth. The top 20 words are then measured against the correct word with MAP.
+\end{enumerate}
+The validation is assumed to be fairly similar to the Kaggle set as justified by the fact that the MAP-20 for the trigram model on the validation set is 0.296 and on Kaggle the model receives an MAP of 0.292. Unless explicitly mentioned, all MAP reported below are calculated with this evaluation code, not on Kaggle.
+
+
 
 %Here you specify the model itself. This section should formally
 %describe the model used to solve the task proposed in the previous
@@ -151,142 +161,75 @@ All models are trained on the \href{http://aclweb.org/anthology/J93-2004}{Penn T
 
 \section{Experiments}
 
-\begin{subsection}{Naive Bayes}
-Word counts for positive and negative labels are all initialized to a global initial count of $\alpha$. Figure \ref{fig:clusters} shows that performance of the algorithm on the validation set is robust to changes in $\alpha$. With $\alpha=.5$, performance on the test set using binarized and count word vectors are analyzed in Table \ref{tab:nb}.\\
-The weight vector determined by Naive Bayes can be interpreted as the sentiment associated with particular words. The most positive and most negative words and their weights for binarized bag of words are shown in Table \ref{tab:nbwords}.
+\begin{subsection}{Trigram}
+The interpolated trigram model states 
+$$ p(y_{i+1}) = \alpha \cdot [p^{y_{i+1}}_{y_{i-1},y_{i}}, p^{y_{i+1}}_{y_{i}}, p^{y_{i+1}}]$$
+Where $\alpha$ is a vector of length 3 with $|\alpha|_1 = 1$, and $p^a_{b}$ is the probability of word $a$ given sequence $b$ as determined by count data in the training set.\\
+The unary probabilties are implemented as a vector of size $\mcV$, the binary probabilties are $\mcV \times \mcV$, and the ternary probabilties are a dictionary with keys $(w_1,w_2)$ and values vectors of size $\mcV$.\\
+During training, all sequences of size 1,2 and 3 are counted. The counts are then normalized over $\mcV$. At test time, we for the most part return $\alpha \cdot p$. However, for sequences of length 1 not seen in training, we replace $p_{binary}$ with $p_{unary}$ and for sequences of length 2 not seen in training, we check if $p_{binary}$ is in training and if so use $p_{binary}$, if not use $p_{unary}$.\\
+To determine the best alpha, we sample randomly from vectors of length 3 that sum to 1. We do so 5000 times and use the best one. The alpha chosen is 
+$$ \alpha = [0.4306712668382596, 0.4897915705677378, 0.07953716259400256] $$
+Scores for the above and other alpha of interest are reported below.
 
-
-
-
-
-\begin{table}[h]
-\centering
-\begin{tabular}{llrrr}
- \toprule
- Model &  & Acc. & Bce. & Roc.\\
- \midrule
- \textsc{Binarized} & & 0.791 & 0.679 & 0.867\\
- \textsc{Counts} & & 0.793  & 0.686 & 0.867\\
- \bottomrule
-\end{tabular}
-\caption{\label{tab:nb} Binarizing or counting words does not significantly affect the performance of the model on the test set.}
-\end{table}
-
-
-
-\begin{table}[h]
-\centering
-\begin{tabular}{cccccccccc}
- \midrule
- stupid & unfunny& pointless  & poorly & suffers & Feels & tiresome & car \\
-   5.39452 & 5.1085& 5.03998 &4.96641&4.96641 & 4.88701 & 4.88701 & 4.88701 \\
- \bottomrule
- \bottomrule
- powerful  & solid& perfectly & inventive & refreshing & riveting & wonderfully & universal \\
-  -5.79766 & -5.7109 & -4.99019 & -4.85754 & -4.78398 & -4.70458 & -4.61832 & -4.61832 \\
- \bottomrule
-\end{tabular}
-\caption{\label{tab:nbwords} Words with the highest and lowest weights in the naive bayes weight vector agree with intuition for being negative and positive words respectively.}
-\end{table}
-
-\end{subsection}
-
-
-
-
-\begin{subsection}{Logistic Regression}
-In the logistic regression model, we take the bag of words $\phi(x)$ but train $w$ and $b$ instead of calculating $w$ and $b$. Figure \ref{fig:logtrain} shows that as the model decreases cross entropy, the accuracy on the validation set also increases. However, this model does not do significantly better than naive bayes. The model is trained with batch size of 150 for 150 iterations with an adam optimizer of learning rate 0.0002 and weight decay 0.0005. The weight vector is initialized to zero to guard against words in the validation set which are not in the training set. The model is trained on binary and count vectors as with naive bayes. The metrics are recorded in Table \ref{tab:logreg}. Significant words are recorded in Table \ref{tab:logwords}.
-
-
-\begin{figure}
-  \centering
-%  \includegraphics[width=6cm]
-  \caption{\label{fig:logtrain} The left is the binary cross entropy recorded during training of binarized logistic regression and the right is the classification accuracy tracked during training. The objective function is tightly correlated with classification accuracy. The model is no better than naive bayes.}
-\end{figure}
-
-\begin{table}[h]
-\centering
-\begin{tabular}{llrrr}
- \toprule
- Model &  & Acc. & Bce. & Roc.\\
- \midrule
- \textsc{Binarized} & & 0.789 & 0.496 & 0.876\\
- \textsc{Counts} & & 0.789  & 0.497 & 0.873\\
- \bottomrule
-\end{tabular}
-\caption{\label{tab:logreg} Binarizing or counting words does not significantly affect the performance of the model on the test set.}
-\end{table}
-
-
-\begin{table}[h]
-\centering
-\begin{tabular}{cccccccccc}
- \midrule
-bad & dull & mess  & worst & too &flat & stupid&? \\
-   0.772932 & 0.687341& 0.657265 &0.648685&0.645756&0.611209 & 0.575218 &  0.572873 \\
- \bottomrule
- \bottomrule
- solid  & fun& best & powerful & entertaining & heart & fascinating & love \\
-  -0.689454 & -0.672897& -0.6613 & -0.657444 & -0.591135 &  -0.586589 &-0.578906 & -0.574162 \\
- \bottomrule
-\end{tabular}
-\caption{\label{tab:logwords} Words with the highest and lowest weights in the logistic regression weight vector agree with intuition for being negative and positive words respectively. There is some overlap with naive bayes.}
-\end{table}
+%Word counts for positive and negative labels are all initialized to a global initial count of $\alpha$. Figure \ref{fig:clusters} shows that performance of the algorithm on the validation set is robust to changes in $\alpha$. With $\alpha=.5$, performance on the test set using binarized and count word vectors are analyzed in Table \ref{tab:nb}.\\
+%The weight vector determined by Naive Bayes can be interpreted as the sentiment associated with particular words. The most positive and most negative words and their weights for binarized bag of words are shown in Table \ref{tab:nbwords}.
+%
+%
+%
+%
+%
+%\begin{table}[h]
+%\centering
+%\begin{tabular}{llrrr}
+% \toprule
+% Model &  & Acc. & Bce. & Roc.\\
+% \midrule
+% \textsc{Binarized} & & 0.791 & 0.679 & 0.867\\
+% \textsc{Counts} & & 0.793  & 0.686 & 0.867\\
+% \bottomrule
+%\end{tabular}
+%\caption{\label{tab:nb} Binarizing or counting words does not significantly affect the performance of the model on the test set.}
+%\end{table}
+%
+%
+%
+%\begin{table}[h]
+%\centering
+%\begin{tabular}{cccccccccc}
+% \midrule
+% stupid & unfunny& pointless  & poorly & suffers & Feels & tiresome & car \\
+%   5.39452 & 5.1085& 5.03998 &4.96641&4.96641 & 4.88701 & 4.88701 & 4.88701 \\
+% \bottomrule
+% \bottomrule
+% powerful  & solid& perfectly & inventive & refreshing & riveting & wonderfully & universal \\
+%  -5.79766 & -5.7109 & -4.99019 & -4.85754 & -4.78398 & -4.70458 & -4.61832 & -4.61832 \\
+% \bottomrule
+%\end{tabular}
+%\caption{\label{tab:nbwords} Words with the highest and lowest weights in the naive bayes weight vector agree with intuition for being negative and positive words respectively.}
+%\end{table}
 
 \end{subsection}
 
 
 
 
-\begin{subsection}{Continuous bag of Words}
+\begin{subsection}{NN Language Model}
 
-In the Continuous bag of words (CBOW) model, one-hot vectors $x_i$ for each word are mapped to a dense vector by ab embedding $\mcE$ in a lower dimensional feature space. These lower dimensional vectors are then pooled. The order of the words is therefore lost during the transformation $\phi(\boldx_i)$ as it is in the naive bayes model.\\
-The model is trained with an Adam optimizer of learning rate 0.00002 and batch size 100 for 350 epochs. The embedding is initialized to Wikipedia word vectors but allowed to change during training. The embeddings improve the accuracy of the model over logistic regression and naive bayes as shown in Table $\ref{tab:cbowtab}$ regardless of whether sum or max pooling is used. Figure \ref{fig:cbowfit} shows the objective and validation accuracy during training of the model with max pooling.
 
-\begin{table}[h]
-\centering
-\begin{tabular}{llrrr}
- \toprule
- Model &  & Acc. & Bce. & Roc.\\
- \midrule
- \textsc{Mean} & & 0.824 & 0.416 & 0.898\\
- \textsc{Sum} & & 0.816  & 0.448 & 0.886\\
-  \textsc{Max} & & 0.798  & 0.447 & 0.880\\
- \bottomrule
-\end{tabular}
-\caption{\label{tab:cbowtab} The word vectors improve the accuracy of the model.}
-\end{table}
+
+\end{subsection}
+
+\begin{subsection}{LSTM language model}
+
 
 
 
 \end{subsection}
 
 
-\begin{subsection}{CNN}
-
-Following \href{http://aclweb.org/anthology/D/D14/D14-1181.pdf}{Yoon's CNN paper}, we train a simple CNN with one layer of convolution. The convolution layer includes
-
-\begin{itemize}
-\item 300$\rightarrow$ 50, kernel 3, stride 1, padding 1
-\item 300$\rightarrow$ 25, kernel 4, stride 1, padding 1
-\item 300$\rightarrow$ 25, kernel 5, stride 1, padding 1
-\end{itemize}
-
-Each convolution layer consists of the convolution, then ReLU, then single output max pool. We concatenate the resultant features and output a fully connected layer with 0.5 dropout. As an experiment, we train first using the wikipedia 300d embedding and second using the GloVe 6B 300d embedding. The optimizer is an Adam optimizer of learning rate .00006 in both cases. We treat the embeddings as fixed. The model is trained for 250 epochs with batch size 50 on wikipedia word vectors, and for 350 epochs with batch size 50 on GloVe word vectors. Training and validation metrics tracked during training are shown in Figure \ref{fig:conv}. Results for the two different embeddings are shown in Table \ref{tab:convtab}.
+\begin{subsection}{Embedding $\rightarrow$ Embedding}
 
 
-\begin{table}[h]
-\centering
-\begin{tabular}{llrrr}
- \toprule
- Model &  & Acc. & Bce. & Roc.\\
- \midrule
- \textsc{Wiki} & & 0.800 & 0.533 & 0.877\\
- \textsc{GloVe} & & 0.833  & 0.577 & 0.907\\
- \bottomrule
-\end{tabular}
-\caption{\label{tab:convtab} Higher quality word vectors improve the model.}
-\end{table}
 
 \end{subsection}
 
@@ -296,27 +239,7 @@ Each convolution layer consists of the convolution, then ReLU, then single outpu
 
 \begin{subsection}{ResNet}
 
-ResNet18is fine-tuned to classify images of the text of movie reviews. This problem is strictly harder than any of the above problems in that the network has to learn how to ``read" in addition to learning how to interpret.\\
-To create the images, I use DejaVuSansMono size 14 font and make images of size (224,224), which is the smallest recommended size to feed to ResNet18. The text is white on a black background and begins at a random location in the row line of the image. Example images are shown in Figure \ref{fig:restext}.\\
-The only modification made to the ResNet18 architecture is I change the fully convolution output layer from 512$\rightarrow$ 1000 to 512$\rightarrow$ 1.\\
-The model is trained for 225 epochs with batch size 4, and Adam optimizer of learning rate 0.0001.\\
-The network memorizes the training data fairly quickly as seen in Figure \ref{fig:restrain}. However, in order to memorize, the network still manages to learn features which allow it to generalize to near naive bayes performance on the validation and test sets.\\ The final results are shown in Table \ref{tab:resres}. Without doing more evaluation, it is not clear to me if the performance of this model is surprising or not.
 
-
-
-
-
-\begin{table}[h]
-\centering
-\begin{tabular}{llrrr}
- \toprule
- Model &  & Acc. & Bce. & Roc.\\
- \midrule
- \textsc{ResNet18} & & 0.774 & 0.685 & 0.855\\
- \bottomrule
-\end{tabular}
-\caption{\label{tab:resres} ResNet learns features straight from the image of the text which generalize to near-naive bayes accuracy on the test set. }
-\end{table}
 
 \end{subsection}
 
