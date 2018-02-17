@@ -1,7 +1,7 @@
 import torch
 import torchtext
 
-from .models import TriGram, NN
+from .models import TriGram, NN, NNLSTM
 
 def get_data(model_dict):
     TEXT = torchtext.data.Field()
@@ -27,6 +27,10 @@ def get_model(model_dict):
 
     if model_dict['type'] == 'NN':
         model = NN(model_dict)
+        model.cuda()
+
+    if model_dict['type'] == 'NNLSTM':
+        model = NNLSTM(model_dict)
         model.cuda()
 
     return model
