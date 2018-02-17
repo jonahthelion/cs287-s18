@@ -139,7 +139,7 @@ class Ensemb(object):
 model_dict = {'max_size': 10001, # max is 10001
                 'batch_size': 70, 
                 'bptt_len': 11,
-                'num_epochs': 5,
+                'num_epochs': 50,
 
                 'output': 'simple3.txt',
 
