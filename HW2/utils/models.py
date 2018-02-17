@@ -7,18 +7,18 @@ from collections import Counter
 from tqdm import tqdm
 
 
-# model_dict = {'max_size': 10001, # max is 10001
-#                 'batch_size': 41, 
-#                 'bptt_len': 32,
-#                 'num_epochs': 1,
+model_dict = {'max_size': 10001, # max is 10001
+                'batch_size': 41, 
+                'bptt_len': 32,
+                'num_epochs': 1,
 
-#                 'output': 'simple3.txt',
+                'output': 'simple3.txt',
 
-#                 'type': 'trigram', 
-#                 'alpha': [0.4306712668382596, 0.4897915705677378, 0.07953716259400256],
+                'type': 'trigram', 
+                'alpha': [0.4306712668382596, 0.4897915705677378, 0.07953716259400256],
 
-#                 # 'type': 'NN',
-#                 }
+                # 'type': 'NN',
+                }
 
 class TriGram(nn.Module):
     def __init__(self, model_dict):
@@ -77,18 +77,18 @@ class TriGram(nn.Module):
 
 
 
-model_dict = {'max_size': 10001, # max is 10001
-                'batch_size': 140, 
-                'bptt_len': 6,
-                'num_epochs': 5,
+# model_dict = {'max_size': 10001, # max is 10001
+#                 'batch_size': 140, 
+#                 'bptt_len': 6,
+#                 'num_epochs': 5,
 
-                'output': 'simple3.txt',
+#                 'output': 'simple3.txt',
 
-                'type': 'NN', 
-                'lookback': 5,
-                'd': 300,
+#                 'type': 'NN', 
+#                 'lookback': 3,
+#                 'd': 300,
 
-                }
+#                 }
 
 class NN(nn.Module):
     def __init__(self, model_dict):
