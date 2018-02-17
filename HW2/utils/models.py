@@ -104,7 +104,7 @@ class NN(nn.Module):
                 nn.Linear(self.d*self.lookback, self.d*self.lookback),
                 nn.ReLU(inplace=True),
                 # nn.BatchNorm1d(self.d*self.lookback),
-                nn.Dropout(p=0.5, inplace=True),
+                nn.Dropout(p=0.3, inplace=True),
 
                 nn.Linear(self.d*self.lookback, self.V),
             )
