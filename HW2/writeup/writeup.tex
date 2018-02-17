@@ -233,23 +233,21 @@ Scores for the above and other alpha of interest are reported in Table ~\ref{tab
 In the neural language model, we map the sparse one-hot vectors used to represent words to dense vectors of dimension $d$. We then concatenate the $lookback$ most recent words and operate an MLP on the resultant vector of length $lookback \cdot d \rightarrow \mcV$. The model is motivated by \href{http://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf}{Bengio}.\\
 We train the NN with an Adam optimizer of learning rate .0003 for five epochs on batches of size 140 and bptt\_len 6. The network architecture is\\
 \centerline{ Embedding \rightarrow Linear(D $\cdot lookback$, D $\cdot lookback$) \rightarrow Dropout(0.3) \rightarrow Linear(D $\cdot lookback$, $\mcV$) }
-where $D$ is the dimension of the embeddings, and $lookback$ is the number of words that are concatenated.
+where $D$ is the dimension of the embeddings, and $lookback$ is the number of words that are concatenated. The MAP is recorded in Table ~\ref{tab:NN} for a lookback of 3, 4, and 5 all with $D=300$.
 
 \begin{table}
   \begin{center}
     \begin{tabular}{@{}lll@{}}
       \toprule
-      & $\alpha$ & MAP\\
+      & $lookback$ & MAP\\
       \midrule
-      & [1,0,0] & 0.271 \\
-      & [0,1,0] & 0.260 \\
-      & [0,0,1] & 0.124 \\
-      & [1/3,1/3,1/3] & 0.294 \\
-      & [0.43,0.49,0.08] & 0.296\\
+      & 3 & 0.257 \\
+      & 4 & 0.255 \\
+      & 5 & 0.124 \\
       \bottomrule
     \end{tabular}
   \end{center}
-  \caption{\label{tab:NN} The first entry of $\alpha$ corresponds to ternary counts, and the third entry cooresponds to unary counts. The binary and ternary counts both contain considerably more information than unary.}
+  \caption{\label{tab:NN} Hello}
  \end{table}
 
 \end{subsection}

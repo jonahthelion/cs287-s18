@@ -17,7 +17,7 @@ vis_windows = None
 vis = visdom.Visdom()
 vis.env = 'train'
 
-for lookback in [4]:
+for lookback in [5]:
     model_dict['lookback'] = lookback
 
     train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
