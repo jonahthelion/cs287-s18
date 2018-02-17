@@ -6,6 +6,22 @@ from torch.autograd import Variable
 from collections import Counter
 from tqdm import tqdm
 
+
+model_dict = {'max_size': 10001, # max is 10001
+                'batch_size': 41, 
+                'bptt_len': 32,
+                'num_epochs': 1,
+
+                'output': 'simple3.txt',
+
+                'type': 'trigram', 
+                'alpha': [0.4306712668382596, 0.4897915705677378, 0.07953716259400256],
+
+                # 'type': 'NN',
+
+
+                }
+
 class TriGram(nn.Module):
     def __init__(self, model_dict):
         super(TriGram, self).__init__()

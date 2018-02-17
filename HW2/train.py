@@ -7,26 +7,13 @@ from tqdm import tqdm
 import numpy as np
 import visdom
 
-from utils.models import TriGram
+from utils.models import TriGram, model_dict
 from utils.preprocess import get_data, get_model
 from utils.postprocess import evaluate, write_submission, vis_display
 
 
 # NOTE: success of TriGram will depend weakly on batch size
-model_dict = {'max_size': 10001, # max is 10001
-                'batch_size': 41, 
-                'bptt_len': 32,
-                'num_epochs': 1,
 
-                'output': 'simple3.txt',
-
-                'type': 'trigram', 
-                'alpha': [0.4306712668382596, 0.4897915705677378, 0.07953716259400256],
-
-                # 'type': 'NN',
-
-
-                }
 
 # visdom
 vis_windows = None
@@ -59,10 +46,9 @@ for epoch in range(model_dict['num_epochs']):
 
 model.postprocess()
 
-for alpha in [[1,0,0], [0,1,0], [0,0,1], [.3333,.3333,.3333], [0.4306712668382596, 0.4897915705677378, 0.07953716259400256]]:
-    model.alpha = alpha
-    MAP = evaluate(model, val_iter)
-    print("MAP", MAP, alpha)
+
+MAP = evaluate(model, val_iter)
+print("MAP", MAP, alpha)
 #write_submission(model, model_dict['output'], TEXT)
 
 

@@ -86,7 +86,7 @@ All models are trained on the \href{http://aclweb.org/anthology/J93-2004}{Penn T
 
 \subsection{Evaluation}
 \begin{enumerate}
-\item All models have a \ttfamily{predict} function which given a batch of sentence fragments outputs an array containing the probabilities for the next word for all batches.
+\item All models assume a vocabulary of $10000$ and have a \ttfamily{predict} function which given a batch of sentence fragments outputs an array containing the probabilities for the next word for all batches.
 
 \item All models are tested with the same evaluation function. The function evaluates the model on batches of size 67 of bptt\_len 11 of ``valid.txt". The first 10 words of the batch are fed into the predict function and the 11th word is treated as ground truth. The top 20 words are then measured against the correct word with MAP.
 \end{enumerate}
@@ -169,7 +169,23 @@ The unary probabilties are implemented as a vector of size $\mcV$, the binary pr
 During training, all sequences of size 1,2 and 3 are counted. The counts are then normalized over $\mcV$. At test time, we for the most part return $\alpha \cdot p$. However, for sequences of length 1 not seen in training, we replace $p_{binary}$ with $p_{unary}$ and for sequences of length 2 not seen in training, we check if $p_{binary}$ is in training and if so use $p_{binary}$, if not use $p_{unary}$.\\
 To determine the best alpha, we sample randomly from vectors of length 3 that sum to 1. We do so 5000 times and use the best one. The alpha chosen is 
 $$ \alpha = [0.4306712668382596, 0.4897915705677378, 0.07953716259400256] $$
-Scores for the above and other alpha of interest are reported below.
+Scores for the above and other alpha of interest are reported in Table ~\ref{tab:interp}.
+\begin{table}
+  \begin{center}
+    \begin{tabular}{@{}lll@{}}
+      \toprule
+      & $\alpha$ & MAP\\
+      \midrule
+      & [1,0,0] & 0.271 \\
+      & [0,1,0] & 0.260 \\
+      & [0,0,1] & 0.124 \\
+      & [1/3,1/3,1/3] & 0.294 \\
+      & [0.43,0.49,0.08] & 0.296\\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \caption{\label{tab:interp} The first entry of $\alpha$ corresponds to ternary counts, and the third entry cooresponds to unary counts. The binary and ternary counts both contain considerably more information than unary.}
+ \end{table}
 
 %Word counts for positive and negative labels are all initialized to a global initial count of $\alpha$. Figure \ref{fig:clusters} shows that performance of the algorithm on the validation set is robust to changes in $\alpha$. With $\alpha=.5$, performance on the test set using binarized and count word vectors are analyzed in Table \ref{tab:nb}.\\
 %The weight vector determined by Naive Bayes can be interpreted as the sentiment associated with particular words. The most positive and most negative words and their weights for binarized bag of words are shown in Table \ref{tab:nbwords}.
@@ -214,7 +230,7 @@ Scores for the above and other alpha of interest are reported below.
 
 
 \begin{subsection}{NN Language Model}
-
+Hello
 
 
 \end{subsection}
