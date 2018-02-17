@@ -230,7 +230,9 @@ Scores for the above and other alpha of interest are reported in Table ~\ref{tab
 
 
 \begin{subsection}{NN Language Model}
-In the neural language model, we map the sparse one-hot vectors used to represent words to dense vectors of dimension $d$. We then concatenate the $lookback$ most recent words and operate an MLP on the resultant vector of length $lookback \cdot d \rightarrow \mcV$. The details of the model are outlined in \href{http://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf}{Bengio}.
+In the neural language model, we map the sparse one-hot vectors used to represent words to dense vectors of dimension $d$. We then concatenate the $lookback$ most recent words and operate an MLP on the resultant vector of length $lookback \cdot d \rightarrow \mcV$. The details of the model are outlined in \href{http://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf}{Bengio}.\\
+We train the NN with an Adam optimizer of learning rate .0003 for five epochs. The network architecture is\\
+\centerline{ Embedding \rightarrow Linear(D $\cdot lookback$, D $\cdot lookback$) }
 
 
 \end{subsection}
