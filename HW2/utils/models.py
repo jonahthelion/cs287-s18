@@ -95,19 +95,26 @@ class NN(nn.Module):
         self.embed = nn.Embedding(self.V, 300)
 
         self.head = nn.Sequential(
+                nn.Linear(300*3, 300*3),
+                nn.ReLU(inplace=True),
+                nn.BatchNorm1d(300*3),
+
                 nn.Linear(300*3, self.V),
             )
 
-    def train_predict(self, text):
-        embeds = self.embed(text[-4:-1])
+    def internal(self, text):
+        embeds = self.embed(text[-3:])
         probs = torch.stack([torch.cat([row for row in embeds[:,i]]) for i in range(text.shape[1])])
         return self.head(probs)
+
+    def train_predict(self, text):
+        return self.internal(text[:-1])
 
     def postprocess(self):
         pass
 
     def predict(self, text):
-        return F.softmax(self.train_predict(text), 1)
+        return F.softmax(self.internal(text), 1)
 
 
 
