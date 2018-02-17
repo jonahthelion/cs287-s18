@@ -86,7 +86,7 @@ model_dict = {'max_size': 10001, # max is 10001
 
                 'type': 'NN', 
                 'lookback': 5,
-                'd': 100,
+                'd': 150,
 
                 }
 
@@ -104,7 +104,7 @@ class NN(nn.Module):
                 # nn.Linear(self.d*self.lookback, self.d*self.lookback),
                 # nn.ReLU(inplace=True),
                 # nn.BatchNorm1d(self.d*self.lookback),
-                nn.Dropout(p=0.5, inplace=True),
+                nn.Dropout(p=0.3, inplace=True),
 
                 nn.Linear(self.d*self.lookback, self.V),
             )
