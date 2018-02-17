@@ -85,7 +85,7 @@ model_dict = {'max_size': 10001, # max is 10001
                 'output': 'simple3.txt',
 
                 'type': 'NN', 
-                'lookback': 5,
+                'lookback': 3,
                 'd': 300,
 
                 }
