@@ -21,15 +21,20 @@ train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 
 model = get_model(model_dict)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=0.0002)
+trainable = False
+if len(model.parameters()) > 0:
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0002)
+    trainable = True
 
 for epoch in range(model_dict['num_epochs']):
     for batch_num,batch in enumerate(tqdm(train_iter)):
-        model.train()
-        #optimizer.zero_grad()
+        if trainable:
+            model.train()
+            optimizer.zero_grad()
+
         probs = model.train_predict(batch.text.cuda())
 
-        if not probs is None:
+        if trainable:
             actuals = batch.text[-1].cuda()
             loss = F.cross_entropy(probs, actuals)
             loss.backward()
