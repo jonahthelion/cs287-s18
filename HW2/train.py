@@ -23,7 +23,7 @@ model = get_model(model_dict)
 
 trainable = False
 if len(list(model.parameters())) > 0:
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0008)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.002)
     trainable = True
 
 for epoch in range(model_dict['num_epochs']):
