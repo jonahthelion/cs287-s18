@@ -22,7 +22,7 @@ train_iter, val_iter, test_iter, TEXT = get_data(model_dict)
 model = get_model(model_dict)
 
 trainable = False
-if len(model.parameters()) > 0:
+if len(list(model.parameters())) > 0:
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0002)
     trainable = True
 
@@ -50,7 +50,7 @@ model.postprocess()
 
 
 MAP = evaluate(model, val_iter)
-print("MAP", MAP, alpha)
+print("MAP FINAL", MAP, alpha)
 #write_submission(model, model_dict['output'], TEXT)
 
 
