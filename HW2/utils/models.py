@@ -170,8 +170,7 @@ class NNLSTM(nn.Module):
 
     def internal(self, text):
         embeds = self.embed(text[-self.lookback:])
-        probs = self.lstm(embeds)[1][0]
-        print(probs.shape)
+        probs = self.lstm(embeds)[1][0].squeeze(0)
         return self.head(probs)
 
     def train_predict(self, text):
