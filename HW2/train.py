@@ -29,7 +29,7 @@ if len(list(model.parameters())) > 0:
 for epoch in range(model_dict['num_epochs']):
     for batch_num,batch in enumerate(tqdm(train_iter)):
         if trainable:
-            if len(batch.text) < 4:
+            if len(batch.text) < model_dict['lookback'] + 1:
                 continue
             model.train()
             optimizer.zero_grad()

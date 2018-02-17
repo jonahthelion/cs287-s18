@@ -79,13 +79,13 @@ class TriGram(nn.Module):
 
 model_dict = {'max_size': 10001, # max is 10001
                 'batch_size': 120, 
-                'bptt_len': 4,
+                'bptt_len': 6,
                 'num_epochs': 5,
 
                 'output': 'simple3.txt',
 
                 'type': 'NN', 
-                'lookback': 3,
+                'lookback': 5,
                 'd': 100,
 
                 }
@@ -95,6 +95,7 @@ class NN(nn.Module):
         super(NN, self).__init__()
         self.V = model_dict['max_size'] + 2
         self.lookback = model_dict['lookback']
+        assert(model_dict['bptt_len'] > model_dict['lookback']), model_dict
         self.d = model_dict['d']
 
         self.embed = nn.Embedding(self.V, self.d)
