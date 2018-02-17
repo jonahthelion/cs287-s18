@@ -50,7 +50,7 @@ for epoch in range(model_dict['num_epochs']):
                 if batch_num % 250 == 0:
                     model.eval()
                     MAP = evaluate(model, val_iter)
-                    print(epoch, batch_num, lookback, MAP)
+                    print(epoch, batch_num, MAP)
                 vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_l, MAP)
 
 model.postprocess()
