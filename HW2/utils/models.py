@@ -156,6 +156,28 @@ class NNLSTM(nn.Module):
 
         self.embed = nn.Embedding(self.V, self.d)
 
+        self.lstm = torch.nn.LSTM(self.d, self.d)
+
+        self.head = nn.Sequential(
+            nn.Linear(self.d, self.d),
+            nn.ReLU(inplace=True),
+            # nn.BatchNorm1d(self.d*self.lookback),
+            nn.Dropout(p=0.3, inplace=True),
+
+            nn.Linear(self.d, self.V),
+        )
+
+    def internal(self, text):
+        embeds = self.embed(text[-self.lookback:])
+        probs = self.lstm(embeds)
+        return self.head(probs)
+
+    def train_predict(self, text):
+        return self.internal(text[:-1])
+
+    def predict(self, text):
+        return F.softmax(self.internal(text), 1)
+
 
 
 
