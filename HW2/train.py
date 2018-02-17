@@ -69,7 +69,8 @@ model.postprocess()
 #         best = [MAP, model.alpha]
 #     print(best)
 
-# model.alpha = best[1]
+MAP = evaluate(model, val_iter)
+print("MAP", MAP)
 write_submission(model, model_dict['output'], TEXT)
 
 
