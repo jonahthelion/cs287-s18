@@ -18,8 +18,8 @@ def get_data(model_dict):
     BOS_WORD = '<s>'
     EOS_WORD = '</s>'
 
-    DE = data.Field(tokenize=tokenize_de)
-    EN = data.Field(tokenize=tokenize_en, init_token=BOS_WORD, eos_token=EOS_WORD)
+    DE = torchtext.data.Field(tokenize=tokenize_de)
+    EN = torchtext.data.Field(tokenize=tokenize_en, init_token=BOS_WORD, eos_token=EOS_WORD)
 
     MAX_LEN = 20
     train, val, test = torchtext.datasets.IWSLT.splits(exts=('.de', '.en'), fields=(DE, EN),
