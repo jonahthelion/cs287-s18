@@ -15,3 +15,4 @@ vis = visdom.Visdom()
 vis.env = 'train'
 
 #############################
+
