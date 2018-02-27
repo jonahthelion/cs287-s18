@@ -8,6 +8,8 @@ from tqdm import tqdm
 import numpy as np
 import visdom
 
+from utils.preprocess import get_data
+
 
 # visdom
 vis_windows = None
@@ -16,3 +18,6 @@ vis.env = 'train'
 
 #############################
 
+model_dict = {}
+
+get_data(model_dict)
