@@ -33,7 +33,7 @@ def get_data(model_dict):
     EN.build_vocab(train.trg, min_freq=MIN_FREQ)
 
     BATCH_SIZE = 32
-    train_iter, val_iter = data.BucketIterator.splits((train, val), batch_size=BATCH_SIZE, device=-1,
+    train_iter, val_iter = torchtext.data.BucketIterator.splits((train, val), batch_size=BATCH_SIZE, device=-1,
                                                       repeat=False, sort_key=lambda x: len(x.src))
 
     return train_iter, val_iter, DE, EN
