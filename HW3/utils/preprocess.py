@@ -4,6 +4,9 @@ import spacy
 
 # from .models import TriGram, NN, NNLSTM
 
+spacy_de = spacy.load('de')
+spacy_en = spacy.load('en')
+
 def tokenize_de(text):
     return [tok.text for tok in spacy_de.tokenizer(text)]
 
@@ -12,8 +15,7 @@ def tokenize_en(text):
 
 def get_data(model_dict):
 
-    spacy_de = spacy.load('de')
-    spacy_en = spacy.load('en')
+
 
     BOS_WORD = '<s>'
     EOS_WORD = '</s>'
