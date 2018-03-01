@@ -30,9 +30,13 @@ def get_data(model_dict):
         filter_pred=lambda x: len(vars(x)['src']) <= MAX_LEN and 
         len(vars(x)['trg']) <= MAX_LEN)
 
-    MIN_FREQ = 5
-    DE.build_vocab(train.src, min_freq=MIN_FREQ)
-    EN.build_vocab(train.trg, min_freq=MIN_FREQ)
+    if not model_dict['pickled_fields']:
+        MIN_FREQ = 5
+        DE.build_vocab(train.src, min_freq=MIN_FREQ)
+        EN.build_vocab(train.trg, min_freq=MIN_FREQ)
+    else:
+        DE = pickle.load( open( "DEfield.p", "rb" ) )
+        EN = pickle.load( open( "ENfield.p", "rb" ) )
 
     if not model_dict['fake']:
         BATCH_SIZE = 32
@@ -54,5 +58,5 @@ def get_model(model_dict, DE, EN):
 
 class Datapoint(object):
     def __init__(self):
-        self.src = Variable(torch.zeros(8, 32))
-        self.trg = Variable(torch.ones(12, 32))
+        self.src = Variable(torch.zeros(8, 32).long())
+        self.trg = Variable(torch.ones(12, 32).long())
