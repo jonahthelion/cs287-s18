@@ -7,8 +7,8 @@ class noAttention(nn.Module):
     def __init__(self, model_dict, DE, EN):
         super(noAttention, self).__init__()
 
-        self.Vg = len(DE)
-        self.Ve = len(EN)
+        self.Vg = len(DE.vocab)
+        self.Ve = len(EN.vocab)
         self.D = model_dict['D']
 
         self.embed = nn.Embedding(self.Vg, self.D)
