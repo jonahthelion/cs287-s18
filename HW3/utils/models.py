@@ -17,8 +17,13 @@ class noAttention(nn.Module):
         self.encode = nn.LSTM(self.D, self.D, self.num_encode)
         self.decode = nn.LSTM(self.D, self.D, self.num_decode)
 
+        self.classifier = nn.Sequential(
+                            nn.ReLU(inplace=True),
+                            nn.Linear(self.D, self.Ve),
+            )
+
     def train_predict(self, src, trg):
         encode = self.encode(self.embed(src))[1]
         decode = self.decode(self.embed(trg), encode)[0]
 
-        return decode
+        return self.classifier(decode)
