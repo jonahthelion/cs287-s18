@@ -28,6 +28,6 @@ class noAttention(nn.Module):
         return output, hidden
 
     def get_decode(self, trg, hidden):
-        embedded = self.embed(trg)
-        decode = self.decode(embedded, hidden)
+        embedded = self.embedder(trg)
+        decode = self.decoder(embedded, hidden)
         return self.classifier(decode[0]), decode[1]
