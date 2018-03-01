@@ -24,7 +24,7 @@ class noAttention(nn.Module):
 
     def get_encode(self, src):
         embedded = self.embedder(src)
-        output, hidden = self.encoder(embedded, (Variable(torch.zeros(self.num_encode, src.shape[1], self.D).cuda()), Variable(torch.zeros(self.num_encode, src.shape[1], self.D).cuda())))
+        output, hidden = self.encoder(embedded)
         return output, hidden
 
     def get_decode(self, trg, hidden):
