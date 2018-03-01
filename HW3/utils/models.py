@@ -18,7 +18,7 @@ class noAttention(nn.Module):
         self.decoder = nn.LSTM(self.D, self.D, self.num_decode)
 
         self.classifier = nn.Sequential(
-                            nn.ReLU(inplace=True),
+                            nn.ReLU(),
                             nn.Linear(self.D, self.Ve),
             )
 
@@ -30,4 +30,4 @@ class noAttention(nn.Module):
     def get_decode(self, trg, hidden):
         embedded = self.embedder(trg)
         decode = self.decoder(embedded, hidden)
-        return decode
+        return model.classifier(decode[0]), decode[1]
