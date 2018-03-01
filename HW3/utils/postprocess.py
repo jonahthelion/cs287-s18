@@ -21,8 +21,9 @@ def evaluate(model, val_iter):
     all_losses = []
     for batch in val_iter:
         if batch.src.shape[1] == 32:
-            preds = model.train_predict(batch.src.cuda(), batch.trg.cuda())
-            loss = torch.cat([F.cross_entropy(preds[:-1][row_ix], batch.trg[1:][row_ix].cuda(), ignore_index=1) for row_ix in range(batch.trg.shape[0]-1)]).mean()
+            output, hidden = model.get_encode(batch.src.cuda())
+            output, hidden = model.get_decode(batch.trg.cuda(), hidden)
+            loss = F.cross_entropy(output[:-1].view(-1, len(EN.vocab)), batch.trg.cuda()[1:].view(-1), ignore_index=1)
             all_losses.append(loss)
     loss_v = torch.cat(all_losses).mean().data.cpu().numpy()[0]
 
