@@ -22,7 +22,7 @@ def evaluate(model, val_iter):
     for batch in val_iter:
         if batch.src.shape[1] == 32:
             preds = model.train_predict(batch.src.cuda(), batch.trg.cuda())
-            loss = torch.cat([F.cross_entropy(preds[:-1][row_ix], batch.trg[1:][row_ix].cuda(), ignore_index=1) for row_ix in batch.trg.shape[0]]).mean()
+            loss = torch.cat([F.cross_entropy(preds[:-1][row_ix], batch.trg[1:][row_ix].cuda(), ignore_index=1) for row_ix in range(batch.trg.shape[0]-1)]).mean()
             all_losses.append(loss)
     loss_v = torch.cat(all_losses).mean().data.cpu().numpy()[0]
 
