@@ -36,7 +36,7 @@ for epoch in range(model_dict['num_epochs']):
         optimizer.zero_grad()
         preds = model.train_predict(batch.src.cuda(), batch.trg.cuda())
         actuals = batch.trg.cuda()
-        loss = torch.cat([F.cross_entropy(preds[row_ix], actuals[row_ix], ignore_index=1) for row_ix in range(actuals.shape[0])]).mean()
+        loss = F.cross_entropy(preds[row_ix].unsqueeze(1), actuals[row_ix].unsqueeze(1), ignore_index=1)
         loss.backward()
         optimizer.step()
 
