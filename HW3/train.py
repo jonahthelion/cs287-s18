@@ -23,11 +23,22 @@ model_dict = {'type': 'noAttention',
                 'num_encode': 4,
                 'num_decode': 4,
                 'num_epochs': 50,
-                'fake': False,
-                'pickled_fields': False}
+                'fake': True,
+                'pickled_fields': True}
 
 train_iter, val_iter, DE, EN = get_data(model_dict)
+
+###########
+model = torch.load('noAttention.p')
+fname = 'PSET/source_test.txt'
+with open(fname, 'rb') as reader:
+    for line in reader:
+        src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
+        output, hidden = model.encode(src.cuda())
 assert False
+###########
+
+
 model = get_model(model_dict, DE, EN)
 
 optimizer = torch.optim.Adam(model.parameters(), lr=.001, weight_decay=1e-4, betas=(.9, .999))
@@ -54,7 +65,5 @@ for epoch in range(model_dict['num_epochs']):
                 print(epoch, batch_num, loss_v)
             vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_t, loss_v)
 
-fname = 'PSET/source_test.txt'
-with open(fname, 'rb') as reader:
-    for line in reader:
-        print(str(line).encode('utf-8'))
+
+
