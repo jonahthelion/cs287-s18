@@ -19,7 +19,7 @@ def vis_display(vis, vis_windows, x_coord, train_l, MAP):
 
 def evaluate(model, val_iter):
     all_losses = []
-    for batch in tqdm(val_iter):
+    for batch in val_iter:
         if batch.src.shape[1] == 32:
             preds = model.train_predict(batch.src.cuda(), batch.trg.cuda())
             loss = F.cross_entropy(preds[:-1].view(-1,preds.shape[-1]), batch.trg[1:].view(-1).cuda(), ignore_index=1)

@@ -28,12 +28,17 @@ train_iter, val_iter, DE, EN = get_data(model_dict)
 
 model = get_model(model_dict, DE, EN)
 
+optimizer = torch.optim.Adam(model.parameters(), lr=.0001)
+
 for epoch in range(model_dict['num_epochs']):
     for batch_num,batch in enumerate(train_iter):
         model.train()
+        optimizer.zero_grad()
         preds = model.train_predict(batch.src.cuda(), batch.trg.cuda())
         loss = F.cross_entropy(preds[:-1].view(-1,preds.shape[-1]), batch.trg[1:].view(-1).cuda(), ignore_index=1)
-        
+        loss.backward()
+        optimizer.step()
+
         if batch_num % 100 == 0:
             loss_t = loss.data.cpu().numpy()[0]
             loss_v = None
