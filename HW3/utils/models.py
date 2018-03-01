@@ -22,8 +22,10 @@ class noAttention(nn.Module):
                             nn.Linear(self.D, self.Ve),
             )
 
+    def get_encode(self, src):
+        return self.encode(self.embed(src))[1]
+
     def train_predict(self, src, trg):
-        encode = self.encode(self.embed(src))[1]
         decode = self.decode(self.embed(Variable(trg)), encode)[0]
 
         return self.classifier(decode)
