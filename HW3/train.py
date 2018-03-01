@@ -35,7 +35,7 @@ for epoch in range(model_dict['num_epochs']):
         model.train()
         optimizer.zero_grad()
         preds = model.train_predict(batch.src.cuda(), batch.trg.cuda())[:-1]
-        loss = F.cross_entropy(preds, batch.trg[1:].cuda(), ignore_index=1)
+        loss = F.cross_entropy(preds.unsqueeze(1), batch.trg[1:].cuda().unsqueeze(1), ignore_index=1)
         loss.backward()
         optimizer.step()
 
