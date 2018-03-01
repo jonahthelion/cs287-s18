@@ -37,7 +37,7 @@ for epoch in range(model_dict['num_epochs']):
         if batch_num % 100 == 0:
             loss_t = loss.data.cpu().numpy()[0]
             loss_v = None
-            if batch_num % 250 == 0:
+            if batch_num % 300 == 0:
                 model.eval()
                 loss_v = evaluate(model, val_iter)
                 print(epoch, batch_num, loss_v)
