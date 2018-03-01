@@ -39,7 +39,7 @@ for epoch in range(model_dict['num_epochs']):
         loss = Variable(torch.Tensor([0]).cuda())
         for di in range(batch.trg.shape[0]):
             decode = model.get_decode(batch.trg[di].unsqueeze(0).cuda(), encoding)
-            loss = F.cross_entropy(decode[0][0], batch.trg[1].cuda())
+            loss += F.cross_entropy(decode[0][0], batch.trg[1].cuda())
             loss.backward()
             assert False
         # preds = model.train_predict(batch.src.cuda(), batch.trg.data.cuda())
