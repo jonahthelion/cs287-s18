@@ -13,9 +13,9 @@ class noAttention(nn.Module):
         self.num_encode = model_dict['num_encode']
         self.num_decode = model_dict['num_decode']
 
-        self.embed = nn.Embedding(self.Vg, self.D)
-        self.encode = nn.LSTM(self.D, self.D, self.num_encode)
-        self.decode = nn.LSTM(self.D, self.D, self.num_decode)
+        self.embedder = nn.Embedding(self.Vg, self.D)
+        self.encoder = nn.LSTM(self.D, self.D, self.num_encode)
+        self.decoder = nn.LSTM(self.D, self.D, self.num_decode)
 
         self.classifier = nn.Sequential(
                             nn.ReLU(inplace=True),
@@ -23,7 +23,10 @@ class noAttention(nn.Module):
             )
 
     def get_encode(self, src):
-        return self.encode(self.embed(src))[1]
+        embedded = self.embedder(src)
+        output = embedded
+        output, hidden = self.encoder(output)
+        return output, hidden
 
     def get_decode(self, trg, hidden):
         decode = self.decode(self.embed(trg), hidden)
