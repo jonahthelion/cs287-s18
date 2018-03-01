@@ -56,15 +56,15 @@ with open(fname, 'rb') as reader:
         best_ixes = poss_scores.topk(100, 0)[1].squeeze(1).data
         answers.append( [[EN.vocab.itos[ixx] for ixx in poss_sentences[1:,ix].data] for ix in best_ixes] )
 
-with open('kaggle0.txt', 'wb') as writer:
-    writer.write('id,word')
+with open('kaggle0.txt', 'w') as writer:
+    writer.write('id,word\n')
     for li_ix,line in enumerate(answers):
         out = ''
         for li in line:
             out += '|'.join(li)
             out += ' '
         out = out.replace("\"", "<quote>").replace(",", "<comma>")
-        out = str(li_ix) + ',' + out[:-1] + '\n'
+        out = str(li_ix+1) + ',' + out[:-1] + '\n'
         writer.write(out)
 assert False
 ###########
