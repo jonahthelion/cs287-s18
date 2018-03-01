@@ -26,7 +26,5 @@ train_iter, val_iter, DE, EN = get_data(model_dict)
 model = get_model(model_dict, DE, EN)
 
 for batch in train_iter:
-    preds = model.train_predict(batch.src.cuda())
-    # print(batch.src)
-    # print(batch.trg)
+    preds = model.train_predict(batch.src.cuda(), batch.trg.cuda())
     assert False
