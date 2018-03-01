@@ -47,7 +47,7 @@ with open(fname, 'rb') as reader:
         new_sentences = []; new_scores = [];
         for i in range(poss_sentences.shape[1]):
             best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
-            for val_ix in enumerate(best_preds_ixes):
+            for val_ix in range(best_pred_ixes):
                 new_sentences.append(torch.cat(poss_sentences[:,i], best_pred_vals[val_ix]))
                 new_scores.append(poss_scores[i] + best_pred_ixes[val_ix])
 
