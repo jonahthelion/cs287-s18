@@ -27,5 +27,8 @@ train_iter, val_iter, DE, EN = get_data(model_dict)
 model = get_model(model_dict, DE, EN)
 
 for batch in train_iter:
+    model.train()
     preds = model.train_predict(batch.src.cuda(), batch.trg.cuda())
-    assert False
+    loss = F.cross_entropy(preds[:-1].view(-1,preds.shape[-1]), batch.trg[1:].view(-1).cuda(), ignore_index=1)
+    
+    print(loss)
