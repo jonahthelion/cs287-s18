@@ -30,7 +30,8 @@ train_iter, val_iter, DE, EN = get_data(model_dict)
 
 ###########
 model = torch.load('noAttention.p')
-model.flatten_parameters()
+model.encoder.flatten_parameters()
+model.decoder.flatten_parameters()
 model.eval()
 fname = 'PSET/source_test.txt'
 with open(fname, 'rb') as reader:
