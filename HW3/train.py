@@ -34,7 +34,7 @@ fname = 'PSET/source_test.txt'
 with open(fname, 'rb') as reader:
     for line in reader:
         src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
-        output, hidden = model.encode(src.cuda())
+        output, hidden = model.get_encode(src.cuda())
 assert False
 ###########
 
