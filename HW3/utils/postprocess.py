@@ -28,3 +28,8 @@ def evaluate(model, val_iter):
     loss_v = torch.cat(all_losses).mean().data.cpu().numpy()[0]
 
     return loss_v
+
+def kaggle(model, fname, DE, EN):
+    with open(fname, 'rb') as reader:
+        for line in reader:
+            print(line)

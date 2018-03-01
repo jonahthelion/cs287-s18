@@ -9,7 +9,7 @@ import numpy as np
 import visdom
 
 from utils.preprocess import get_data, get_model
-from utils.postprocess import vis_display, evaluate
+from utils.postprocess import vis_display, evaluate, spacy_de
 
 # visdom
 vis_windows = None
@@ -27,7 +27,7 @@ model_dict = {'type': 'noAttention',
                 'pickled_fields': False}
 
 train_iter, val_iter, DE, EN = get_data(model_dict)
-
+assert False
 model = get_model(model_dict, DE, EN)
 
 optimizer = torch.optim.Adam(model.parameters(), lr=.001, weight_decay=1e-4, betas=(.9, .999))
@@ -53,3 +53,8 @@ for epoch in range(model_dict['num_epochs']):
                 loss_v = evaluate(model, val_iter)
                 print(epoch, batch_num, loss_v)
             vis_windows = vis_display(vis, vis_windows, epoch + batch_num/float(len(train_iter)), loss_t, loss_v)
+
+fname = 'PSET/source_test.txt'
+with open(fname, 'rb') as reader:
+    for line in reader:
+        print(str(line).encode('utf-8'))
