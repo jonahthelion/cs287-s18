@@ -1,6 +1,7 @@
 import torch
 import torchtext
 import spacy
+from time import time
 
 # from .models import TriGram, NN, NNLSTM
 
@@ -14,8 +15,8 @@ def tokenize_en(text):
     return [tok.text for tok in spacy_en.tokenizer(text)]
 
 def get_data(model_dict):
-
-
+    print(model_dict)
+    t0 = time()
 
     BOS_WORD = '<s>'
     EOS_WORD = '</s>'
@@ -35,5 +36,6 @@ def get_data(model_dict):
     BATCH_SIZE = 32
     train_iter, val_iter = torchtext.data.BucketIterator.splits((train, val), batch_size=BATCH_SIZE, device=-1,
                                                       repeat=False, sort_key=lambda x: len(x.src))
-
+    t1 = time()
+    print('done loading', t1-t0)
     return train_iter, val_iter, DE, EN
