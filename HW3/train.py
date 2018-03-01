@@ -24,7 +24,7 @@ model_dict = {'type': 'noAttention',
                 'num_decode': 4,
                 'num_epochs': 10,
                 'fake': False,
-                'pickled_fields': True}
+                'pickled_fields': False}
 
 train_iter, val_iter, DE, EN = get_data(model_dict)
 
