@@ -24,6 +24,6 @@ class noAttention(nn.Module):
 
     def train_predict(self, src, trg):
         encode = self.encode(self.embed(src))[1]
-        decode = self.decode(self.embed(trg), encode)[0]
+        decode = self.decode(self.embed(Variable(trg)), encode)[0]
 
         return self.classifier(decode)
