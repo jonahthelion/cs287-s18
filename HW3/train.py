@@ -34,8 +34,8 @@ for epoch in range(model_dict['num_epochs']):
     for batch_num,batch in enumerate(train_iter):
         model.train()
         optimizer.zero_grad()
-        preds = model.train_predict(batch.src.cuda(), batch.trg.cuda())[:-1]
-        loss = F.cross_entropy(preds.unsqueeze(1), batch.trg[1:].cuda().unsqueeze(1), ignore_index=1)
+        preds = model.train_predict(batch.src.cuda(), batch.trg.cuda())
+        loss = torch.cat([F.cross_entropy(preds[:-1][row_ix], batch.trg[1:][row_ix].cuda(), ignore_index=1) for row_ix in range(batch.trg.shape[0]-1)]).mean()
         loss.backward()
         optimizer.step()
 
