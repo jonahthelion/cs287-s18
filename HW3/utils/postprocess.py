@@ -13,7 +13,8 @@ def vis_display(vis, vis_windows, x_coord, train_l, MAP):
         vis_windows['val_ce'] = vis.line(Y=torch.Tensor([float(MAP)]), X=torch.Tensor([x_coord]), opts=dict(title='Validation CE'))
     else:
         vis.line(Y=torch.Tensor([float(train_l)]), X=torch.Tensor([x_coord]), win=vis_windows['train_ce'], update='append', opts=dict(title='Train CE'))
-        vis.line(Y=torch.Tensor([float(MAP)]), X=torch.Tensor([x_coord]), win=vis_windows['val_ce'], update='append', opts=dict(title='Validation CE'))
+        if not MAP is None:
+            vis.line(Y=torch.Tensor([float(MAP)]), X=torch.Tensor([x_coord]), win=vis_windows['val_ce'], update='append', opts=dict(title='Validation CE'))
     return vis_windows
 
 def evaluate(model, val_iter):
