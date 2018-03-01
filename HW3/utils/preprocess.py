@@ -2,6 +2,7 @@ import torch
 import torchtext
 import spacy
 from time import time
+from torch.autograd import Variable
 
 from .models import noAttention
 
