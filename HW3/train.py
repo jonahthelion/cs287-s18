@@ -36,7 +36,10 @@ for epoch in range(model_dict['num_epochs']):
         optimizer.zero_grad()
 
         encoding = model.get_encode(batch.src.cuda())
-        assert False
+        loss = Variable(torch.Tensor([0]).cuda())
+        for di in range(batch.trg.shape[0]):
+            decode = model.get_decode(batch.trg[di].unsqueeze(0).cuda(), encoding)
+            assert False
         # preds = model.train_predict(batch.src.cuda(), batch.trg.data.cuda())
         # assert False
         # actuals = Variable(batch.trg.cuda().data.view(-1))
