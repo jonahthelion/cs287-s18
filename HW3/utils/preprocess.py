@@ -3,7 +3,7 @@ import torchtext
 import spacy
 from time import time
 
-# from .models import TriGram, NN, NNLSTM
+from .models import noAttention
 
 spacy_de = spacy.load('de')
 spacy_en = spacy.load('en')
@@ -39,3 +39,9 @@ def get_data(model_dict):
     t1 = time()
     print('done loading', t1-t0)
     return train_iter, val_iter, DE, EN
+
+def get_model(model_dict, DE, EN):
+    if model_dict['type'] == 'noAttention':
+        model = noAttention(model_dict, DE, EN)
+        model.cuda()
+        return model

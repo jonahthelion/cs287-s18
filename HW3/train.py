@@ -8,8 +8,7 @@ from tqdm import tqdm
 import numpy as np
 import visdom
 
-from utils.preprocess import get_data
-
+from utils.preprocess import get_data, get_model
 
 # visdom
 vis_windows = None
@@ -18,11 +17,15 @@ vis.env = 'train'
 
 #############################
 
-model_dict = {}
+model_dict = {'type': 'noAttention',
+                'D': 200}
 
 train_iter, val_iter, DE, EN = get_data(model_dict)
 
+model = get_model(model_dict, DE, EN)
+
 for batch in train_iter:
+    preds = model.train_predict(batch.src.cuda())
     # print(batch.src)
     # print(batch.trg)
     assert False
