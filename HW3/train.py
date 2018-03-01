@@ -23,6 +23,6 @@ model_dict = {}
 train_iter, val_iter, DE, EN = get_data(model_dict)
 
 for batch in train_iter:
-    print(batch.src)
-    print(batch.trg)
+    # print(batch.src)
+    # print(batch.trg)
     assert False
