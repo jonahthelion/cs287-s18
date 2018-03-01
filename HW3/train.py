@@ -39,18 +39,19 @@ with open(fname, 'rb') as reader:
         src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
         output, hidden = model.get_encode(src.cuda())
 
-        poss_sentences = Variable(torch.Tensor([[2, 2]]).long().cuda())
-        poss_scores = [0, 0]
-        poss_hidden = (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
-        preds = model.get_decode(poss_sentences, poss_hidden)
+        poss_sentences = Variable(torch.Tensor([[2]]).long().cuda())
+        poss_scores = [0]
+        for _ in range(3):
+            poss_hidden = (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
+            preds = model.get_decode(poss_sentences, poss_hidden)
 
-        new_sentences = []; new_scores = [];
-        for i in range(poss_sentences.shape[1]):
-            best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
-            for val_ix in range(len(best_pred_ixes)):
-                new_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
-                new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
-        new_sentences = torch.stack(new_sentences, 1); new_scores = torch.stack(new_scores)
+            new_sentences = []; new_scores = [];
+            for i in range(poss_sentences.shape[1]):
+                best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
+                for val_ix in range(len(best_pred_ixes)):
+                    new_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
+                    new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
+            poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
         assert False
 ###########
 
