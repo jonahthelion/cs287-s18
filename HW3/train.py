@@ -18,7 +18,8 @@ vis.env = 'train'
 #############################
 
 model_dict = {'type': 'noAttention',
-                'D': 200}
+                'D': 200,
+                'num_encode': 4}
 
 train_iter, val_iter, DE, EN = get_data(model_dict)
 

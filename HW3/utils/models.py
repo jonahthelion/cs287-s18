@@ -10,8 +10,11 @@ class noAttention(nn.Module):
         self.Vg = len(DE.vocab)
         self.Ve = len(EN.vocab)
         self.D = model_dict['D']
+        self.num_encode = model_dict['num_encode']
 
         self.embed = nn.Embedding(self.Vg, self.D)
+        self.encode = nn.LSTM(self.D, self.D, self.num_encode)
 
     def train_predict(self, src):
-        return self.embed(src)
+        embeds = self.embed(src)
+        return self.encode(embeds)[0,-1]
