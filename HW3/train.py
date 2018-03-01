@@ -39,7 +39,7 @@ for epoch in range(model_dict['num_epochs']):
 
         output, hidden = model.get_encode(batch.src.cuda())
         output, hidden = model.get_decode(batch.trg.cuda(), hidden)
-        loss = F.binary_cross_entropy_with_logits(output, Variable(torch.zeros(output.shape).cuda()))
+        loss = F.cross_entropy(output[:-1], batch.trg.cuda()[1:], ignore_index=1)
         
         loss.backward()
         optimizer.step()
