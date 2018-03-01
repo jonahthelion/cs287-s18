@@ -17,4 +17,4 @@ class noAttention(nn.Module):
 
     def train_predict(self, src):
         embeds = self.embed(src)
-        return self.encode(embeds)[0,-1]
+        return self.encode(embeds)[0][-1]
