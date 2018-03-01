@@ -9,7 +9,7 @@ import numpy as np
 import visdom
 
 from utils.preprocess import get_data, get_model
-from utils.postprocess import vis_display, evaluate, spacy_de
+from utils.postprocess import vis_display, evaluate
 
 # visdom
 vis_windows = None
