@@ -22,7 +22,7 @@ model_dict = {'type': 'noAttention',
                 'D': 200,
                 'num_encode': 4,
                 'num_decode': 4,
-                'num_epochs': 10,
+                'num_epochs': 50,
                 'fake': False,
                 'pickled_fields': False}
 
@@ -30,7 +30,7 @@ train_iter, val_iter, DE, EN = get_data(model_dict)
 
 model = get_model(model_dict, DE, EN)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=.0001)
+optimizer = torch.optim.Adam(model.parameters(), lr=.001, weight_decay=1e-4, betas=(.9, .999))
 
 for epoch in range(model_dict['num_epochs']):
     for batch_num,batch in enumerate(train_iter):
@@ -42,6 +42,7 @@ for epoch in range(model_dict['num_epochs']):
         loss = F.cross_entropy(output[:-1].view(-1, output.shape[-1]), batch.trg.cuda()[1:].view(-1), ignore_index=1)
         
         loss.backward()
+        torch.nn.utils.clip_grad_norm(model.parameters(), 5)
         optimizer.step()
 
         if batch_num % 100 == 0:
