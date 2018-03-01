@@ -3,6 +3,7 @@ import torchtext
 import spacy
 from time import time
 from torch.autograd import Variable
+import pickle
 
 from .models import noAttention
 
@@ -25,10 +26,11 @@ def get_data(model_dict):
     DE = torchtext.data.Field(tokenize=tokenize_de)
     EN = torchtext.data.Field(tokenize=tokenize_en, init_token=BOS_WORD, eos_token=EOS_WORD)
 
-    MAX_LEN = 20
-    train, val, test = torchtext.datasets.IWSLT.splits(exts=('.de', '.en'), fields=(DE, EN),
-        filter_pred=lambda x: len(vars(x)['src']) <= MAX_LEN and 
-        len(vars(x)['trg']) <= MAX_LEN)
+    if not model_dict['fake']:
+        MAX_LEN = 20
+        train, val, test = torchtext.datasets.IWSLT.splits(exts=('.de', '.en'), fields=(DE, EN),
+            filter_pred=lambda x: len(vars(x)['src']) <= MAX_LEN and 
+            len(vars(x)['trg']) <= MAX_LEN)
 
     if not model_dict['pickled_fields']:
         MIN_FREQ = 5
