@@ -26,4 +26,4 @@ class noAttention(nn.Module):
         encode = self.encode(self.embed(src))[1]
         decode = self.decode(self.embed(trg), encode)[0]
 
-        return self.classifier(decode)
+        return self.classifier(decode), trg
