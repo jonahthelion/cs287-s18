@@ -53,7 +53,7 @@ with open(fname, 'rb') as reader:
                     new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
             poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
         best_ixes = poss_scores.topk(100, 0)[1].squeeze(1).data
-        best_sentences = [poss_sentences[:,ix] for ix in best_ixes]
+        best_sentences = [[EN.vocab.itos[ixx] for ixx in poss_sentences[:,ix]] for ix in best_ixes]
 
         assert False
 ###########
