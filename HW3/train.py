@@ -34,8 +34,9 @@ model.encoder.flatten_parameters()
 model.decoder.flatten_parameters()
 model.eval()
 fname = 'PSET/source_test.txt'
+answers = []
 with open(fname, 'rb') as reader:
-    for line in reader:
+    for line in tqdm(reader):
         src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
         output, hidden = model.get_encode(src.cuda())
 
@@ -53,9 +54,9 @@ with open(fname, 'rb') as reader:
                     new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
             poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
         best_ixes = poss_scores.topk(100, 0)[1].squeeze(1).data
-        best_sentences = [[EN.vocab.itos[ixx] for ixx in poss_sentences[:,ix].data] for ix in best_ixes]
+        answers.append( [[EN.vocab.itos[ixx] for ixx in poss_sentences[1:,ix].data] for ix in best_ixes] )
 
-        assert False
+assert False
 ###########
 
 
