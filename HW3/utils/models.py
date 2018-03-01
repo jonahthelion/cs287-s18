@@ -23,11 +23,11 @@ class noAttention(nn.Module):
             )
 
     def get_encode(self, src):
-        embedded = self.embedder(src)
+        embedded = self.embedder(torch.stack([src[len(src) -1 - i] for i in range(len(src)) ]))
         output, hidden = self.encoder(embedded)
         return output, hidden
 
-    def get_decode(self, trg, hidden):
+    def get_decode(self, trg, encoding):
         embedded = self.embedder(trg)
-        decode = self.decoder(embedded, hidden)
+        decode = self.decoder(embedded, encoding[1])
         return self.classifier(decode[0]), decode[1]

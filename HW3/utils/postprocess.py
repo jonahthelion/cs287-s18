@@ -21,15 +21,10 @@ def evaluate(model, val_iter):
     all_losses = []
     for batch in val_iter:
         if batch.src.shape[1] == 32:
-            output, hidden = model.get_encode(batch.src.cuda())
-            output, hidden = model.get_decode(batch.trg.cuda(), hidden)
+            encoding = model.get_encode(batch.src.cuda())
+            output, hidden = model.get_decode(batch.trg.cuda(), encoding)
             loss = F.cross_entropy(output[:-1].view(-1, output.shape[-1]), batch.trg.cuda()[1:].view(-1), ignore_index=1)
             all_losses.append(loss)
     loss_v = torch.cat(all_losses).mean().data.cpu().numpy()[0]
 
     return loss_v
-
-def kaggle(model, fname, DE, EN):
-    with open(fname, 'rb') as reader:
-        for line in reader:
-            print(line)
