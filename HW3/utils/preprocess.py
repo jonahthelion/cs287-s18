@@ -33,9 +33,14 @@ def get_data(model_dict):
     DE.build_vocab(train.src, min_freq=MIN_FREQ)
     EN.build_vocab(train.trg, min_freq=MIN_FREQ)
 
-    BATCH_SIZE = 32
-    train_iter, val_iter = torchtext.data.BucketIterator.splits((train, val), batch_size=BATCH_SIZE, device=-1,
-                                                      repeat=False, sort_key=lambda x: len(x.src))
+    if not model_dict['fake']:
+        BATCH_SIZE = 32
+        train_iter, val_iter = torchtext.data.BucketIterator.splits((train, val), batch_size=BATCH_SIZE, device=-1,
+                                                          repeat=False, sort_key=lambda x: len(x.src))
+    else:
+        val_iter = None
+        train_iter = [Datapoint()]
+
     t1 = time()
     print('done loading', t1-t0)
     return train_iter, val_iter, DE, EN
@@ -45,3 +50,8 @@ def get_model(model_dict, DE, EN):
         model = noAttention(model_dict, DE, EN)
         model.cuda()
         return model
+
+class Datapoint(object):
+    def __init__(self):
+        self.src = Variable(torch.zeros(8, 32))
+        self.trg = Variable(torch.ones(12, 32))
