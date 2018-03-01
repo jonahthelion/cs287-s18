@@ -39,7 +39,7 @@ with open(fname, 'rb') as reader:
         src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
         output, hidden = model.get_encode(src.cuda())
 
-        poss_sentences = Variable(torch.Tensor([2]).long().cuda()).unsqueeze(1)
+        poss_sentences = Variable(torch.Tensor([[2, 2]]).long().cuda())
         poss_hidden = (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
         preds = model.get_decode(poss_sentences, poss_hidden)
 assert False
