@@ -5,7 +5,7 @@ from time import time
 from torch.autograd import Variable
 import pickle
 
-from .models import noAttention
+from .models import noAttention, Attention
 
 spacy_de = spacy.load('de')
 spacy_en = spacy.load('en')
@@ -55,6 +55,10 @@ def get_data(model_dict):
 def get_model(model_dict, DE, EN):
     if model_dict['type'] == 'noAttention':
         model = noAttention(model_dict, DE, EN)
+        model.cuda()
+        return model
+    if model_dict['type'] == 'Attention':
+        model = Attention(model_dict, DE, EN)
         model.cuda()
         return model
 
