@@ -57,4 +57,4 @@ class Attention(nn.Module):
         return output, hidden
 
     def get_decode(self, trg, encoding):
-        assert False
+        pass
