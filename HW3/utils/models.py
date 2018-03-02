@@ -42,7 +42,8 @@ class Attention(nn.Module):
         self.num_encode = model_dict['num_encode']
         self.num_decode = model_dict['num_decode']
 
-        self.embedder = nn.Embedding(self.Vg, self.D)
+        self.embedder_g = nn.Embedding(self.Vg, self.D)
+        self.embedder = nn.Embedding(self.Ve, self.D)
         self.encoder = nn.LSTM(self.D, self.D, self.num_encode)
         self.decoder = nn.LSTM(self.D, self.D, self.num_decode)
 
@@ -52,7 +53,7 @@ class Attention(nn.Module):
             )
 
     def get_encode(self, src):
-        embedded = self.embedder(src)
+        embedded = self.embedder_g(src)
         output, hidden = self.encoder(embedded)
         return output, hidden
 
