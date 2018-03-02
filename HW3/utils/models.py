@@ -48,13 +48,32 @@ class Attention(nn.Module):
 
         self.classifier = nn.Sequential(
                             nn.ReLU(),
-                            nn.Linear(self.D, self.Ve),
+                            nn.Linear(self.D*2, self.Ve),
             )
 
     def get_encode(self, src):
-        embedded = self.embedder(torch.stack([src[len(src) -1 - i] for i in range(len(src)) ]))
+        embedded = self.embedder(src)
         output, hidden = self.encoder(embedded)
         return output, hidden
 
     def get_decode(self, trg, encoding):
-        pass
+        classes = []
+        current_hidden = encoding[1]
+
+        for i in range(trg.shape[0]):
+            output = self.decoder(self.embedder(trg[i].unsqueeze(0)), current_hidden)
+            attn = F.softmax(torch.bmm(encoding[0].permute(1, 0, 2) , output[0].permute(1,2,0)), 1)
+            feats = torch.cat((torch.bmm(encoding[0].permute(1,2,0), attn), output[0].permute(1,2,0)), 1).squeeze(-1)
+            classes.append(self.classifier(feats))
+            current_hidden = output[1]
+        classes = torch.stack(classes)
+
+        return classes, current_hidden
+
+
+
+
+
+
+
+
