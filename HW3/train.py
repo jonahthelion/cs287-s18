@@ -62,6 +62,7 @@ with open(fname, 'rb') as reader:
                 best_ixes = poss_scores.topk(500,0)[1].squeeze(1).data
                 poss_sentences = torch.stack([poss_sentences[:,ix] for ix in best_ixes], 1)
                 poss_scores = poss_scores[best_ixes]
+        actual_scores = torch.stack(actual_scores)
         best_ixes = actual_scores.topk(100,0)[1].squeeze(1).data
         actual_sentences = torch.stack([actual_sentences[:,ix] for ix in best_ixes], 1)
         actual_scores = actual_scores[best_ixes]
