@@ -43,7 +43,7 @@ with open(fname, 'rb') as reader:
         actual_sentences = []; actual_scores = [];
         poss_sentences = Variable(torch.Tensor([[2]]).long().cuda())
         poss_scores = [0]
-        for _ in range(10):
+        for _ in range(20):
             poss_hidden = output, (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
             preds = model.get_decode(poss_sentences, poss_hidden)
 
@@ -59,7 +59,7 @@ with open(fname, 'rb') as reader:
                         new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
             poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
             if poss_sentences.shape[1] > 100:
-                best_ixes = poss_scores.topk(100,0)[1].squeeze(1).data
+                best_ixes = poss_scores.topk(500,0)[1].squeeze(1).data
                 poss_sentences = torch.stack([poss_sentences[:,ix] for ix in best_ixes], 1)
                 poss_scores = poss_scores[best_ixes]
         assert False
