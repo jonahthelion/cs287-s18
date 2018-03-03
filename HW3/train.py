@@ -60,7 +60,7 @@ with open(fname, 'rb') as reader:
             poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
             if poss_sentences.shape[1] > 100:
                 best_ixes = poss_scores.topk(100,0)[1].squeeze(1).data
-                poss_scores = torch.stack([poss_sentences[:,ix] for ix in best_ixes])
+                poss_scores = torch.stack([poss_sentences[:,ix] for ix in best_ixes], 1)
                 poss_scores = poss_scores[best_ixes]
 assert False
 
