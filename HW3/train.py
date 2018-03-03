@@ -51,7 +51,7 @@ with open(fname, 'rb') as reader:
             for i in range(poss_sentences.shape[1]):
                 best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
                 for val_ix in range(len(best_pred_ixes)):
-                    if val_ix == 3:
+                    if best_pred_vals[val_ix] == 3:
                         actual_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
                         actual_scores.append(poss_scores[i] + best_pred_vals[val_ix])
                     else:
