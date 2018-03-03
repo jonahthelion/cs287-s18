@@ -71,18 +71,17 @@ train_iter, val_iter, DE, EN = get_data(model_dict)
 #         answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
 
 
-
-with open('kaggle3.txt', 'w') as writer:
-    writer.write('id,word\n')
-    for li_ix,line in enumerate(answers):
-        out = ''
-        for li in line:
-            out += '|'.join(li)
-            out += ' '
-        out = out.replace("\"", "<quote>").replace(",", "<comma>")
-        out = str(li_ix+1) + ',' + out[:-1] + '\n'
-        writer.write(out)
-assert False
+# with open('kaggle3.txt', 'w') as writer:
+#     writer.write('id,word\n')
+#     for li_ix,line in enumerate(answers):
+#         out = ''
+#         for li in line:
+#             out += '|'.join(li)
+#             out += ' '
+#         out = out.replace("\"", "<quote>").replace(",", "<comma>")
+#         out = str(li_ix+1) + ',' + out[:-1] + '\n'
+#         writer.write(out)
+# assert False
 ###########
 
 
