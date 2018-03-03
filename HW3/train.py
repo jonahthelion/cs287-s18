@@ -23,52 +23,52 @@ model_dict = {'type': 'Attention',
                 'num_encode': 4,
                 'num_decode': 4,
                 'num_epochs': 50,
-                'fake': True,
-                'pickled_fields': True}
+                'fake': False,
+                'pickled_fields': False}
 
 train_iter, val_iter, DE, EN = get_data(model_dict)
 
-###########
-model = torch.load('noAttention2.p')
-model.encoder.flatten_parameters()
-model.decoder.flatten_parameters()
-model.eval()
-fname = 'PSET/source_test.txt'
-answers = []
-with open(fname, 'rb') as reader:
-    for break_ix, line in tqdm(enumerate(reader)):
-        src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
-        output, hidden = model.get_encode(src.cuda())
+# ###########
+# model = torch.load('noAttention2.p')
+# model.encoder.flatten_parameters()
+# model.decoder.flatten_parameters()
+# model.eval()
+# fname = 'PSET/source_test.txt'
+# answers = []
+# with open(fname, 'rb') as reader:
+#     for break_ix, line in tqdm(enumerate(reader)):
+#         src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
+#         output, hidden = model.get_encode(src.cuda())
 
-        actual_sentences = []; actual_scores = [];
-        poss_sentences = Variable(torch.Tensor([[2]]).long().cuda())
-        poss_scores = [0]
-        while len(actual_sentences) < 100:
-            poss_hidden = output, (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
-            preds = model.get_decode(poss_sentences, poss_hidden)
+#         actual_sentences = []; actual_scores = [];
+#         poss_sentences = Variable(torch.Tensor([[2]]).long().cuda())
+#         poss_scores = [0]
+#         while len(actual_sentences) < 100:
+#             poss_hidden = output, (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
+#             preds = model.get_decode(poss_sentences, poss_hidden)
 
-            new_sentences = []; new_scores = [];
-            for i in range(poss_sentences.shape[1]):
-                best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
-                for val_ix in range(len(best_pred_ixes)):
-                    if best_pred_ixes[val_ix].cpu().data.numpy()[0] == 3:
-                        actual_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
-                        actual_scores.append(poss_scores[i] + best_pred_vals[val_ix])
-                    else:
-                        new_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
-                        new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
-            poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
-            if poss_sentences.shape[1] > 100:
-                best_ixes = poss_scores.topk(100,0)[1].squeeze(1).data
-                poss_sentences = torch.stack([poss_sentences[:,ix] for ix in best_ixes], 1)
-                poss_scores = poss_scores[best_ixes]
-        actual_scores = torch.stack(actual_scores)
-        best_ixes = actual_scores.topk(100,0)[1].squeeze(1).data
-        actual_sentences = [actual_sentences[ix] for ix in best_ixes]
-        actual_scores = actual_scores[best_ixes]
+#             new_sentences = []; new_scores = [];
+#             for i in range(poss_sentences.shape[1]):
+#                 best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
+#                 for val_ix in range(len(best_pred_ixes)):
+#                     if best_pred_ixes[val_ix].cpu().data.numpy()[0] == 3:
+#                         actual_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
+#                         actual_scores.append(poss_scores[i] + best_pred_vals[val_ix])
+#                     else:
+#                         new_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
+#                         new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
+#             poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
+#             if poss_sentences.shape[1] > 100:
+#                 best_ixes = poss_scores.topk(100,0)[1].squeeze(1).data
+#                 poss_sentences = torch.stack([poss_sentences[:,ix] for ix in best_ixes], 1)
+#                 poss_scores = poss_scores[best_ixes]
+#         actual_scores = torch.stack(actual_scores)
+#         best_ixes = actual_scores.topk(100,0)[1].squeeze(1).data
+#         actual_sentences = [actual_sentences[ix] for ix in best_ixes]
+#         actual_scores = actual_scores[best_ixes]
 
-        # fill answers
-        answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
+#         # fill answers
+#         answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
 
 
 
@@ -88,7 +88,7 @@ assert False
 
 model = get_model(model_dict, DE, EN)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=.01, weight_decay=1e-4, betas=(.9, .999))
+optimizer = torch.optim.Adam(model.parameters(), lr=.1, weight_decay=1e-4, betas=(.9, .999))
 
 for epoch in range(model_dict['num_epochs']):
     for batch_num,batch in enumerate(train_iter):
