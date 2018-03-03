@@ -27,7 +27,7 @@ model_dict = {'type': 'Attention',
                 'pickled_fields': True}
 
 train_iter, val_iter, DE, EN = get_data(model_dict)
-assert False
+
 ###########
 model = torch.load('noAttention2.p')
 model.encoder.flatten_parameters()
@@ -40,7 +40,7 @@ with open(fname, 'rb') as reader:
         src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
         output, hidden = model.get_encode(src.cuda())
 
-        actual_sentences = []
+        actual_sentences = []; actual_scores = [];
         poss_sentences = Variable(torch.Tensor([[2]]).long().cuda())
         poss_scores = [0]
         for _ in range(3):
@@ -51,9 +51,15 @@ with open(fname, 'rb') as reader:
             for i in range(poss_sentences.shape[1]):
                 best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
                 for val_ix in range(len(best_pred_ixes)):
-                    new_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
-                    new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
+                    if val_ix == 3:
+                        actual_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
+                        actual_scores.append(poss_scores[i] + best_pred_vals[val_ix])
+                    else:
+                        new_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
+                        new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
             poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
+            if poss_sentences.shape[1] > 100:
+                assert False
         best_ixes = poss_scores.topk(100, 0)[1].squeeze(1).data
         answers.append( [[EN.vocab.itos[ixx] for ixx in poss_sentences[1:,ix].data] for ix in best_ixes] )
 
