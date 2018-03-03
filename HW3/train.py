@@ -23,51 +23,52 @@ model_dict = {'type': 'Attention',
                 'num_encode': 4,
                 'num_decode': 4,
                 'num_epochs': 50,
-                'fake': False,
-                'pickled_fields': False}
+                'fake': True,
+                'pickled_fields': True}
 
 train_iter, val_iter, DE, EN = get_data(model_dict)
+assert False
+###########
+model = torch.load('noAttention2.p')
+model.encoder.flatten_parameters()
+model.decoder.flatten_parameters()
+model.eval()
+fname = 'PSET/source_test.txt'
+answers = []
+with open(fname, 'rb') as reader:
+    for line in tqdm(reader):
+        src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
+        output, hidden = model.get_encode(src.cuda())
 
-# ###########
-# model = torch.load('noAttention2.p')
-# model.encoder.flatten_parameters()
-# model.decoder.flatten_parameters()
-# model.eval()
-# fname = 'PSET/source_test.txt'
-# answers = []
-# with open(fname, 'rb') as reader:
-#     for line in tqdm(reader):
-#         src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
-#         output, hidden = model.get_encode(src.cuda())
+        actual_sentences = []
+        poss_sentences = Variable(torch.Tensor([[2]]).long().cuda())
+        poss_scores = [0]
+        for _ in range(3):
+            poss_hidden = output, (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
+            preds = model.get_decode(poss_sentences, poss_hidden)
 
-#         poss_sentences = Variable(torch.Tensor([[2]]).long().cuda())
-#         poss_scores = [0]
-#         for _ in range(3):
-#             poss_hidden = output, (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
-#             preds = model.get_decode(poss_sentences, poss_hidden)
+            new_sentences = []; new_scores = [];
+            for i in range(poss_sentences.shape[1]):
+                best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
+                for val_ix in range(len(best_pred_ixes)):
+                    new_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
+                    new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
+            poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
+        best_ixes = poss_scores.topk(100, 0)[1].squeeze(1).data
+        answers.append( [[EN.vocab.itos[ixx] for ixx in poss_sentences[1:,ix].data] for ix in best_ixes] )
 
-#             new_sentences = []; new_scores = [];
-#             for i in range(poss_sentences.shape[1]):
-#                 best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
-#                 for val_ix in range(len(best_pred_ixes)):
-#                     new_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
-#                     new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
-#             poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
-#         best_ixes = poss_scores.topk(100, 0)[1].squeeze(1).data
-#         answers.append( [[EN.vocab.itos[ixx] for ixx in poss_sentences[1:,ix].data] for ix in best_ixes] )
-
-# with open('kaggle0.txt', 'w') as writer:
-#     writer.write('id,word\n')
-#     for li_ix,line in enumerate(answers):
-#         out = ''
-#         for li in line:
-#             out += '|'.join(li)
-#             out += ' '
-#         out = out.replace("\"", "<quote>").replace(",", "<comma>")
-#         out = str(li_ix+1) + ',' + out[:-1] + '\n'
-#         writer.write(out)
-# assert False
-# ###########
+with open('kaggle0.txt', 'w') as writer:
+    writer.write('id,word\n')
+    for li_ix,line in enumerate(answers):
+        out = ''
+        for li in line:
+            out += '|'.join(li)
+            out += ' '
+        out = out.replace("\"", "<quote>").replace(",", "<comma>")
+        out = str(li_ix+1) + ',' + out[:-1] + '\n'
+        writer.write(out)
+assert False
+###########
 
 
 model = get_model(model_dict, DE, EN)
