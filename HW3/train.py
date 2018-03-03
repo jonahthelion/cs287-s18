@@ -36,7 +36,7 @@ model.eval()
 fname = 'PSET/source_test.txt'
 answers = []
 with open(fname, 'rb') as reader:
-    for line in tqdm(reader):
+    for break_ix, line in tqdm(enumerate(reader)):
         src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
         output, hidden = model.get_encode(src.cuda())
 
@@ -70,7 +70,10 @@ with open(fname, 'rb') as reader:
         # fill answers
         answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
 
-with open('kaggle0.txt', 'w') as writer:
+        if break_ix == 20:
+            break
+
+with open('kaggle3.txt', 'w') as writer:
     writer.write('id,word\n')
     for li_ix,line in enumerate(answers):
         out = ''
