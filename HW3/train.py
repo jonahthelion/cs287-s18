@@ -62,7 +62,12 @@ with open(fname, 'rb') as reader:
                 best_ixes = poss_scores.topk(500,0)[1].squeeze(1).data
                 poss_sentences = torch.stack([poss_sentences[:,ix] for ix in best_ixes], 1)
                 poss_scores = poss_scores[best_ixes]
-        assert False
+        best_ixes = actual_scores.topk(100,0)[1].squeeze(1).data
+        actual_sentences = torch.stack([actual_sentences[:,ix] for ix in best_ixes], 1)
+        actual_scores = actual_scores[best_ixes]
+
+        # fill answers
+        answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
 
 with open('kaggle0.txt', 'w') as writer:
     writer.write('id,word\n')
