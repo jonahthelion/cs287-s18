@@ -51,6 +51,7 @@ class Attention(nn.Module):
                             nn.ReLU(),
                             nn.Linear(self.D*2, self.Ve),
             )
+        self.attn = nn.Linear(self.D*2, 20)
 
     def get_encode(self, src):
         embedded = self.embedder_g(src)
@@ -60,13 +61,19 @@ class Attention(nn.Module):
     def get_decode(self, trg, encoding):
         classes = []
         current_hidden = encoding[1]
+        encoding_hist = torch.cat((encoding[0], Variable(torch.zeros(20 - encoding[0].shape[0], encoding[0].shape[1], encoding[0].shape[2]).cuda())))
 
         for i in range(trg.shape[0]):
-            output = self.decoder(self.embedder(trg[i].unsqueeze(0)), current_hidden)
-            attn = F.softmax(torch.bmm(encoding[0].permute(1, 0, 2) , output[0].permute(1,2,0)), 1)
-            feats = torch.cat((torch.bmm(encoding[0].permute(1,2,0), attn), output[0].permute(1,2,0)), 1).squeeze(-1)
-            classes.append(self.classifier(feats))
-            current_hidden = output[1]
+            weights = F.softmax(self.attn(torch.cat((self.embedder(trg[i].unsqueeze(0)), current_hidden[0][-1].unsqueeze(0)), 2)), 2)
+            feat_hist = torch.bmm(encoding_hist.permute(1, 2, 0), weights.permute(1, 2, 0))
+            output, current_hidden = self.decoder(feat_hist.permute(2, 0, 1), current_hidden)
+            classes.append(self.classifier(output))
+        # for i in range(trg.shape[0]):
+        #     output = self.decoder(self.embedder(trg[i].unsqueeze(0)), current_hidden)
+        #     attn = F.softmax(torch.bmm(encoding[0].permute(1, 0, 2) , output[0].permute(1,2,0)), 1)
+        #     feats = torch.cat((torch.bmm(encoding[0].permute(1,2,0), attn), output[0].permute(1,2,0)), 1).squeeze(-1)
+        #     classes.append(self.classifier(feats))
+        #     current_hidden = output[1]
         classes = torch.stack(classes)
 
         return classes, current_hidden
