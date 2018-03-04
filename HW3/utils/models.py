@@ -69,6 +69,7 @@ class Attention(nn.Module):
         for i in range(trg.shape[0]):
             weights = F.softmax(self.attn(torch.cat((self.embedder(trg[i].unsqueeze(0)), current_hidden[0][-1].unsqueeze(0)), 2)), 2)
             feat_hist = torch.bmm(encoding_hist.permute(1, 2, 0), weights.permute(1, 2, 0))
+            print (feat_hist.permute(2, 0, 1).shape)
             output, current_hidden = self.decoder(feat_hist.permute(2, 0, 1), current_hidden)
             classes.append(self.classifier(output.squeeze(0)))
         # for i in range(trg.shape[0]):
