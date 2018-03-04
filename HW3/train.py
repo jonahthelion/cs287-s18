@@ -20,8 +20,8 @@ vis.env = 'train'
 
 model_dict = {'type': 'Attention',
                 'D': 200,
-                'num_encode': 2,
-                'num_decode': 2,
+                'num_encode': 4,
+                'num_decode': 4,
                 'num_epochs': 50,
                 'fake': False,
                 'pickled_fields': False}
