@@ -49,7 +49,7 @@ class Attention(nn.Module):
 
         self.classifier = nn.Sequential(
                             nn.ReLU(),
-                            nn.Linear(self.D*2, self.Ve),
+                            nn.Linear(self.D, self.Ve),
             )
         self.attn = nn.Linear(self.D*2, 20)
 
@@ -67,7 +67,7 @@ class Attention(nn.Module):
             weights = F.softmax(self.attn(torch.cat((self.embedder(trg[i].unsqueeze(0)), current_hidden[0][-1].unsqueeze(0)), 2)), 2)
             feat_hist = torch.bmm(encoding_hist.permute(1, 2, 0), weights.permute(1, 2, 0))
             output, current_hidden = self.decoder(feat_hist.permute(2, 0, 1), current_hidden)
-            classes.append(self.classifier(output))
+            classes.append(self.classifier(output.squeeze(0)))
         # for i in range(trg.shape[0]):
         #     output = self.decoder(self.embedder(trg[i].unsqueeze(0)), current_hidden)
         #     attn = F.softmax(torch.bmm(encoding[0].permute(1, 0, 2) , output[0].permute(1,2,0)), 1)
