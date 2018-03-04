@@ -61,6 +61,7 @@ class Attention(nn.Module):
     def get_decode(self, trg, encoding):
         classes = []
         current_hidden = encoding[1]
+        print(encoding[0].shape)
         encoding_hist = torch.cat((encoding[0], Variable(torch.zeros(20 - encoding[0].shape[0], encoding[0].shape[1], encoding[0].shape[2]).cuda())))
 
         for i in range(trg.shape[0]):
