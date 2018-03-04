@@ -61,8 +61,10 @@ class Attention(nn.Module):
     def get_decode(self, trg, encoding):
         classes = []
         current_hidden = encoding[1]
-        print(encoding[0].shape)
-        encoding_hist = torch.cat((encoding[0], Variable(torch.zeros(20 - encoding[0].shape[0], encoding[0].shape[1], encoding[0].shape[2]).cuda())))
+        if encoding[0].shape[0] <20:
+            encoding_hist = torch.cat((encoding[0], Variable(torch.zeros(20 - encoding[0].shape[0], encoding[0].shape[1], encoding[0].shape[2]).cuda())))
+        else:
+            encoding_hist = encoding[0]
 
         for i in range(trg.shape[0]):
             weights = F.softmax(self.attn(torch.cat((self.embedder(trg[i].unsqueeze(0)), current_hidden[0][-1].unsqueeze(0)), 2)), 2)
