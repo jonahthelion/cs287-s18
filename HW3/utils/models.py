@@ -45,7 +45,7 @@ class Attention(nn.Module):
         self.embedder_g = nn.Embedding(self.Vg, self.D)
         self.embedder = nn.Embedding(self.Ve, self.D)
         self.encoder = nn.LSTM(self.D, self.D, self.num_encode)
-        self.decoder = nn.LSTM(self.D, self.D, self.num_decode)
+        self.decoder = nn.LSTM(2*self.D, self.D, self.num_decode)
 
         self.classifier = nn.Sequential(
                             nn.ReLU(),
