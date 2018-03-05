@@ -209,10 +209,15 @@ To decode, we embed the ground truth $trg$, run a LSTM with initial hidden state
 \begin{subsection}{Attention}
 
 The encoder is no different from that of the non-attention model.\\
-For the decoder, the embedding of the source sentence is first padded with zeros to be a length of 20. Next, the most recent hidden state is concatenated to the most recent word vector and fed to a linear layer $2D \rightarrow 20$. The softmax of this vector gives the ``attention" to the at most 20 words in the source sentence. The input to the decoder is a linear combination of the encoding with coefficients given by the ``attention" vector. As in the no-attention model, a linear layer $D \rightarrow V_{en}$ gives the output distribution over the vocabulary.\\
-\centerline{PPL: }
-The training graph is shown in 
+For the decoder, the embedding of the source sentence is first padded with zeros to be a length of 20. Next, the most recent hidden state is concatenated to the most recent word vector and fed to a linear layer $2D \rightarrow 20$. The softmax of this vector gives the ``attention" to the at most 20 words in the source sentence. The input to the decoder is a linear combination of the encoding with coefficients given by the ``attention" vector concatenated with the input word vector. As in the no-attention model, a linear layer $D \rightarrow V_{en}$ gives the output distribution over the vocabulary. I report the score for $D=300$.\\
+\centerline{PPL: 7.97}
+The training graph is shown in Figure \ref{fig:att}.
 
+ \begin{figure}
+  \centering
+  \includegraphics[width=6cm]{imgs/att}
+  \caption{\label{fig:att} The network performs almost identically to the non attention model which means that the attention component of the decoder was just noise.}
+\end{figure}
 \end{subsection}
 
 
