@@ -66,7 +66,7 @@ with open(fname, 'rb') as reader:
         best_ixes = actual_scores.topk(100,0)[1].squeeze(1).data
         actual_sentences = [actual_sentences[ix] for ix in best_ixes]
         actual_scores = actual_scores[best_ixes]
-        print(break_ix, ' '.join([EN.vocab.itos[actual_sentences[0].data[c]] for c in range(len(actual_sentences[0]))])) )
+        print(break_ix, ' '.join([EN.vocab.itos[actual_sentences[0].data[c]] for c in range(len(actual_sentences[0]))])) 
 
         # fill answers
         answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
