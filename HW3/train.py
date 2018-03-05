@@ -28,62 +28,62 @@ model_dict = {'type': 'Attention',
 
 train_iter, val_iter, DE, EN = get_data(model_dict)
 
-# ###########
-# model = torch.load('Attention2.p')
-# model.encoder.flatten_parameters()
-# model.decoder.flatten_parameters()
-# model.eval()
-# fname = 'PSET/source_test.txt'
-# answers = []
-# with open(fname, 'rb') as reader:
-#     for break_ix, line in tqdm(enumerate(reader)):
-#         src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
-#         output, hidden = model.get_encode(src.cuda())
+###########
+model = torch.load('Attention2.p')
+model.encoder.flatten_parameters()
+model.decoder.flatten_parameters()
+model.eval()
+fname = 'PSET/source_test.txt'
+answers = []
+with open(fname, 'rb') as reader:
+    for break_ix, line in tqdm(enumerate(reader)):
+        src = Variable(torch.Tensor([DE.vocab.stoi[s] for s in line.decode('utf-8').strip('\n').split(' ')]).long().unsqueeze(1))
+        output, hidden = model.get_encode(src.cuda())
 
-#         actual_sentences = []; actual_scores = [];
-#         poss_sentences = Variable(torch.Tensor([[2]]).long().cuda())
-#         poss_scores = [0]
-#         while len(actual_sentences) < 100:
-#             poss_hidden = output, (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
-#             print(poss_hidden[1][0].shape, poss_hidden[1][1].shape)            
-#             preds = model.get_decode(poss_sentences, poss_hidden)
+        actual_sentences = []; actual_scores = [];
+        poss_sentences = Variable(torch.Tensor([[2]]).long().cuda())
+        poss_scores = [0]
+        while len(actual_sentences) < 100:
+            poss_hidden = output, (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
+            print('THING', poss_sentences.shape, poss_hidden[0].shape, poss_hidden[1][0].shape, poss_hidden[1][1].shape)           
+            preds = model.get_decode(poss_sentences, poss_hidden)
 
-#             new_sentences = []; new_scores = [];
-#             for i in range(poss_sentences.shape[1]):
-#                 best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
-#                 for val_ix in range(len(best_pred_ixes)):
-#                     if best_pred_ixes[val_ix].cpu().data.numpy()[0] == 3:
-#                         actual_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
-#                         actual_scores.append(poss_scores[i] + best_pred_vals[val_ix])
-#                     else:
-#                         new_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
-#                         new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
-#             poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
-#             if poss_sentences.shape[1] > 100:
-#                 best_ixes = poss_scores.topk(100,0)[1].squeeze(1).data
-#                 poss_sentences = torch.stack([poss_sentences[:,ix] for ix in best_ixes], 1)
-#                 poss_scores = poss_scores[best_ixes]
-#         actual_scores = torch.stack(actual_scores)
-#         best_ixes = actual_scores.topk(100,0)[1].squeeze(1).data
-#         actual_sentences = [actual_sentences[ix] for ix in best_ixes]
-#         actual_scores = actual_scores[best_ixes]
-#         print(break_ix, ' '.join([EN.vocab.itos[actual_sentences[0].data[c]] for c in range(len(actual_sentences[0]))])) 
+            new_sentences = []; new_scores = [];
+            for i in range(poss_sentences.shape[1]):
+                best_pred_vals, best_pred_ixes = preds[0][-1, i].topk(5)
+                for val_ix in range(len(best_pred_ixes)):
+                    if best_pred_ixes[val_ix].cpu().data.numpy()[0] == 3:
+                        actual_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
+                        actual_scores.append(poss_scores[i] + best_pred_vals[val_ix])
+                    else:
+                        new_sentences.append(torch.cat((poss_sentences[:,i], best_pred_ixes[val_ix] )))
+                        new_scores.append(poss_scores[i] + best_pred_vals[val_ix])
+            poss_sentences = torch.stack(new_sentences, 1); poss_scores = torch.stack(new_scores)
+            if poss_sentences.shape[1] > 100:
+                best_ixes = poss_scores.topk(100,0)[1].squeeze(1).data
+                poss_sentences = torch.stack([poss_sentences[:,ix] for ix in best_ixes], 1)
+                poss_scores = poss_scores[best_ixes]
+        actual_scores = torch.stack(actual_scores)
+        best_ixes = actual_scores.topk(100,0)[1].squeeze(1).data
+        actual_sentences = [actual_sentences[ix] for ix in best_ixes]
+        actual_scores = actual_scores[best_ixes]
+        print(break_ix, ' '.join([EN.vocab.itos[actual_sentences[0].data[c]] for c in range(len(actual_sentences[0]))])) 
 
-#         # fill answers
-#         answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
+        # fill answers
+        answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
 
-# with open('kaggle4.txt', 'w') as writer:
-#     writer.write('id,word\n')
-#     for li_ix,line in enumerate(answers):
-#         out = ''
-#         for li in line:
-#             out += '|'.join(li)
-#             out += ' '
-#         out = out.replace("\"", "<quote>").replace(",", "<comma>")
-#         out = str(li_ix+1) + ',' + out[:-1] + '\n'
-#         writer.write(out)
-# assert False
-# ##########
+with open('kaggle4.txt', 'w') as writer:
+    writer.write('id,word\n')
+    for li_ix,line in enumerate(answers):
+        out = ''
+        for li in line:
+            out += '|'.join(li)
+            out += ' '
+        out = out.replace("\"", "<quote>").replace(",", "<comma>")
+        out = str(li_ix+1) + ',' + out[:-1] + '\n'
+        writer.write(out)
+assert False
+##########
 
 
 #model = get_model(model_dict, DE, EN)
