@@ -8,6 +8,7 @@ from tqdm import tqdm
 import numpy as np
 import visdom
 import matplotlib.pyplot as plt
+plt.use('Agg')
 
 from utils.preprocess import get_data, get_model
 from utils.postprocess import vis_display, evaluate
