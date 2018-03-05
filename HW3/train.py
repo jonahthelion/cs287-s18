@@ -81,9 +81,9 @@ with open(fname, 'rb') as reader:
             encoding_hist = encoding[0]
 
         for i in range(trg.shape[0]):
-            weights = F.softmax(self.attn(torch.cat((self.embedder(trg[i].unsqueeze(0)), current_hidden[0][-1].unsqueeze(0)), 2)), 2)
+            weights = F.softmax(model.attn(torch.cat((model.embedder(trg[i].unsqueeze(0)), current_hidden[0][-1].unsqueeze(0)), 2)), 2)
             feat_hist = torch.bmm(encoding_hist.permute(1, 2, 0), weights.permute(1, 2, 0))
-            output, current_hidden = self.decoder(torch.cat((feat_hist.permute(2, 0, 1), self.embedder(trg[i].unsqueeze(0))), 2), current_hidden)
+            output, current_hidden = model.decoder(torch.cat((feat_hist.permute(2, 0, 1), model.embedder(trg[i].unsqueeze(0))), 2), current_hidden)
             all_weights.append(weights)
         all_weights = torch.stack(all_weights)
         fig = plt.figure()
