@@ -44,8 +44,7 @@ with open(fname, 'rb') as reader:
         poss_sentences = Variable(torch.Tensor([[2]]).long().cuda())
         poss_scores = [0]
         while len(actual_sentences) < 100:
-            poss_hidden = torch.stack([output[:,0] for _ in range(poss_sentences.shape[1])], 1), (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1))
-            print('THING', poss_sentences.shape, poss_hidden[0].shape, poss_hidden[1][0].shape, poss_hidden[1][1].shape)           
+            poss_hidden = torch.stack([output[:,0] for _ in range(poss_sentences.shape[1])], 1), (torch.stack([hidden[0][:,0] for _ in range(poss_sentences.shape[1])], 1), torch.stack([hidden[1][:,0] for _ in range(poss_sentences.shape[1])], 1)) 
             preds = model.get_decode(poss_sentences, poss_hidden)
 
             new_sentences = []; new_scores = [];
