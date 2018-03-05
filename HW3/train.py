@@ -66,7 +66,31 @@ with open(fname, 'rb') as reader:
         best_ixes = actual_scores.topk(100,0)[1].squeeze(1).data
         actual_sentences = [actual_sentences[ix] for ix in best_ixes]
         actual_scores = actual_scores[best_ixes]
+
+        ### printing the translations
         print(break_ix, ' '.join([EN.vocab.itos[actual_sentences[0].data[c]] for c in range(len(actual_sentences[0]))])) 
+
+        ### printing the attention
+        all_weights = []
+        trg = actual_sentences[0].unsqueeze(1)
+        encoding = output, hidden
+        current_hidden = encoding[1]
+        if encoding[0].shape[0] <20:
+            encoding_hist = torch.cat((encoding[0], Variable(torch.zeros(20 - encoding[0].shape[0], encoding[0].shape[1], encoding[0].shape[2]).cuda())))
+        else:
+            encoding_hist = encoding[0]
+
+        for i in range(trg.shape[0]):
+            weights = F.softmax(self.attn(torch.cat((self.embedder(trg[i].unsqueeze(0)), current_hidden[0][-1].unsqueeze(0)), 2)), 2)
+            feat_hist = torch.bmm(encoding_hist.permute(1, 2, 0), weights.permute(1, 2, 0))
+            output, current_hidden = self.decoder(torch.cat((feat_hist.permute(2, 0, 1), self.embedder(trg[i].unsqueeze(0))), 2), current_hidden)
+            all_weights.append(weights)
+        all_weights = torch.stack(all_weights)
+        fig = plt.figure()
+        plt.imshow(all_weights.data.cpu().numpy())
+        plt.tight_layout()
+        plt.savefig('att_fig.pdf')
+        plt.close(fig)
 
         # fill answers
         answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
