@@ -29,7 +29,7 @@ model_dict = {'type': 'Attention',
 train_iter, val_iter, DE, EN = get_data(model_dict)
 
 ###########
-model = torch.load('noAttention2.p')
+model = torch.load('Attention2.p')
 model.encoder.flatten_parameters()
 model.decoder.flatten_parameters()
 model.eval()
@@ -71,8 +71,7 @@ with open(fname, 'rb') as reader:
         # fill answers
         answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
 
-
-with open('kaggle3.txt', 'w') as writer:
+with open('kaggle4.txt', 'w') as writer:
     writer.write('id,word\n')
     for li_ix,line in enumerate(answers):
         out = ''
