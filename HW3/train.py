@@ -90,7 +90,7 @@ with open(fname, 'rb') as reader:
             all_weights.append(weights)
         all_weights = torch.stack(all_weights)
         fig = plt.figure()
-        plt.imshow(all_weights.data.cpu().numpy())
+        plt.imshow(all_weights.squeeze().data.cpu().numpy())
         plt.tight_layout()
         plt.savefig('att_fig.pdf')
         plt.close(fig)
