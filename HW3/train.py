@@ -91,6 +91,7 @@ with open(fname, 'rb') as reader:
         plt.tight_layout()
         plt.savefig('att_fig.pdf')
         plt.close(fig)
+        assert False
 
         # fill answers
         answers.append([[EN.vocab.itos[ans.data[c]] for c in range(1,4)] if len(ans)>4 else ['<unk>','<unk>','<unk>'] for ans in actual_sentences])
