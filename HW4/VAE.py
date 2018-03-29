@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from utils.preprocess import get_data, get_model
 
 """
-python VAE.py -model "Simple" -hidden 100 -lr .0008
+python VAE.py -model "Simple" -hidden 100 -lr .0008 -epochs 10
 """
 
 def get_args():
