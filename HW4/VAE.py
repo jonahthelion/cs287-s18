@@ -53,6 +53,7 @@ for epoch in range(args.epochs):
         z = eps.mul(std).add_(mu)
         img_out = model.get_decoding(z)
 
+        assert False
         l_reconstruct = F.binary_cross_entropy(img_out.view(-1,28*28), Variable(img).cuda().view(-1, 28*28), size_average=False)
         l_kl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
         
