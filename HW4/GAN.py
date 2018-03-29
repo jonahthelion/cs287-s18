@@ -36,7 +36,7 @@ def get_args():
     return parser.parse_args()
 
 args = get_args()
-train_loader, val_loader, test_loader = get_data(args)
+train_loader, val_loader, test_loader = get_data(args, bern=False)
 model = get_model(args)
 optimizer_g = torch.optim.Adam(model.decoder.parameters(), lr=args.lr)
 optimizer_d = torch.optim.Adam(model.discrim.parameters(), lr=args.lr)
