@@ -11,7 +11,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 from utils.preprocess import get_data, get_model
-from utils.postprocess import vis_display, get_validation_loss
+from utils.postprocess import gan_display, get_validation_loss
 
 """
 python GAN.py -model "SimpleGAN" -hidden 2 -lr .001 -epochs 40
@@ -73,6 +73,13 @@ for epoch in range(args.epochs):
 
         if data_ix % 30 == 0:
             print(data_ix, l_d, l_g, d_type)
+            model.eval()
+
+            # get sample images
+            sample_z = Variable(torch.normal(mean=0.0, std=torch.ones(16,args.hidden))).cuda()
+            sample_img = model.get_decoding(sample_z)
+
+            vis_windows = gan_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_d.data.cpu()[0], l_g.data.cpu()[0], (sample_img/2.+1/2.).data.cpu().unsqueeze(1))
 
 
 
