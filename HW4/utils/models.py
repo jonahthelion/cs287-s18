@@ -10,7 +10,7 @@ class SimpleVAE(nn.Module):
                         nn.ReLU(),
                         nn.Linear(50, 50),
                         nn.ReLU(),
-                        nn.Linear(50, self.hidden),
+                        nn.Linear(50, 2*self.hidden),
                     )
 
 
