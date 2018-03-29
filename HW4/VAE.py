@@ -1,37 +1,29 @@
 import torch
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
+import argparse
 
-train_dataset = datasets.MNIST(root='./data/',
-                            train=True, 
-                            transform=transforms.ToTensor(),
-                            download=False)
-test_dataset = datasets.MNIST(root='./data/',
-                           train=False, 
-                           transform=transforms.ToTensor())
+from utils.preprocess import get_data
 
-torch.manual_seed(3435)
-train_img = torch.stack([torch.bernoulli(d[0]) for d in train_dataset])
-train_label = torch.LongTensor([d[1] for d in train_dataset])
-test_img = torch.stack([torch.bernoulli(d[0]) for d in test_dataset])
-test_label = torch.LongTensor([d[1] for d in test_dataset])
+"""
+python VAE.py -model "Simple" -hidden 100
+"""
 
-val_img = train_img[-10000:].clone()
-val_label = train_label[-10000:].clone()
-train_img = train_img[:-10000]
-train_label = train_label[:-10000]
+def get_args():
+    parser = argparse.ArgumentParser(description='Train/evaluate a VAE.')
+    parser.add_argument('-model', metavar='-model', type=str,
+                        help='type of model')
+    parser.add_argument('-hidden', dest='-hidden', type=int,
+                        help='the size of z')
 
+    return parser.parse_args()
 
-train = torch.utils.data.TensorDataset(train_img, train_label)
-val = torch.utils.data.TensorDataset(val_img, val_label)
-test = torch.utils.data.TensorDataset(test_img, test_label)
-BATCH_SIZE = 100
-train_loader = torch.utils.data.DataLoader(train, batch_size=BATCH_SIZE, shuffle=True)
-val_loader = torch.utils.data.DataLoader(val, batch_size=BATCH_SIZE, shuffle=True)
-test_loader = torch.utils.data.DataLoader(test, batch_size=BATCH_SIZE, shuffle=True)
-
+args = get_args()
+train_loader, val_loader, test_loader = get_data(args)
+model = get_model(args)
 
 for datum in train_loader:
+    model.train()
     img, label = datum
-    print(img.size(), label.size())
+    mu, sig = model(img)
     break
