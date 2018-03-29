@@ -11,7 +11,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 from utils.preprocess import get_data, get_model
-from utils.postprocess import vis_display, get_validataion_loss
+from utils.postprocess import vis_display, get_validation_loss
 
 """
 python VAE.py -model "Simple" -hidden 2 -lr .001 -epochs 20 -kl_lam 0.05
