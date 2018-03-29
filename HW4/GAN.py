@@ -71,7 +71,7 @@ for epoch in range(args.epochs):
         l_g.backward()
         optimizer_g.step()
 
-        if data_ix % 30 == 0:
+        if data_ix % 100 == 0:
             print(data_ix, l_d, l_g, d_type)
             model.eval()
 
