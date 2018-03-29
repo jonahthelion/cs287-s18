@@ -17,7 +17,7 @@ class SimpleVAE(nn.Module):
         self.decoder = nn.Sequential(
                         nn.Linear(self.hidden, 50),
                         nn.ReLU(),
-                        nn.Linear(50, 508),
+                        nn.Linear(50, 50),
                         nn.ReLU(),
                         nn.Linear(50, 28*28),
                     )
