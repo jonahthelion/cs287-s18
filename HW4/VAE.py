@@ -3,7 +3,7 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 import argparse
 
-from utils.preprocess import get_data
+from utils.preprocess import get_data, get_model
 
 """
 python VAE.py -model "Simple" -hidden 100
