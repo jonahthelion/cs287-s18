@@ -44,7 +44,6 @@ optimizer_d = torch.optim.Adam(model.discrim.parameters(), lr=args.lr)
 for epoch in range(args.epochs):
     for data_ix,(img,label) in enumerate(train_loader):
         model.train()
-        optimizer.zero_grad()
         img = 2*(img - .5)
 
         assert False
