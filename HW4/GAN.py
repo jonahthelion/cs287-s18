@@ -46,36 +46,37 @@ for epoch in range(args.epochs):
         model.train()
         img = (2*(img - .5)).squeeze(1)
         z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
+        img_g = model.get_decoding(z)
 
         # train the discriminator
         optimizer_d.zero_grad()
         l_d = 0
         preds = model.get_discrim(Variable(img.view(-1,28*28)).cuda()).view(-1)
-        gt = Variable(torch.zeros(len(preds)).cuda()) + Variable(torch.Tensor(len(preds)).uniform_(0.3).cuda())
+        gt = Variable(torch.zeros(len(preds)).cuda()) + Variable(torch.Tensor(len(preds)).uniform_(0,.2).cuda())
         l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
-        img_g = model.get_decoding(z).detach()
         preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
-        gt = Variable(torch.ones(len(preds)).cuda()) - Variable(torch.Tensor(len(preds)).uniform_(0.3).cuda())
+        gt = Variable(torch.ones(len(preds)).cuda()) - Variable(torch.Tensor(len(preds)).uniform_(0,.2).cuda())
         l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
         l_d.backward()
         optimizer_d.step()
+        optimizer_d.zero_grad(); optimizer_g.zero_grad();
 
         # train the generator
-        optimizer_g.zero_grad()
         z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
         img_g = model.get_decoding(z)
         preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
-        gt = Variable(torch.zeros(len(preds)).cuda())+ Variable(torch.Tensor(len(preds)).uniform_(0.3).cuda())
+        gt = Variable(torch.zeros(len(preds)).cuda())+ Variable(torch.Tensor(len(preds)).uniform_(0.2).cuda())
         l_g = F.binary_cross_entropy_with_logits(preds, gt)
         l_g.backward()
         optimizer_g.step()
+        optimizer_d.zero_grad(); optimizer_g.zero_grad();
 
         if data_ix % 100 == 0:
             print(data_ix, l_d, l_g)
             model.eval()
 
             # get sample images
-            sample_z = Variable(torch.normal(mean=0.0, std=torch.ones(16,args.hidden))).cuda()
+            sample_z = Variable(torch.zeros(16, args.hidden).normal_().cuda())
             sample_img = model.get_decoding(sample_z)
 
             vis_windows = gan_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_d.data.cpu()[0], l_g.data.cpu()[0], (sample_img/2.+1/2.).data.cpu().unsqueeze(1))
