@@ -51,11 +51,11 @@ for epoch in range(args.epochs):
         optimizer_d.zero_grad()
         l_d = 0
         preds = model.get_discrim(Variable(img.view(-1,28*28)).cuda()).view(-1)
-        gt = Variable(torch.zeros(len(preds)).cuda())
+        gt = Variable(torch.zeros(len(preds)).cuda()) + torch.Tensor(len(preds)).uniform_(0.3)
         l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
         img_g = model.get_decoding(z).detach()
         preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
-        gt = Variable(torch.ones(len(preds)).cuda())
+        gt = Variable(torch.ones(len(preds)).cuda()) - torch.Tensor(len(preds)).uniform_(0.3)
         l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
         l_d.backward()
         optimizer_d.step()
@@ -65,7 +65,7 @@ for epoch in range(args.epochs):
         z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
         img_g = model.get_decoding(z)
         preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
-        gt = Variable(torch.zeros(len(preds)).cuda())
+        gt = Variable(torch.zeros(len(preds)).cuda())+ + torch.Tensor(len(preds)).uniform_(0.3)
         l_g = F.binary_cross_entropy_with_logits(preds, gt)
         l_g.backward()
         optimizer_g.step()
