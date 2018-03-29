@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch.nn.functional as F
 
 class SimpleVAE(nn.Module):
     def __init__(self, args):
@@ -6,9 +7,11 @@ class SimpleVAE(nn.Module):
         self.hidden = args.hidden
         self.encoder = nn.Linear(28*28, 2*self.hidden)
 
-        self.decoder = nn.Linear(2*self.hidden, 28*28)
+        self.decoder = nn.Linear(self.hidden, 28*28)
 
     def get_encoding(self, x):
-        flatx = x.view(x.shape[0], 28*28)
-        out = self.encoder(flatx)
-        return out[:,:self.hidden], out[:,self.hidden:]
+        out = self.encoder(x.view(x.shape[0], 28*28))
+        return out[:,:self.hidden], F.softplus(out[:,self.hidden:])
+
+    def get_decoding(self, z):
+        return self.decoder(z).view(z.shape[0], 28, 28)
