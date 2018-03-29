@@ -32,7 +32,7 @@ class SimpleVAE(nn.Module):
 class SimpleGAN(nn.Module):
     def __init__(self, args):
         super(SimpleGAN, self).__init__()
-        self.hidden = hidden
+        self.hidden = args.hidden
 
         self.decoder = nn.Sequential(
                         nn.Linear(self.hidden, 50),
