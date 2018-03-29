@@ -32,8 +32,6 @@ def get_args():
                         help='learning rate')
     parser.add_argument('-epochs', metavar='-epochs', type=int,
                         help='number of epochs')
-    parser.add_argument('-kl_lam', metavar='-kl_lam', type=float,
-                        help='weight of the kl term')
 
     return parser.parse_args()
 
@@ -53,10 +51,10 @@ for epoch in range(args.epochs):
         z = eps.mul(std).add_(mu)
         img_out = model.get_decoding(z)
 
-        l_reconstruct = F.binary_cross_entropy_with_logits(img_out.view(-1,28*28), Variable(img).cuda().view(-1, 28*28),size_average=False)
-        l_kl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+        l_reconstruct = F.binary_cross_entropy_with_logits(img_out.view(-1,28*28), Variable(img).cuda().view(-1, 28*28),size_average=False) / float(len(mu))
+        l_kl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp()) / float(len(mu))
         
-        (l_reconstruct + args.kl_lam * l_kl).backward()
+        (l_reconstruct + l_kl).backward()
         optimizer.step()
 
         if data_ix%30 == 0:
