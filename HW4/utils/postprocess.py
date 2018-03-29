@@ -23,12 +23,12 @@ def vis_display(vis, vis_windows, x_coord, train_l, MAP, sample_img, val_kl, val
 def gan_display(vis, vis_windows, x_coord, train_l, MAP, sample_img):
     if vis_windows is None:
         vis_windows = {}
-        vis_windows['train_ce'] = vis.line(Y=torch.Tensor([float(train_l)]), X=torch.Tensor([x_coord]), opts=dict(title='Train XENT', ytickmax=200, ytickmin=0))
-        vis_windows['val_ce'] = vis.line(Y=torch.Tensor([float(MAP)]), X=torch.Tensor([x_coord]), opts=dict(title='Train KL', ytickmax=10, ytickmin=0))
+        vis_windows['train_ce'] = vis.line(Y=torch.Tensor([float(train_l)]), X=torch.Tensor([x_coord]), opts=dict(title='Discrim XENT', ytickmax=3, ytickmin=0))
+        vis_windows['val_ce'] = vis.line(Y=torch.Tensor([float(MAP)]), X=torch.Tensor([x_coord]), opts=dict(title='Gen XENT', ytickmax=3, ytickmin=0))
         vis_windows['imgs'] = vis.images(sample_img, nrow=4)
     else:
-        vis.line(Y=torch.Tensor([float(train_l)]), X=torch.Tensor([x_coord]), win=vis_windows['train_ce'], update='append', opts=dict(title='Train XENT', ytickmax=200, ytickmin=0))
-        vis.line(Y=torch.Tensor([float(MAP)]), X=torch.Tensor([x_coord]), win=vis_windows['val_ce'], update='append', opts=dict(title='Train KL', ytickmax=10, ytickmin=0))
+        vis.line(Y=torch.Tensor([float(train_l)]), X=torch.Tensor([x_coord]), win=vis_windows['train_ce'], update='append', opts=dict(title='Discrim XENT', ytickmax=3, ytickmin=0))
+        vis.line(Y=torch.Tensor([float(MAP)]), X=torch.Tensor([x_coord]), win=vis_windows['val_ce'], update='append', opts=dict(title='Gen XENT', ytickmax=3, ytickmin=0))
         vis.images(sample_img, win=vis_windows['imgs'], nrow=4)
     return vis_windows
 
