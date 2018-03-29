@@ -14,7 +14,7 @@ from utils.preprocess import get_data, get_model
 from utils.postprocess import vis_display, get_validation_loss
 
 """
-python VAE.py -model "Simple" -hidden 2 -lr .001 -epochs 20
+python VAE.py -model "Simple" -hidden 2 -lr .001 -epochs 40
 """
 
 # visdom
