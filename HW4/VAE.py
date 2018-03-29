@@ -69,7 +69,7 @@ for epoch in range(args.epochs):
             
             val_reconstruct=None; val_kl=None;
             if data_ix % 150 == 0:
-                val_kl, val_reconstruct = get_validataion_loss(model, val_loader)
+                val_kl, val_reconstruct = get_validation_loss(model, val_loader)
             vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0], F.sigmoid(sample_img).data.cpu().unsqueeze(1), val_kl, val_reconstruct)
 
 # model = torch.load('VAE.p')
