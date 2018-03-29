@@ -9,6 +9,6 @@ class SimpleVAE(nn.Module):
         self.decoder = nn.Linear(2*self.hidden, 28*28)
 
     def get_encoding(self, x):
-        flatx = img.view(x.shape[0], 28*28)
+        flatx = x.view(x.shape[0], 28*28)
         out = self.encoder(flatx)
         return out[:,:self.hidden], out[:,self.hidden:]
