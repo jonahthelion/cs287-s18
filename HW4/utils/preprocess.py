@@ -2,9 +2,9 @@ import torch
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
-from utils.models import SimpleVAE
+from utils.models import SimpleVAE, SimpleGAN
 
-def get_data(args):
+def get_data(args, bern=True):
     print('Loading Data...')
     train_dataset = datasets.MNIST(root='./data/',
                                 train=True, 
@@ -15,9 +15,15 @@ def get_data(args):
                                transform=transforms.ToTensor())
 
     torch.manual_seed(3435)
-    train_img = torch.stack([torch.bernoulli(d[0]) for d in train_dataset])
+    if bern:
+        train_img = torch.stack([torch.bernoulli(d[0]) for d in train_dataset])
+    else:
+        train_img = torch.stack([d[0] for d in train_dataset])
     train_label = torch.LongTensor([d[1] for d in train_dataset])
-    test_img = torch.stack([torch.bernoulli(d[0]) for d in test_dataset])
+    if bern:
+        test_img = torch.stack([torch.bernoulli(d[0]) for d in test_dataset])
+    else:
+        test_img = torch.stack([d[0] for d in test_dataset])
     test_label = torch.LongTensor([d[1] for d in test_dataset])
 
     val_img = train_img[-10000:].clone()
@@ -39,3 +45,5 @@ def get_data(args):
 def get_model(args):
     if args.model == 'Simple':
         return SimpleVAE(args).cuda()
+    elif args.model == 'SimpleGAN':
+        return SimpleGAN(args).cuda()

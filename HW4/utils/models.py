@@ -28,3 +28,8 @@ class SimpleVAE(nn.Module):
 
     def get_decoding(self, z):
         return self.decoder(z).view(z.shape[0], 28, 28)
+
+class SimpleGAN(nn.Module):
+    def __init__(self, args):
+        super(SimpleGAN, self).__init__()
+        self.hidden = hidden
