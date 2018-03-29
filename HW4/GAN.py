@@ -46,7 +46,6 @@ for epoch in range(args.epochs):
         model.train()
         img = (2*(img - .5)).squeeze(1)
         z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
-        img_g = model.get_decoding(z)
 
         # train the discriminator
         optimizer_d.zero_grad()
@@ -55,6 +54,7 @@ for epoch in range(args.epochs):
             gt = Variable(torch.zeros(len(preds)).cuda())
             d_type = 'data'
         else:
+            img_g = model.get_decoding(z).detach()
             preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
             gt = Variable(torch.ones(len(preds)).cuda())
             d_type = 'gen'
@@ -64,6 +64,7 @@ for epoch in range(args.epochs):
 
         # train the generator
         optimizer_g.zero_grad()
+        img_g = model.get_decoding(z)
         preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
         gt = Variable(torch.zeros(len(preds)).cuda())
         l_g = F.binary_cross_entropy_with_logits(preds, gt)
