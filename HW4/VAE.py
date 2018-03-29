@@ -7,6 +7,7 @@ import torch.nn.functional as F
 import visdom
 
 from utils.preprocess import get_data, get_model
+from utils.postprocess import vis_display
 
 """
 python VAE.py -model "Simple" -hidden 20 -lr .0008 -epochs 10
