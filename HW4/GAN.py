@@ -14,7 +14,7 @@ from utils.preprocess import get_data, get_model
 from utils.postprocess import gan_display, get_validation_loss
 
 """
-python GAN.py -model "SimpleGAN" -hidden 2 -lr .001 -epochs 40
+python GAN.py -model "SimpleGAN" -hidden 2 -lr .001 -epochs 200
 """
 
 # visdom
@@ -71,7 +71,7 @@ for epoch in range(args.epochs):
         optimizer_g.step()
         optimizer_d.zero_grad(); optimizer_g.zero_grad();
 
-        if data_ix % 100 == 0:
+        if data_ix % 300 == 0:
             print(data_ix, l_d, l_g)
             model.eval()
 
