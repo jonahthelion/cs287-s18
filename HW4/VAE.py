@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from utils.preprocess import get_data, get_model
 
 """
-python VAE.py -model "Simple" -hidden 100 -lr .0008 -epochs 10
+python VAE.py -model "Simple" -hidden 20 -lr .0008 -epochs 10
 """
 
 def get_args():
@@ -32,6 +32,8 @@ optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-4, 
 for epoch in range(args.epochs):
     for data_ix,datum in enumerate(train_loader):
         model.train()
+        optimizer.zero_grad()
+
         img, label = datum
         mu, sig = model.get_encoding(Variable(img).cuda())
         z = mu + sig * Variable(torch.normal(mean=0.0, std=torch.ones(mu.shape[0],1))).cuda()
@@ -39,4 +41,8 @@ for epoch in range(args.epochs):
 
         l_reconstruct = F.binary_cross_entropy_with_logits(img_out.unsqueeze(1), Variable(img).cuda())
         l_kl = torch.stack([ 1./2*(s.sum()+m.pow(2).sum()-s.shape[0]-s.prod().log()) for m,s in zip(mu, sig)]).mean()
-        print (data_ix, l_reconstruct, l_kl)
+        
+        (l_reconstruct + l_kl).backward()
+
+        if data_ix%30 == 0:
+            print (data_ix, l_reconstruct, l_kl)
