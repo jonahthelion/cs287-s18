@@ -24,7 +24,7 @@ class SimpleVAE(nn.Module):
 
     def get_encoding(self, x):
         out = self.encoder(x.view(x.shape[0], 28*28))
-        return out[:,:self.hidden], F.softplus(out[:,self.hidden:])
+        return out[:,:self.hidden], out[:,self.hidden:]
 
     def get_decoding(self, z):
         return self.decoder(z).view(z.shape[0], 28, 28)

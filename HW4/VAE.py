@@ -14,7 +14,7 @@ from utils.preprocess import get_data, get_model
 from utils.postprocess import vis_display
 
 """
-python VAE.py -model "Simple" -hidden 2 -lr .0005 -epochs 20 -kl_lam 0.05
+python VAE.py -model "Simple" -hidden 2 -lr .001 -epochs 20 -kl_lam 0.05
 """
 
 # visdom
@@ -40,7 +40,7 @@ def get_args():
 args = get_args()
 train_loader, val_loader, test_loader = get_data(args)
 model = get_model(args)
-optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-4, betas=(.9, .999))
+optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
 for epoch in range(args.epochs):
     for data_ix,datum in enumerate(train_loader):
@@ -48,7 +48,8 @@ for epoch in range(args.epochs):
         optimizer.zero_grad()
 
         img, label = datum
-        mu, sig = model.get_encoding(Variable(img).cuda())
+        mu, logvar = model.get_encoding(Variable(img).cuda())
+        assert False
         z = mu + sig.sqrt() * Variable(torch.normal(mean=0.0, std=torch.ones(mu.shape[0],1))).cuda()
         img_out = model.get_decoding(z)
 
