@@ -94,19 +94,29 @@ train_loader, val_loader, test_loader = get_data(args)
 model = torch.load('VAE.p')
 model.eval()
 for data in test_loader:
-    img, label = data
-    mu, sig = model.get_encoding(Variable(img).cuda())
-    fig = plt.figure()
-    gs = mpl.gridspec.GridSpec(1, 12)
-    ax = plt.subplot(gs[0,0])
-    plt.imshow(F.sigmoid(model.get_decoding(mu[0].unsqueeze(0))[0]).data.cpu().numpy(), cmap='Greys')
-    ax = plt.subplot(gs[0,-1])
-    plt.imshow(F.sigmoid(model.get_decoding(mu[1].unsqueeze(0))[0]).data.cpu().numpy(), cmap='Greys')
-    diff = mu[1]-mu[0]
-    for push_ix,push in np.linspace(0,1,10):
-        ax = plt.subplot(gs[0,push_ix+1])
-        plt.imshow(F.sigmoid(model.get_decoding((mu[0] + diff*push).unsqueeze(0))[0]).data.cpu().numpy(), cmap='Greys')
-    plt.tight_layout()
-    plt.savefig('interp_vae.pdf')
-    plt.close(fig)
-    break
+    for ixstart in range(10):
+        img, label = data
+        mu, sig = model.get_encoding(Variable(img).cuda())
+        fig = plt.figure(figsize=(10,2))
+        gs = mpl.gridspec.GridSpec(1, 12)
+        ax = plt.subplot(gs[0,0])
+        plt.imshow(img[ixstart][0].numpy(), cmap='Greys')
+        frame1 = plt.gca()
+        frame1.axes.xaxis.set_ticklabels([])
+        frame1.axes.yaxis.set_ticklabels([])
+        ax = plt.subplot(gs[0,-1])
+        plt.imshow(img[ixstart+1][0].numpy(), cmap='Greys')
+        frame1 = plt.gca()
+        frame1.axes.xaxis.set_ticklabels([])
+        frame1.axes.yaxis.set_ticklabels([])
+        diff = mu[ixstart+1]-mu[ixstart]
+        for push_ix,push in enumerate(np.linspace(0,1,10)):
+            ax = plt.subplot(gs[0,push_ix+1])
+            plt.imshow(F.sigmoid(model.get_decoding((mu[ixstart] + diff*push).unsqueeze(0))[0]).data.cpu().numpy(), cmap='Greys')
+            frame1 = plt.gca()
+            frame1.axes.xaxis.set_ticklabels([])
+            frame1.axes.yaxis.set_ticklabels([])
+        plt.tight_layout()
+        plt.savefig('interp_vae' + str(ixstart) + '.pdf')
+        plt.close(fig)
+        break
