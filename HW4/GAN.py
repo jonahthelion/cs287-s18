@@ -49,16 +49,14 @@ for epoch in range(args.epochs):
 
         # train the discriminator
         optimizer_d.zero_grad()
-        if np.random.choice([0,1]):
-            preds = model.get_discrim(Variable(img.view(-1,28*28)).cuda()).view(-1)
-            gt = Variable(torch.zeros(len(preds)).cuda())
-            d_type = 'data'
-        else:
-            img_g = model.get_decoding(z).detach()
-            preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
-            gt = Variable(torch.ones(len(preds)).cuda())
-            d_type = 'gen'
-        l_d = F.binary_cross_entropy_with_logits(preds, gt)
+        l_d = 0
+        preds = model.get_discrim(Variable(img.view(-1,28*28)).cuda()).view(-1)
+        gt = Variable(torch.zeros(len(preds)).cuda())
+        l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
+        img_g = model.get_decoding(z).detach()
+        preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
+        gt = Variable(torch.ones(len(preds)).cuda())
+        l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
         l_d.backward()
         optimizer_d.step()
 
@@ -72,7 +70,7 @@ for epoch in range(args.epochs):
         optimizer_g.step()
 
         if data_ix % 100 == 0:
-            print(data_ix, l_d, l_g, d_type)
+            print(data_ix, l_d, l_g)
             model.eval()
 
             # get sample images
