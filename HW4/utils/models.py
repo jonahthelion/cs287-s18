@@ -36,18 +36,18 @@ class SimpleGAN(nn.Module):
 
         self.decoder = nn.Sequential(
                         nn.Linear(self.hidden, 50),
-                        nn.ReLU(),
+                        nn.LeakyReLU(),
                         nn.Linear(50, 50),
-                        nn.ReLU(),
+                        nn.LeakyReLU(),
                         nn.Linear(50, 28*28),
                         nn.Tanh(),
                     )
 
         self.discrim = nn.Sequential(
                         nn.Linear(28*28, 50),
-                        nn.ReLU(),
+                        nn.LeakyReLU(),
                         nn.Linear(50, 50),
-                        nn.ReLU(),
+                        nn.LeakyReLU(),
                         nn.Linear(50, 1),
                     )
 

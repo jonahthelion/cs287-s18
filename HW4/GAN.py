@@ -46,4 +46,33 @@ for epoch in range(args.epochs):
         model.train()
         img = 2*(img - .5)
         z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
-        assert False
+        img_g = model.get_decoding(z)
+
+        # train the discriminator
+        optimizer_d.zero_grad()
+        if np.random.choice([0,1]):
+            preds = model.get_discrim(img)
+            gt = Variable(torch.zeros(len(preds)).cuda())
+            d_type = 'data'
+        else:
+            preds = model.get_discrim(img_g)
+            gt = Variable(torch.ones(len(preds)).cuda())
+            d_type = 'gen'
+        l_d = F.binary_cross_entropy_with_logits(preds, gt)
+        l_d.backward()
+        optimizer_d.step()
+
+        # train the generator
+        optimizer_g.zero_grad()
+        preds = model.get_discrim(img_g)
+        gt = Variable(torch.zeros(len(preds)).cuda())
+        l_g = F.binary_cross_entropy_with_logits(preds, gt)
+        l_g.backward()
+        optimizer_g.step()
+
+        if data_ix % 30 == 0:
+            print(batch_ix, l_d, l_g, d_type)
+
+
+
+
