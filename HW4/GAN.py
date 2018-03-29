@@ -45,5 +45,5 @@ for epoch in range(args.epochs):
     for data_ix,(img,label) in enumerate(train_loader):
         model.train()
         img = 2*(img - .5)
-
+        z = Variable(torch.zeros(len(img), args.hidden).normal_().gpu())
         assert False
