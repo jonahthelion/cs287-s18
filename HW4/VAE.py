@@ -5,6 +5,7 @@ import argparse
 from torch.autograd import Variable
 import torch.nn.functional as F
 import visdom
+import numpy as np
 
 from utils.preprocess import get_data, get_model
 from utils.postprocess import vis_display
