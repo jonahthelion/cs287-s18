@@ -36,5 +36,5 @@ for datum in train_loader:
 
     l_reconstruct = F.binary_cross_entropy_with_logits(img_out, Variable(img).cuda())
     l_kl = torch.stack([ 1./2*(s.sum()+m.pow(2).sum()-s.shape[0]-s.prod().log()) for m,s in zip(mu, sig)]).mean()
-    print l_reconstruct, l_kl
+    print (l_reconstruct, l_kl)
     break
