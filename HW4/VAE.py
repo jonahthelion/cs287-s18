@@ -10,7 +10,7 @@ from utils.preprocess import get_data, get_model
 from utils.postprocess import vis_display
 
 """
-python VAE.py -model "Simple" -hidden 20 -lr .0008 -epochs 10
+python VAE.py -model "Simple" -hidden 20 -lr .0008 -epochs 10 -kl_lam 0.1
 """
 
 # visdom
@@ -56,7 +56,8 @@ for epoch in range(args.epochs):
 
         if data_ix%30 == 0:
             print (data_ix, l_reconstruct, l_kl)
-            vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0])
-
+            sample_z = Variable(torch.normal(mean=0.0, std=torch.ones(4,args.hidden))).cuda()
+            sample_img = model.get_decoding(sample_z)
+            vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0], sample_img.data.cpu())
 
 
