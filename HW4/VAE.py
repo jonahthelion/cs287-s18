@@ -27,6 +27,6 @@ for datum in train_loader:
     model.train()
     img, label = datum
     mu, sig = model.get_encoding(Variable(img).cuda())
-    z = mu + sig * Variable(torch.normal(mean=0.0, std=torch.ones(mu.shape[0],1),1)).cuda()
+    z = mu + sig * Variable(torch.normal(mean=0.0, std=torch.ones(mu.shape[0],1))).cuda()
     img_out = model.get_decoding(z)
     break
