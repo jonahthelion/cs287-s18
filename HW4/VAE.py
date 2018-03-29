@@ -11,7 +11,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 from utils.preprocess import get_data, get_model
-from utils.postprocess import vis_display
+from utils.postprocess import vis_display, get_validataion_loss
 
 """
 python VAE.py -model "Simple" -hidden 2 -lr .001 -epochs 20 -kl_lam 0.05
@@ -43,18 +43,18 @@ model = get_model(args)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
 for epoch in range(args.epochs):
-    for data_ix,datum in enumerate(train_loader):
+    for data_ix,(img,label) in enumerate(train_loader):
         model.train()
         optimizer.zero_grad()
 
-        img, label = datum
         mu, logvar = model.get_encoding(Variable(img).cuda())
-        assert False
-        z = mu + sig.sqrt() * Variable(torch.normal(mean=0.0, std=torch.ones(mu.shape[0],1))).cuda()
+        std = logvar.mul(0.5).exp_()
+        eps = Variable(std.data.new(std.size()).normal_())
+        z = eps.mul(std).add_(mu)
         img_out = model.get_decoding(z)
 
-        l_reconstruct = F.binary_cross_entropy_with_logits(img_out.unsqueeze(1), Variable(img).cuda())
-        l_kl = torch.stack([ 1./2*(s.sum()+m.pow(2).sum()-z.shape[1]-s.log().sum()) for m,s in zip(mu, sig)]).mean()
+        l_reconstruct = F.binary_cross_entropy(img_out.view(-1,28*28), Variable(img).cuda().view(-1, 28*28), size_average=False)
+        l_kl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
         
         (l_reconstruct + args.kl_lam * l_kl).backward()
         optimizer.step()
@@ -69,18 +69,7 @@ for epoch in range(args.epochs):
             
             val_reconstruct=None; val_kl=None;
             if data_ix % 150 == 0:
-                # get validation loss
-                val_reconstruct = []; val_kl = [];
-                for datum in val_loader:
-                    img, label = datum
-                    mu, sig = model.get_encoding(Variable(img).cuda())
-                    z = mu + sig.sqrt() * Variable(torch.normal(mean=0.0, std=torch.ones(mu.shape[0],1))).cuda()
-                    img_out = model.get_decoding(z)
-
-                    l_reconstruct = F.binary_cross_entropy_with_logits(img_out.unsqueeze(1), Variable(img).cuda())
-                    l_kl = torch.stack([ 1./2*(s.sum()+m.pow(2).sum()-z.shape[1]-s.prod().log()) for m,s in zip(mu, sig)]).mean()
-                    val_reconstruct.append(l_reconstruct.data.cpu()[0]); val_kl.append(l_kl.data.cpu()[0]); 
-                val_kl = np.mean(val_kl); val_reconstruct = np.mean(val_reconstruct);
+                val_kl, val_reconstruct = get_validataion_loss(model, val_loader)
             vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0], F.sigmoid(sample_img).data.cpu().unsqueeze(1), val_kl, val_reconstruct)
 
 # model = torch.load('VAE.p')
