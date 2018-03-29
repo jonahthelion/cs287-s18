@@ -62,6 +62,7 @@ for epoch in range(args.epochs):
 
         # train the generator
         optimizer_g.zero_grad()
+        z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
         img_g = model.get_decoding(z)
         preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
         gt = Variable(torch.zeros(len(preds)).cuda())
