@@ -44,18 +44,18 @@ optimizer_d = torch.optim.Adam(model.discrim.parameters(), lr=args.lr)
 for epoch in range(args.epochs):
     for data_ix,(img,label) in enumerate(train_loader):
         model.train()
-        img = 2*(img - .5)
+        img = (2*(img - .5)).squeeze(1)
         z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
         img_g = model.get_decoding(z)
 
         # train the discriminator
         optimizer_d.zero_grad()
         if np.random.choice([0,1]):
-            preds = model.get_discrim(img)
+            preds = model.get_discrim(Variable(img.view(-1,28*28)).cuda()).view(-1)
             gt = Variable(torch.zeros(len(preds)).cuda())
             d_type = 'data'
         else:
-            preds = model.get_discrim(img_g)
+            preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
             gt = Variable(torch.ones(len(preds)).cuda())
             d_type = 'gen'
         l_d = F.binary_cross_entropy_with_logits(preds, gt)
@@ -64,7 +64,7 @@ for epoch in range(args.epochs):
 
         # train the generator
         optimizer_g.zero_grad()
-        preds = model.get_discrim(img_g)
+        preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
         gt = Variable(torch.zeros(len(preds)).cuda())
         l_g = F.binary_cross_entropy_with_logits(preds, gt)
         l_g.backward()
