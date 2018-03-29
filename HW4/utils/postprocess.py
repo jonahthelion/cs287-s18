@@ -1,4 +1,7 @@
 import torch
+from torch.autograd import Variable
+import torch.nn.functional as F
+import numpy as np
 
 def vis_display(vis, vis_windows, x_coord, train_l, MAP, sample_img, val_kl, val_recon):
     if vis_windows is None:
