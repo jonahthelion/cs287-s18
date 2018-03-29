@@ -37,39 +37,40 @@ def get_args():
 
 args = get_args()
 train_loader, val_loader, test_loader = get_data(args)
-model = get_model(args)
-optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+# model = get_model(args)
+# optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
-for epoch in range(args.epochs):
-    for data_ix,(img,label) in enumerate(train_loader):
-        model.train()
-        optimizer.zero_grad()
+# for epoch in range(args.epochs):
+#     for data_ix,(img,label) in enumerate(train_loader):
+#         model.train()
+#         optimizer.zero_grad()
 
-        mu, logvar = model.get_encoding(Variable(img).cuda())
-        std = logvar.mul(0.5).exp_()
-        eps = Variable(std.data.new(std.size()).normal_())
-        z = eps.mul(std).add_(mu)
-        img_out = model.get_decoding(z)
+#         mu, logvar = model.get_encoding(Variable(img).cuda())
+#         std = logvar.mul(0.5).exp_()
+#         eps = Variable(std.data.new(std.size()).normal_())
+#         z = eps.mul(std).add_(mu)
+#         img_out = model.get_decoding(z)
 
-        l_reconstruct = F.binary_cross_entropy_with_logits(img_out.view(-1,28*28), Variable(img).cuda().view(-1, 28*28), size_average=False) / float(len(mu))
-        l_kl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp()) / float(len(mu))
+#         l_reconstruct = F.binary_cross_entropy_with_logits(img_out.view(-1,28*28), Variable(img).cuda().view(-1, 28*28), size_average=False) / float(len(mu))
+#         l_kl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp()) / float(len(mu))
         
-        (l_reconstruct + l_kl).backward()
-        optimizer.step()
+#         (l_reconstruct + l_kl).backward()
+#         optimizer.step()
 
-        if data_ix%30 == 0:
-            print (data_ix, l_reconstruct, l_kl)
-            model.eval()
+#         if data_ix%30 == 0:
+#             print (data_ix, l_reconstruct, l_kl)
+#             model.eval()
 
-            # get sample images
-            sample_z = Variable(torch.normal(mean=0.0, std=torch.ones(16,args.hidden))).cuda()
-            sample_img = model.get_decoding(sample_z)
+#             # get sample images
+#             sample_z = Variable(torch.normal(mean=0.0, std=torch.ones(16,args.hidden))).cuda()
+#             sample_img = model.get_decoding(sample_z)
             
-            val_reconstruct=None; val_kl=None;
-            if data_ix % 150 == 0:
-                val_kl, val_reconstruct = get_validation_loss(model, val_loader)
-            vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0], F.sigmoid(sample_img).data.cpu().unsqueeze(1), val_kl, val_reconstruct)
+#             val_reconstruct=None; val_kl=None;
+#             if data_ix % 150 == 0:
+#                 val_kl, val_reconstruct = get_validation_loss(model, val_loader)
+#             vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0], F.sigmoid(sample_img).data.cpu().unsqueeze(1), val_kl, val_reconstruct)
 
+#### Scatter Plot
 # model = torch.load('VAE.p')
 # model.eval()
 # all_mu = []; all_labels = [];
@@ -89,5 +90,23 @@ for epoch in range(args.epochs):
 # plt.tight_layout()
 # plt.savefig('vae_mus2.pdf')
 
-
-
+#### Interpolation
+model = torch.load('VAE.p')
+model.eval()
+for data in test_loader:
+    img, label = data
+    mu, sig = model.get_encoding(Variable(img).cuda())
+    fig = plt.figure()
+    gs = mpl.gridspec.GridSpec(1, 12)
+    ax = plt.subplot(gs[0,0])
+    plt.imshow(model.get_decoding(mu[0].unsqueeze(0))[0], cmap='Greys')
+    ax = plt.subplot(gs[0,-1])
+    plt.imshow(model.get_decoding(mu[1].unsqueeze(0))[0], cmap='Greys')
+    diff = mu[1]-mu[0]
+    for push_ix,push in np.linspace(0,1,10):
+        ax = plt.subplot(gs[0,push_ix+1])
+        plt.imshow(model.get_decoding((mu[0] + diff*push).unsqueeze(0))[0], cmap='Greys')
+    plt.tight_layout()
+    plt.savefig('interp_vae.pdf')
+    plt.close(fig)
+    break
