@@ -11,5 +11,3 @@ def vis_display(vis, vis_windows, x_coord, train_l, MAP, sample_img):
         vis.line(Y=torch.Tensor([float(MAP)]), X=torch.Tensor([x_coord]), win=vis_windows['val_ce'], update='append', opts=dict(title='Train KL', ytickmax=0.5, ytickmin=0))
         vis.images(sample_img, win=vis_windows['imgs'])
     return vis_windows
-
-def example
