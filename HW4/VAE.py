@@ -4,6 +4,7 @@ import torchvision.transforms as transforms
 import argparse
 from torch.autograd import Variable
 import torch.nn.functional as F
+import visdom
 
 from utils.preprocess import get_data, get_model
 
