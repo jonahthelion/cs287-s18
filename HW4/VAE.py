@@ -58,6 +58,6 @@ for epoch in range(args.epochs):
             print (data_ix, l_reconstruct, l_kl)
             sample_z = Variable(torch.normal(mean=0.0, std=torch.ones(4,args.hidden))).cuda()
             sample_img = model.get_decoding(sample_z)
-            vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0], sample_img.data.cpu().unsqueeze(1))
+            vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0], F.sigmoid(sample_img).data.cpu().unsqueeze(1))
 
 
