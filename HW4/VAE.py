@@ -11,6 +11,11 @@ from utils.preprocess import get_data, get_model
 python VAE.py -model "Simple" -hidden 20 -lr .0008 -epochs 10
 """
 
+# visdom
+vis_windows = None
+vis = visdom.Visdom()
+vis.env = 'train'
+
 def get_args():
     parser = argparse.ArgumentParser(description='Train/evaluate a VAE.')
     parser.add_argument('-model', metavar='-model', type=str,
@@ -47,3 +52,7 @@ for epoch in range(args.epochs):
 
         if data_ix%30 == 0:
             print (data_ix, l_reconstruct, l_kl)
+            vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0])
+
+
+
