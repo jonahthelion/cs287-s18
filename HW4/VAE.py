@@ -13,7 +13,7 @@ def get_args():
     parser = argparse.ArgumentParser(description='Train/evaluate a VAE.')
     parser.add_argument('-model', metavar='-model', type=str,
                         help='type of model')
-    parser.add_argument('-hidden', dest='-hidden', type=int,
+    parser.add_argument('-hidden', metavar='-hidden', type=int,
                         help='the size of z')
 
     return parser.parse_args()
