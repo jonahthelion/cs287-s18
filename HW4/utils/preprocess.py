@@ -31,7 +31,7 @@ def get_data(args):
     test = torch.utils.data.TensorDataset(test_img, test_label)
     BATCH_SIZE = 100
     train_loader = torch.utils.data.DataLoader(train, batch_size=BATCH_SIZE, shuffle=True)
-    val_loader = torch.utils.data.DataLoader(val, batch_size=BATCH_SIZE, shuffle=True)
+    val_loader = torch.utils.data.DataLoader(val, batch_size=BATCH_SIZE, shuffle=True, drop_loast=True)
     test_loader = torch.utils.data.DataLoader(test, batch_size=BATCH_SIZE, shuffle=True)
 
     return train_loader, val_loader, test_loader

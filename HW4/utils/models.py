@@ -6,16 +6,20 @@ class SimpleVAE(nn.Module):
         super(SimpleVAE, self).__init__()
         self.hidden = args.hidden
         self.encoder = nn.Sequential(
-                        nn.Linear(28*28, 14*14),
+                        nn.Linear(28*28, 50),
                         nn.ReLU(),
-                        nn.Linear(14*14, 2*self.hidden),
+                        nn.Linear(50, 50),
+                        nn.ReLU(),
+                        nn.Linear(50, self.hidden),
                     )
 
 
         self.decoder = nn.Sequential(
-                        nn.Linear(self.hidden, 14*14),
+                        nn.Linear(self.hidden, 50),
                         nn.ReLU(),
-                        nn.Linear(14*14, 28*28),
+                        nn.Linear(50, 508),
+                        nn.ReLU(),
+                        nn.Linear(50, 28*28),
                     )
 
     def get_encoding(self, x):

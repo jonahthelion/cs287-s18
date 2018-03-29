@@ -56,8 +56,24 @@ for epoch in range(args.epochs):
 
         if data_ix%30 == 0:
             print (data_ix, l_reconstruct, l_kl)
+            model.eval()
+
+            # get sample images
             sample_z = Variable(torch.normal(mean=0.0, std=torch.ones(4,args.hidden))).cuda()
             sample_img = model.get_decoding(sample_z)
-            vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0], F.sigmoid(sample_img).data.cpu().unsqueeze(1))
+            
+            # get validation loss
+            val_reconstruct = []; val_kl = [];
+            for datum in val_loader:
+                img, label = datum
+                mu, sig = model.get_encoding(Variable(img).cuda())
+                z = mu + sig * Variable(torch.normal(mean=0.0, std=torch.ones(mu.shape[0],1))).cuda()
+                img_out = model.get_decoding(z)
+
+                l_reconstruct = F.binary_cross_entropy_with_logits(img_out.unsqueeze(1), Variable(img).cuda())
+                l_kl = torch.stack([ 1./2*(s.sum()+m.pow(2).sum()-s.shape[0]-s.prod().log()) for m,s in zip(mu, sig)]).mean()
+                val_reconstruct.append(l_reconstruct.data.cpu()[0]); val_kl.append(l_kl.data.cpu()[0]); 
+
+            vis_windows = vis_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_reconstruct.data.cpu()[0], l_kl.data.cpu()[0], F.sigmoid(sample_img).data.cpu().unsqueeze(1), np.mean(val_kl), np.mean(val_reconstruct))
 
 
