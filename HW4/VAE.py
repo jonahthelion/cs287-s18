@@ -11,7 +11,7 @@ from utils.preprocess import get_data, get_model
 from utils.postprocess import vis_display
 
 """
-python VAE.py -model "Simple" -hidden 20 -lr .0001 -epochs 10 -kl_lam 1.0
+python VAE.py -model "Simple" -hidden 2 -lr .0001 -epochs 10 -kl_lam 1.0
 """
 
 # visdom
@@ -50,7 +50,7 @@ for epoch in range(args.epochs):
         img_out = model.get_decoding(z)
 
         l_reconstruct = F.binary_cross_entropy_with_logits(img_out.unsqueeze(1), Variable(img).cuda())
-        l_kl = torch.stack([ 1./2*(s.sum()+m.pow(2).sum()-s.shape[0]-s.prod().log()) for m,s in zip(mu, sig)]).mean()
+        l_kl = torch.stack([ 1./2*(s.sum()+m.pow(2).sum()-z.shape[1]-s.log().sum()) for m,s in zip(mu, sig)]).mean()
         
         (l_reconstruct + args.kl_lam * l_kl).backward()
         optimizer.step()
