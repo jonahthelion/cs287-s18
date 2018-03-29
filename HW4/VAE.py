@@ -2,6 +2,7 @@ import torch
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 import argparse
+from torch.autograd import Variable
 
 from utils.preprocess import get_data, get_model
 
