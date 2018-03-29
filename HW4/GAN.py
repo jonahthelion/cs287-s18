@@ -72,7 +72,7 @@ for epoch in range(args.epochs):
         optimizer_g.step()
 
         if data_ix % 30 == 0:
-            print(batch_ix, l_d, l_g, d_type)
+            print(data_ix, l_d, l_g, d_type)
 
 
 
