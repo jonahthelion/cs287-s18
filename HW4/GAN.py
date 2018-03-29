@@ -38,4 +38,11 @@ def get_args():
 args = get_args()
 train_loader, val_loader, test_loader = get_data(args)
 model = get_model(args)
-optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+optimizer_g = torch.optim.Adam(model.decoder.parameters(), lr=args.lr)
+optimizer_d = torch.optim.Adam(model.discrim.parameters(), lr=args.lr)
+
+for epoch in range(args.epochs):
+    for data_ix,(img,label) in enumerate(train_loader):
+        model.train()
+        optimizer.zero_grad()
+        assert False

@@ -33,3 +33,26 @@ class SimpleGAN(nn.Module):
     def __init__(self, args):
         super(SimpleGAN, self).__init__()
         self.hidden = hidden
+
+        self.decoder = nn.Sequential(
+                        nn.Linear(self.hidden, 50),
+                        nn.ReLU(),
+                        nn.Linear(50, 50),
+                        nn.ReLU(),
+                        nn.Linear(50, 28*28),
+                        nn.Tanh(),
+                    )
+
+        self.discrim = nn.Sequential(
+                        nn.Linear(28*28, 50),
+                        nn.ReLU(),
+                        nn.Linear(50, 50),
+                        nn.ReLU(),
+                        nn.Linear(50, 1),
+                    )
+
+    def get_decoding(self, z):
+        return self.decoder(z).view(z.shape[0], 28, 28)
+
+    def get_discrim(self, x):
+        return self.discrim(x)
