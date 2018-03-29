@@ -37,4 +37,4 @@ def get_data(args):
 
 def get_model(args):
     if args.model == 'Simple':
-        return SimpleVAE(args)
+        return SimpleVAE(args).cuda()

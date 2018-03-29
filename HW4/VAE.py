@@ -25,5 +25,5 @@ model = get_model(args)
 for datum in train_loader:
     model.train()
     img, label = datum
-    mu, sig = model.get_encoding(img)
+    mu, sig = model.get_encoding(Variable(img).cuda())
     break
