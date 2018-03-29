@@ -14,7 +14,7 @@ from utils.preprocess import get_data, get_model
 from utils.postprocess import vis_display, get_validation_loss
 
 """
-python VAE.py -model "Simple" -hidden 2 -lr .001 -epochs 20 -kl_lam 0.05
+python VAE.py -model "Simple" -hidden 2 -lr .001 -epochs 20
 """
 
 # visdom
@@ -51,7 +51,7 @@ for epoch in range(args.epochs):
         z = eps.mul(std).add_(mu)
         img_out = model.get_decoding(z)
 
-        l_reconstruct = F.binary_cross_entropy_with_logits(img_out.view(-1,28*28), Variable(img).cuda().view(-1, 28*28),size_average=False) / float(len(mu))
+        l_reconstruct = F.binary_cross_entropy_with_logits(img_out.view(-1,28*28), Variable(img).cuda().view(-1, 28*28), size_average=False) / float(len(mu))
         l_kl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp()) / float(len(mu))
         
         (l_reconstruct + l_kl).backward()
