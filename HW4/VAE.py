@@ -84,18 +84,13 @@ train_loader, val_loader, test_loader = get_data(args)
 
 model = torch.load('VAE.p')
 model.eval()
+all_mu = []; all_labels = [];
 for data in test_loader:
     img, label = data
     mu, sig = model.get_encoding(Variable(img).cuda())
+    all_mu.append(mu.data.cpu())
+    all_labels.append(label)
+all_mu = torch.cat(all_mu, 0); all_labels = torch.cat(all_labels, 0)
 
-    diff = mu[1] - mu[0]
-    for push_ix,push in enumerate(np.linspace(0, 1, 10)):
-        img_out = F.sigmoid(model.get_decoding(mu[0].unsqueeze(0))).data.cpu().numpy()
-        fig = plt.figure()
-        plt.imshow(img_out[0], cmap='Greys')
-        plt.tight_layout()
-        plt.savefig(str(push_ix) + '.pdf')
-        plt.close(fig)
-    break
 
 
