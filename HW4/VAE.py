@@ -11,7 +11,7 @@ from utils.preprocess import get_data, get_model
 from utils.postprocess import vis_display
 
 """
-python VAE.py -model "Simple" -hidden 20 -lr .0008 -epochs 10 -kl_lam 0.1
+python VAE.py -model "Simple" -hidden 20 -lr .0001 -epochs 10 -kl_lam 1.0
 """
 
 # visdom
