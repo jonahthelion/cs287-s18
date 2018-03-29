@@ -99,13 +99,13 @@ for data in test_loader:
     fig = plt.figure()
     gs = mpl.gridspec.GridSpec(1, 12)
     ax = plt.subplot(gs[0,0])
-    plt.imshow(model.get_decoding(mu[0].unsqueeze(0))[0], cmap='Greys')
+    plt.imshow(F.sigmoid(model.get_decoding(mu[0].unsqueeze(0))[0]).data.cpu().numpy(), cmap='Greys')
     ax = plt.subplot(gs[0,-1])
-    plt.imshow(model.get_decoding(mu[1].unsqueeze(0))[0], cmap='Greys')
+    plt.imshow(F.sigmoid(model.get_decoding(mu[1].unsqueeze(0))[0]).data.cpu().numpy(), cmap='Greys')
     diff = mu[1]-mu[0]
     for push_ix,push in np.linspace(0,1,10):
         ax = plt.subplot(gs[0,push_ix+1])
-        plt.imshow(model.get_decoding((mu[0] + diff*push).unsqueeze(0))[0], cmap='Greys')
+        plt.imshow(F.sigmoid(model.get_decoding((mu[0] + diff*push).unsqueeze(0))[0]).data.cpu().numpy(), cmap='Greys')
     plt.tight_layout()
     plt.savefig('interp_vae.pdf')
     plt.close(fig)
