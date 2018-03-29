@@ -43,6 +43,7 @@ for epoch in range(args.epochs):
         l_kl = torch.stack([ 1./2*(s.sum()+m.pow(2).sum()-s.shape[0]-s.prod().log()) for m,s in zip(mu, sig)]).mean()
         
         (l_reconstruct + l_kl).backward()
+        optimizer.step()
 
         if data_ix%30 == 0:
             print (data_ix, l_reconstruct, l_kl)
