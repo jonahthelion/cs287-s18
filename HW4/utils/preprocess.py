@@ -5,6 +5,7 @@ import torchvision.transforms as transforms
 from utils.models import SimpleVAE
 
 def get_data(args):
+    print('Loading Data...')
     train_dataset = datasets.MNIST(root='./data/',
                                 train=True, 
                                 transform=transforms.ToTensor(),
