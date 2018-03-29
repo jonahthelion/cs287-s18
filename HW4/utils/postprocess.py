@@ -26,7 +26,7 @@ def get_validation_loss(model, val_loader):
         mu, logvar = model.get_encoding(Variable(img).cuda())
         img_out = model.get_decoding(mu)
 
-        l_reconstruct = F.binary_cross_entropy(img_out.view(-1,28*28), Variable(img).cuda().view(-1, 28*28), size_average=False)
+        l_reconstruct = F.binary_cross_entropy_with_logits(img_out.view(-1,28*28), Variable(img).cuda().view(-1, 28*28),size_average=False)
         l_kl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
 
         val_reconstruct.append(l_reconstruct.data.cpu()[0])
