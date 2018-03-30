@@ -71,30 +71,30 @@ class CNNGAN(nn.Module):
                         nn.Tanh(),
                     )
 
-        # self.discrim = nn.Sequential(
-        #                 nn.Conv2d(1, 16, 4, 2, 1),
-        #                 nn.LeakyReLU(),
-        #                 nn.BatchNorm2d(16),
-        #                 nn.Conv2d(16, 32, 4, 2, 1),
-        #                 nn.LeakyReLU(),
-        #                 nn.BatchNorm2d(32),
-        #                 nn.Conv2d(32, 32, 4, 2, 1),
-        #                 nn.LeakyReLU(),
-        #                 nn.BatchNorm2d(32),
-        #                 nn.Conv2d(32, 1, 4, 2, 1),
-        #             )
         self.discrim = nn.Sequential(
-                        nn.Linear(28*28, 50),
+                        nn.Conv2d(1, 16, 4, 2, 1),
                         nn.LeakyReLU(),
-                        nn.Linear(50, 50),
+                        nn.BatchNorm2d(16),
+                        nn.Conv2d(16, 32, 4, 2, 1),
                         nn.LeakyReLU(),
-                        nn.Linear(50, 1),
+                        nn.BatchNorm2d(32),
+                        nn.Conv2d(32, 32, 4, 2, 1),
+                        nn.LeakyReLU(),
+                        nn.BatchNorm2d(32),
+                        nn.Conv2d(32, 1, 4, 2, 1),
                     )
+        # self.discrim = nn.Sequential(
+        #                 nn.Linear(28*28, 50),
+        #                 nn.LeakyReLU(),
+        #                 nn.Linear(50, 50),
+        #                 nn.LeakyReLU(),
+        #                 nn.Linear(50, 1),
+        #             )
     def get_decoding(self, z):
         return self.decoder(z).view(z.shape[0], 28, 28)
 
     def get_discrim(self, x):
-        return self.discrim(x) # self.discrim(x.view(-1, 1,28,28))
+        return self.discrim(x.view(-1, 1,28,28))
 
 
 
