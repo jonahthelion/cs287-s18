@@ -65,9 +65,12 @@ class CNNGAN(nn.Module):
         self.decoder = nn.Sequential(
                         nn.ConvTranspose2d(args.hidden, 128, 4, 1, 0),
                         nn.LeakyReLU(),
-                        nn.ConvTranspose2d(128, 128, 2, 1, 0),
+                        nn.ConvTranspose2d(128, 128, 4, 2, 0),
                         nn.LeakyReLU(),
-                        nn.ConvTranspose2d(128, 128, 2, 1, 0),
+                        nn.ConvTranspose2d(128, 128, 4, 2, 0),
+                        nn.LeakyReLU(),
+                        nn.ConvTranspose2d(128, 128, 4, 2, 0),
+                        nn.LeakyReLU(),
                         nn.Tanh(),
                     )
 
