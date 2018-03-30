@@ -65,7 +65,7 @@ class CNNGAN(nn.Module):
         self.decoder = nn.Sequential(
                         nn.Conv2d(int(self.hidden/9), 8, 3, 1, 1),
                         nn.LeakyReLU(),
-                        nn.ConvTranspose2d(8, 8, 2, 2, 1),
+                        nn.ConvTranspose2d(8, 8, 2, 2, output_padding=1),
                         nn.Conv2d(8, 8, 3, 1, 1),
                         nn.LeakyReLU(),
                         nn.ConvTranspose2d(8, 8, 2, 2, 0),
