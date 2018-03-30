@@ -56,3 +56,39 @@ class SimpleGAN(nn.Module):
 
     def get_discrim(self, x):
         return self.discrim(x)
+
+class CNNGAN(nn.Module):
+    def __init__(self, args):
+        super(CNNGAN, self).__init__()
+        self.hidden = args.hidden
+
+        self.decoder = nn.Sequential(
+                        nn.ConvTranspose2d(args.hidden, 128, 4, 1, 0),
+                        nn.LeakyReLU(),
+                        nn.ConvTranspose2d(128, 128, 2, 1, 0),
+                        nn.LeakyReLU(),
+                        nn.ConvTranspose2d(128, 128, 2, 1, 0),
+                        nn.Tanh(),
+                    )
+
+        self.discrim = nn.Sequential(
+                        nn.Conv2d(1, 8, 2),
+                        nn.LeakyReLU(),
+                        nn.Conv2d(1, 8, 2),
+                        nn.LeakyReLU(),
+                        nn.Conv2d(1, 8, 2),
+                        nn.LeakyReLU(),
+                        nn.Conv2d(1, 8, 2),
+                    )
+    def get_decoding(self, z):
+        z = z.unsqueeze(-1).unsqueeze(-1)
+        return self.decoder(z)
+
+    def get_discrim(self, x):
+        return self.discrim(x.view(-1, 1,28,28))
+
+
+
+
+
+
