@@ -14,7 +14,7 @@ from utils.preprocess import get_data, get_model
 from utils.postprocess import gan_display, get_validation_loss
 
 """
-python GAN.py -model "SimpleGAN" -hidden 2 -lr .001 -epochs 200
+python GAN.py -model "SimpleGAN" -hidden 150 -lr .001 -epochs 250
 """
 
 # visdom
@@ -37,50 +37,64 @@ def get_args():
 
 args = get_args()
 train_loader, val_loader, test_loader = get_data(args, bern=False)
-model = get_model(args)
-optimizer_g = torch.optim.Adam(model.decoder.parameters(), lr=args.lr)
-optimizer_d = torch.optim.Adam(model.discrim.parameters(), lr=args.lr)
+# model = get_model(args)
+# optimizer_g = torch.optim.Adam(model.decoder.parameters(), lr=args.lr)
+# optimizer_d = torch.optim.Adam(model.discrim.parameters(), lr=args.lr)
 
-for epoch in range(args.epochs):
-    for data_ix,(img,label) in enumerate(train_loader):
-        model.train()
-        img = (2*(img - .5)).squeeze(1)
-        z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
-        img_g = model.get_decoding(z)
+# for epoch in range(args.epochs):
+#     for data_ix,(img,label) in enumerate(train_loader):
+#         model.train()
+#         img = (2*(img - .5)).squeeze(1)
+#         z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
+#         img_g = model.get_decoding(z)
 
-        # train the discriminator
-        optimizer_d.zero_grad()
-        l_d = 0
-        preds = model.get_discrim(Variable(img.view(-1,28*28)).cuda()).view(-1)
-        gt = Variable(torch.zeros(len(preds)).cuda()) + Variable(torch.Tensor(len(preds)).uniform_(0,.2).cuda())
-        l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
-        preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
-        gt = Variable(torch.ones(len(preds)).cuda()) - Variable(torch.Tensor(len(preds)).uniform_(0,.2).cuda())
-        l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
-        l_d.backward()
-        optimizer_d.step()
-        optimizer_d.zero_grad(); optimizer_g.zero_grad();
+#         # train the discriminator
+#         optimizer_d.zero_grad()
+#         l_d = 0
+#         preds = model.get_discrim(Variable(img.view(-1,28*28)).cuda()).view(-1)
+#         gt = Variable(torch.zeros(len(preds)).cuda()) + Variable(torch.Tensor(len(preds)).uniform_(0,.2).cuda())
+#         l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
+#         preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
+#         gt = Variable(torch.ones(len(preds)).cuda()) - Variable(torch.Tensor(len(preds)).uniform_(0,.2).cuda())
+#         l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
+#         l_d.backward()
+#         optimizer_d.step()
+#         optimizer_d.zero_grad(); optimizer_g.zero_grad();
 
-        # train the generator
-        z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
-        img_g = model.get_decoding(z)
-        preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
-        gt = Variable(torch.zeros(len(preds)).cuda())+ Variable(torch.Tensor(len(preds)).uniform_(0.2).cuda())
-        l_g = F.binary_cross_entropy_with_logits(preds, gt)
-        l_g.backward()
-        optimizer_g.step()
-        optimizer_d.zero_grad(); optimizer_g.zero_grad();
+#         # train the generator
+#         z = Variable(torch.zeros(len(img), args.hidden).normal_().cuda())
+#         img_g = model.get_decoding(z)
+#         preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
+#         gt = Variable(torch.zeros(len(preds)).cuda())+ Variable(torch.Tensor(len(preds)).uniform_(0.2).cuda())
+#         l_g = F.binary_cross_entropy_with_logits(preds, gt)
+#         l_g.backward()
+#         optimizer_g.step()
+#         optimizer_d.zero_grad(); optimizer_g.zero_grad();
 
-        if data_ix % 300 == 0:
-            print(data_ix, l_d, l_g)
-            model.eval()
+#         if data_ix % 300 == 0:
+#             print(data_ix, l_d, l_g)
+#             model.eval()
 
-            # get sample images
-            sample_z = Variable(torch.zeros(16, args.hidden).normal_().cuda())
-            sample_img = model.get_decoding(sample_z)
+#             # get sample images
+#             sample_z = Variable(torch.zeros(16, args.hidden).normal_().cuda())
+#             sample_img = model.get_decoding(sample_z)
 
-            vis_windows = gan_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_d.data.cpu()[0], l_g.data.cpu()[0], (sample_img/2.+1/2.).data.cpu().unsqueeze(1))
+#             vis_windows = gan_display(vis, vis_windows, epoch + data_ix/float(len(train_loader)), l_d.data.cpu()[0], l_g.data.cpu()[0], (sample_img/2.+1/2.).data.cpu().unsqueeze(1))
 
-
+model = torch.load('GAN.p')
+model.eval()
+z = Variable(torch.zeros(36, args.hidden).normal_().cuda())
+img_g = model.get_decoding(z).data.cpu()
+fig = plt.figure()
+gs = mpl.gridspec.GridSpec(6,6)
+current = 0
+for i in range(6):
+    for j in range(6):
+        ax = plt.subplot(gs[i,j])
+        plt.imshow(img_g[current])
+        current += 1
+plt.tight_layout()
+plt.savefig('gan_decode.pdf')
+plt.close(fig)
 
 
