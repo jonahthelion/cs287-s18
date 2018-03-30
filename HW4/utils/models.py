@@ -86,7 +86,7 @@ class CNNGAN(nn.Module):
                     )
     def get_decoding(self, z):
         z = z.unsqueeze(-1).unsqueeze(-1)
-        return self.decoder(z)
+        return self.decoder(z).squeeze(1)
 
     def get_discrim(self, x):
         return self.discrim(x.view(-1, 1,28,28))
