@@ -15,7 +15,7 @@ from utils.postprocess import gan_display, get_validation_loss
 
 """
 python GAN.py -model "SimpleGAN" -hidden 150 -lr .001 -epochs 250
-python GAN.py -model "CNNGAN" -hidden 150 -lr .001 -epochs 250
+python GAN.py -model "CNNGAN" -hidden 256 -lr .0002 -epochs 250
 """
 
 # visdom
