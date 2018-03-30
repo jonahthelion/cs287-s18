@@ -53,7 +53,6 @@ for epoch in range(args.epochs):
         optimizer_d.zero_grad()
         l_d = 0
         preds = model.get_discrim(Variable(img.view(-1,28*28)).cuda()).view(-1)
-        assert False
         gt = Variable(torch.zeros(len(preds)).cuda()) + Variable(torch.Tensor(len(preds)).uniform_(0,.2).cuda())
         l_d += F.binary_cross_entropy_with_logits(preds, gt)/2.
         preds = model.get_discrim(img_g.view(-1, 28*28)).view(-1)
