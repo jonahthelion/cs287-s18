@@ -15,6 +15,7 @@ from utils.postprocess import vis_display, get_validation_loss
 
 """
 python VAE.py -model "Simple" -hidden 2 -lr .001 -epochs 40
+python VAE.py -model "CNNVAE" -hidden 2 -lr .001 -epochs 40
 """
 
 # visdom

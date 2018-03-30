@@ -101,7 +101,38 @@ class CNNGAN(nn.Module):
     def get_discrim(self, x):
         return self.discrim(x.view(-1, 1,28,28))
 
+class CNNVAE(nn.Module):
+    def __init__(self, args):
+        super(CNNVAE, self).__init__()
+        self.hidden = args.hidden
+        self.encoder = nn.Sequential(
+                        nn.Conv2d(1, 16, 4, 2, 1),
+                        nn.LeakyReLU(),
+                        nn.BatchNorm2d(16),
+                        nn.Conv2d(16, 32, 4, 2, 1),
+                        nn.LeakyReLU(),
+                        nn.BatchNorm2d(32),
+                        nn.Conv2d(32, 32, 4, 2, 1),
+                        nn.LeakyReLU(),
+                        nn.BatchNorm2d(32),
+                        nn.Conv2d(32, 2*self.hidden, 4, 2, 1),
+                    )
 
+
+        self.decoder = nn.Sequential(
+                        nn.Linear(self.hidden, 50),
+                        nn.ReLU(),
+                        nn.Linear(50, 50),
+                        nn.ReLU(),
+                        nn.Linear(50, 28*28),
+                    )
+
+    def get_encoding(self, x):
+        out = self.encoder(x.view(x.shape[0], 1,28,28)).squeeze(-1).squeeze(-1)
+        return out[:,:self.hidden], out[:,self.hidden:]
+
+    def get_decoding(self, z):
+        return self.decoder(z).view(z.shape[0], 28, 28)
 
 
 

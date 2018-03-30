@@ -2,7 +2,7 @@ import torch
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
-from utils.models import SimpleVAE, SimpleGAN, CNNGAN
+from utils.models import SimpleVAE, SimpleGAN, CNNGAN, CNNVAE
 
 def get_data(args, bern=True):
     print('Loading Data...')
@@ -49,3 +49,5 @@ def get_model(args):
         return SimpleGAN(args).cuda()
     elif args.model == 'CNNGAN':
         return CNNGAN(args).cuda()
+    elif args.model == 'CNNVAE':
+        return CNNVAE(args).cuda()
