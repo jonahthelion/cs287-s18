@@ -117,14 +117,18 @@ class CNNVAE(nn.Module):
                         nn.BatchNorm2d(32),
                         nn.Conv2d(32, 2*self.hidden, 4, 2, 1),
                     )
-
-
+        self.simple = nn.Linear(self.hidden, 36)
         self.decoder = nn.Sequential(
-                        nn.Linear(self.hidden, 50),
-                        nn.ReLU(),
-                        nn.Linear(50, 50),
-                        nn.ReLU(),
-                        nn.Linear(50, 28*28),
+                        nn.Conv2d(4, 8, 3, 1, 1),
+                        nn.LeakyReLU(),
+                        nn.ConvTranspose2d(8, 8, 2, 2, output_padding=1),
+                        nn.Conv2d(8, 8, 3, 1, 1),
+                        nn.LeakyReLU(),
+                        nn.ConvTranspose2d(8, 8, 2, 2, 0),
+                        nn.Conv2d(8, 16, 3, 1, 1),
+                        nn.LeakyReLU(),
+                        nn.ConvTranspose2d(16, 16, 2, 2, 0),
+                        nn.Conv2d(16, 1, 3, 1, 1),
                     )
 
     def get_encoding(self, x):
@@ -132,7 +136,7 @@ class CNNVAE(nn.Module):
         return out[:,:self.hidden], out[:,self.hidden:]
 
     def get_decoding(self, z):
-        return self.decoder(z).view(z.shape[0], 28, 28)
+        return self.decoder(self.simple(z).view(z.shape[0],4,3,3)).squeeze(1)
 
 
 
