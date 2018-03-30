@@ -76,13 +76,13 @@ class CNNGAN(nn.Module):
                     )
 
         self.discrim = nn.Sequential(
-                        nn.Conv2d(1, 8, 2),
+                        nn.Conv2d(1, 16, 4, 2, 1),
                         nn.LeakyReLU(),
-                        nn.Conv2d(1, 8, 2),
+                        nn.Conv2d(16, 32, 4, 2, 1),
                         nn.LeakyReLU(),
-                        nn.Conv2d(1, 8, 2),
+                        nn.Conv2d(32, 32, 4, 2, 1),
                         nn.LeakyReLU(),
-                        nn.Conv2d(1, 8, 2),
+                        nn.Conv2d(32, 1, 4, 2, 1),
                     )
     def get_decoding(self, z):
         z = z.unsqueeze(-1).unsqueeze(-1)
