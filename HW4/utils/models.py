@@ -65,10 +65,13 @@ class CNNGAN(nn.Module):
         self.decoder = nn.Sequential(
                         nn.ConvTranspose2d(args.hidden, 128*4, 4, 1, 0),
                         nn.LeakyReLU(),
+                        nn.BatchNorm2d(128*4),
                         nn.ConvTranspose2d(128*4, 128*4, 1, 2, 0),
                         nn.LeakyReLU(),
+                        nn.BatchNorm2d(128*4),
                         nn.ConvTranspose2d(128*4, 128*2, 2, 2, 0),
                         nn.LeakyReLU(),
+                        nn.BatchNorm2d(128*2),
                         nn.ConvTranspose2d(128*2, 1, 2, 2, 0),
                         nn.Tanh(),
                     )
@@ -76,10 +79,13 @@ class CNNGAN(nn.Module):
         self.discrim = nn.Sequential(
                         nn.Conv2d(1, 16, 4, 2, 1),
                         nn.LeakyReLU(),
+                        nn.BatchNorm2d(16),
                         nn.Conv2d(16, 32, 4, 2, 1),
                         nn.LeakyReLU(),
+                        nn.BatchNorm2d(32),
                         nn.Conv2d(32, 32, 4, 2, 1),
                         nn.LeakyReLU(),
+                        nn.BatchNorm2d(32),
                         nn.Conv2d(32, 1, 4, 2, 1),
                     )
     def get_decoding(self, z):
