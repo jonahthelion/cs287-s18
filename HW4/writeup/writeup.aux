@@ -1,0 +1,45 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}VAE}{1}{section.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}GAN}{1}{section.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Visualization of training and validation loss for the VAE is handled by visdom. The x-axis is number of epochs through the training set in all cases. Example visualizations of the decoder's output in the top right are on random samples from $z$ which are sampled throughout training.\relax }}{2}{figure.caption.1}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:loss}{{1}{2}{Visualization of training and validation loss for the VAE is handled by visdom. The x-axis is number of epochs through the training set in all cases. Example visualizations of the decoder's output in the top right are on random samples from $z$ which are sampled throughout training.\relax }{figure.caption.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The VAE model learns to separate the different digits without ever seeing a label. After training, on every test sample, we run the encoder and collect all the $\mu $ and ground truth labels. The $\mu $ are plotted and color coded by their ground truth label. The $\mu $ all together are roughly gaussian about the origin as enforced by the KL loss.\relax }}{2}{figure.caption.2}}
+\newlabel{fig:vaespace}{{2}{2}{The VAE model learns to separate the different digits without ever seeing a label. After training, on every test sample, we run the encoder and collect all the $\mu $ and ground truth labels. The $\mu $ are plotted and color coded by their ground truth label. The $\mu $ all together are roughly gaussian about the origin as enforced by the KL loss.\relax }{figure.caption.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Two images from the test set are displayed on the far left and far right. We run the VAE encoder on both images, then decode 10 interpolations between the latent vectors. To smoothly move from an image of a 5 to an image of a 7, the model transitions to an 8 and then to a 9 and finally a 7. This trajectory is supported by Figure \ref  {fig:vaespace}.\relax }}{3}{figure.caption.3}}
+\newlabel{fig:grid}{{3}{3}{Two images from the test set are displayed on the far left and far right. We run the VAE encoder on both images, then decode 10 interpolations between the latent vectors. To smoothly move from an image of a 5 to an image of a 7, the model transitions to an 8 and then to a 9 and finally a 7. This trajectory is supported by Figure \ref {fig:vaespace}.\relax }{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  15 latent vectors on a grid between -2 and 2 are decoded by the VAE into images. There is a sense in which the latent variable plotted on the $y$ axis encodes the angle of the digit.\relax }}{3}{figure.caption.4}}
+\newlabel{fig:grid}{{4}{3}{15 latent vectors on a grid between -2 and 2 are decoded by the VAE into images. There is a sense in which the latent variable plotted on the $y$ axis encodes the angle of the digit.\relax }{figure.caption.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  the leftmost image is the cross entropy of the discriminator on 100 data and 100 generated images during training of the GAN. The middle image is the cross entropy of the discriminator on 100 generated images where ground truth is defined as being drawn from the data. The rightmost images are example decoded images which are sampled every epoch.\relax }}{4}{figure.caption.5}}
+\newlabel{fig:gantrain}{{5}{4}{the leftmost image is the cross entropy of the discriminator on 100 data and 100 generated images during training of the GAN. The middle image is the cross entropy of the discriminator on 100 generated images where ground truth is defined as being drawn from the data. The rightmost images are example decoded images which are sampled every epoch.\relax }{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}CNN VAE}{4}{section.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces  36 latent vectors are randomly sampled from the GAN space and the output of the GAN decoder on these vectors is plotted in no particular order. The images aren't as smooth as the VAE images but they are also less fuzzy which is a plus.\relax }}{5}{figure.caption.6}}
+\newlabel{fig:gangrid}{{6}{5}{36 latent vectors are randomly sampled from the GAN space and the output of the GAN decoder on these vectors is plotted in no particular order. The images aren't as smooth as the VAE images but they are also less fuzzy which is a plus.\relax }{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces  Two random latent vectors from the GAN space are sampled and the decoding of linearly interpolated latent vectors in between the two are decoded. We can see that the latent space is at least somewhat smooth.\relax }}{5}{figure.caption.7}}
+\newlabel{fig:gan_12}{{7}{5}{Two random latent vectors from the GAN space are sampled and the decoding of linearly interpolated latent vectors in between the two are decoded. We can see that the latent space is at least somewhat smooth.\relax }{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces  Visualization of training and validation loss for the Convolutional VAE is handled by visdom. The x-axis is number of epochs through the training set in all cases. Example visualizations of the decoder's output in the top right are on random samples from $z$ which are sampled throughout training.\relax }}{6}{figure.caption.8}}
+\newlabel{fig:convloss}{{8}{6}{Visualization of training and validation loss for the Convolutional VAE is handled by visdom. The x-axis is number of epochs through the training set in all cases. Example visualizations of the decoder's output in the top right are on random samples from $z$ which are sampled throughout training.\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The Convolutional VAE model learns to separate the different digits without ever seeing a label. After training, on every test sample, we run the encoder and collect all the $\mu $ and ground truth labels. The $\mu $ are plotted and color coded by their ground truth label. The $\mu $ all together are roughly gaussian about the origin as enforced by the KL loss.\relax }}{6}{figure.caption.9}}
+\newlabel{fig:convvaespace}{{9}{6}{The Convolutional VAE model learns to separate the different digits without ever seeing a label. After training, on every test sample, we run the encoder and collect all the $\mu $ and ground truth labels. The $\mu $ are plotted and color coded by their ground truth label. The $\mu $ all together are roughly gaussian about the origin as enforced by the KL loss.\relax }{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces  Two images from the test set are displayed on the far left and far right. We run the Convolutional VAE encoder on both images, then decode 10 interpolations between the latent vectors.\relax }}{7}{figure.caption.10}}
+\newlabel{fig:convgrid}{{10}{7}{Two images from the test set are displayed on the far left and far right. We run the Convolutional VAE encoder on both images, then decode 10 interpolations between the latent vectors.\relax }{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces  15 latent vectors from the Convolutional VAE latent space on a grid between -2 and 2 are decoded by the Convolutional VAE into images. This image looks similar to the standard VAE picture.\relax }}{7}{figure.caption.11}}
+\newlabel{fig:convlatent}{{11}{7}{15 latent vectors from the Convolutional VAE latent space on a grid between -2 and 2 are decoded by the Convolutional VAE into images. This image looks similar to the standard VAE picture.\relax }{figure.caption.11}{}}
