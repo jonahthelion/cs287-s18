@@ -57,7 +57,7 @@
   \vfill
   \centering
   \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
-    \usebeamerfont{title}\insertsectionhead\par%
+    \usebeamerfont{title}\large\insertsectionhead\par%
   \end{beamercolorbox}
   \vfill
   \end{frame}
@@ -125,6 +125,16 @@
 \section{Traditional Neural Machine Translation} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
 
+\begin{frame}
+\textbf{Problem} Given a sentence in language $l$, generate a sentence in language $l'$ with the same meaning.\\\pause
+~\\
+\textbf{Metrics}
+\begin{itemize}
+\item BLEU - geometric mean of modified precision scores multiplied by a brevity penalty
+\item METEOR - harmonic mean of unigram precision and recall with recal weighted higher than precision. Stronger correlation with human judgement than BLEU but cited less often.
+\end{itemize}
+\end{frame}
+
 %\subsection{Subsection Example} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
 
 \begin{frame}
@@ -137,7 +147,7 @@
 \end{frame}
 
 %------------------------------------------------
-\section{Zero-Shot Translation}
+\section{Zero-Shot Translation (Johnson, 2017)}
 \begin{frame}
 \frametitle{Motivation for Google Zero-Shot Translation (Johnson, 2017)}
 Problem
@@ -148,7 +158,7 @@ Problem
 Solution
 \begin{itemize}
 \item Universal decoder and encoder for all language pairs.
-\item Add an artificial token to the input sequence to indicate the required target language.
+\item Add an artificial token to the input sequence to indicate the required target language.\pause
 $$\texttt{Hello, how are you? -> Hola, ¿cómo estás?}$$
 $$\texttt{<2es> Hello, how are you? -> Hola, ¿cómo estás?}$$
 \end{itemize}
@@ -159,7 +169,7 @@ $$\texttt{<2es> Hello, how are you? -> Hola, ¿cómo estás?}$$
  \begin{figure}
   \centering
   \includegraphics[width=10cm]{pres_imgs/zero_shot_arch}
-  \caption{\label{fig:zero_shot_arch} Google Zero-Shot Architecture (Johnson, 2017). Source sentence is reversed and prepended to the target language codon.}
+  \caption{\label{fig:zero_shot_arch} Google Zero-Shot Architecture (Johnson, 2017). Source sentence is reversed and prepended to the target language token.}
 \end{figure}
 \end{frame}
 
@@ -170,7 +180,7 @@ $$\texttt{<2es> Hello, how are you? -> Hola, ¿cómo estás?}$$
  \begin{figure}
   \centering
   \includegraphics[width=8cm]{pres_imgs/manyto-many}
-  \caption{\label{fig:manyto-many} When trained on all pairs of three languages, the model achieves comparable BLEU scores. Since the simplest model has 255$M$ instead of 3$B$ parameters, this result is astounding.}
+  \caption{\label{fig:manyto-many} When trained on all pairs of three languages, the model achieves comparable BLEU scores. Since the simplest model has 255$M$ instead of 3$B$ parameters, this result is satisfying.}
 \end{figure}
 
 \end{itemize}
@@ -183,7 +193,7 @@ The model can translate between languages for which there was no parallel data d
  \begin{figure}
   \centering
   \includegraphics[width=8cm]{pres_imgs/zeroshottab}
-  \caption{\label{fig:zeroshottab} PBMT is a phrase based translation system. NMT bridged is translation from Portuguese to Spanish going through English. NMT Pt$\rightarrow$Es is a standard NMT model with attention trained on all available Portuguese to Spanish sentences.}
+  \caption{\label{fig:zeroshottab} PBMT is a phrase based translation system. NMT bridged is translation from Portuguese to Spanish going through English. NMT Pt$\rightarrow$Es is a standard NMT model with attention trained on all available Portuguese to Spanish sentences. Model (f) is trained on a tenth of the data of model (c).}
 \end{figure}
 \end{frame}
 
@@ -202,13 +212,22 @@ What if we mix languages in the source sentence?
 
 \column{.5\textwidth} % Right column and width
 \textbf{Weighted Target Language Selection}
-What if we feed linear combinations of target codons?
+What if we feed linear combinations of target tokens?
  \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{pres_imgs/trgswitch}
   \caption{\label{fig:trgswitch} The model translates into Ukrainian in the process of translating to Russian and Belarusian.}
 \end{figure}
 \end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Interlingua}
+ \begin{figure}
+  \centering
+  \includegraphics[width=.75\textwidth]{pres_imgs/zeroshotlatent}
+  \caption{\label{fig:zeroshotlatent} Semantically identicle sentences have similar encodings.}
+\end{figure}
 \end{frame}
 
 %------------------------------------------------
@@ -220,7 +239,8 @@ What if we feed linear combinations of target codons?
 $$\rightarrow \text{Strong baseline for supervised NMT}$$
 $$\rightarrow \text{Translation in low-resource contexts}$$
 \pause
-\item \textbf{Solution} Train universal encoder and language-specific decoders to denoise and backtranslate.
+\item \textbf{Solution} Train universal encoder and language-specific decoders to denoise and backtranslate.\\\pause
+This solution is one of many proposed solutions to this problem.
 \end{itemize}
 \end{frame}
 
@@ -235,15 +255,16 @@ $$\rightarrow \text{Translation in low-resource contexts}$$
 \end{frame}
 
 \begin{frame}
-\frametitle{``Differences" from Standard NMT}
+\frametitle{2 ``Differences" from Standard NMT}\pause
 \begin{itemize}
-\item \textbf{2-step training} Cross-lingual word embeddings are determined in an initial training step (Johnson, 2017). These embeddings are then frozen before training the encoder-decoder system. 
+\item \textbf{2-step training} Cross-lingual word embeddings are determined in an initial training step (Johnson, 2017). These embeddings are then frozen before training the encoder-decoder system. \pause
 \item \textbf{L$_{denoise}$ + L$_{backtranslate}$} Training the ecoder-decoder consists of a loss associated with the ability to back-translate and a loss associated with the ability to denoise.
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{L$_{denoise}$}
+\textbf{Loss}\\
 Given a sequence of length $N$, make $N/2$ transpositions iteratively. The model is trained with the standard word-by-word loss. Let $C(x)$ return our noise model applied to sentence $x$.
 $$ L_{denoise} = \mathbb{E}_{x\sim X_l, \hat{x}\sim d(e(C(x)),l)}\Delta(\hat{x},x) $$
 An example denoising case
@@ -255,12 +276,25 @@ $$\texttt{\small -> this is an example denoising sentence for my presentation}$$
 \frametitle{L$_{backtranslate}$}
 Given an input sentence in one language, use the system in inference mode with greedy decoding to translate it to the other language. In this way, we obtain pseudo-parallel sentence pairs. Let $x'=d(e(x),l')$.
 $$ L_{backtranslate} = \mathbb{E}_{x\sim X_l, \hat{x}\sim d(e(x'),l)}\Delta(\hat{x},x) $$
-In the semi-supervised model, we also mix in parallel sentence examples to this loss. The above loss has had some success in unsupervised image-to-image translation (Zhu, 2018).\\
+In the semi-supervised model, we also mix in parallel sentence examples to this loss. The above loss has had some success in unsupervised image-to-image translation (Zhu, 2018).\\ \pause
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{pres_imgs/imagetran}
 %  \caption{\label{fig:imagetran} The model performs ``surprisingly" well. However, there is discussion of whether this model is actually interesting given the lack of success of models 7., 8., and 9. in a fully supervised setting.}
 \end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+\textbf{Details}
+\begin{itemize}
+\item French-English and German-English datasets from WMT 2014.\pause
+\item \textbf{Unsupervised model} trained on News Crawl corpus articles from 2007 to 2013.\pause
+\item \textbf{Semi-Supervised model} Additional 10k or 100k random sentence pairs from News Commentary.\pause
+\item \textbf{Supervised model} WMT 2014 $+$ UN and Gigaword corpus for French-English.\pause
+\item Spanish-English WMT data used for hyperparameter exploration.\pause
+\item Frozen cross-lingual embeddings from Artetxe (2017).
+\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -271,8 +305,29 @@ In the semi-supervised model, we also mix in parallel sentence examples to this 
   \caption{\label{fig:unsupresults} The model performs ``surprisingly" well. However, there is discussion of whether this model is actually interesting given the lack of success of models 7., 8., and 9. in a fully supervised setting.}
 \end{figure}
 \end{frame}
-%------------------------------------------------
 
+\begin{frame}
+\frametitle{Evaluation}
+ \begin{figure}
+  \centering
+  \includegraphics[width=.9\textwidth]{pres_imgs/unsupfrench}
+  \caption{\label{fig:unsupfrench} Example translations for the best unsupervised model. The model is a decent translator.}
+\end{figure}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Extension Ideas AKA Pipe Dreams}
+We want to enforce that given a source sentence $src$, the translation $M(src)$ has the same meaning as $src$ and is indistinguishable from sentences in the corpus of the target language.\\ \pause
+~\\
+\textbf{Problem} Translations $M(x_{src})$ indistiguishable from corpus $x_i \sim X_{tgt}$\\ \pause
+$\Rightarrow$ \textbf{L$_{adversary}$} Force translations to fool a discriminator\\ \pause
+~\\
+\textbf{Problem} Translations $M(x_{src})$ should capture the meaning of $x_{src}$\\ \pause
+$\Rightarrow$ \textbf{L$_{back^n translate}$} force invertibility of $M$ over $n$ cycles between $l_{src}$ and $l_{tgt}$.\\ \pause
+~\\
+\textbf{Problem} Words aren't well defined for certain languages\\ \pause
+$\Rightarrow$ Add a language model loss with word-pieces to train end-to-end (Wu, 2016)\\
+\end{frame}
 
 
 %------------------------------------------------
