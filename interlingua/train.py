@@ -23,4 +23,7 @@ valbatcher = torchdata.DataLoader(valloader, batch_size=args.batch_size, num_wor
 
 for batch_ix,batch in enumerate(trainbatcher):
     print(batch_ix, batch)
+    print([TEXT.itos[i][1] for i in batch['en'][0] if not i==-2])
+    print([TEXT.itos[i][1] for i in batch['de'][0] if not i==-2])
+    print([TEXT.itos[i][1] for i in batch['fr'][0] if not i==-2])
     assert False
