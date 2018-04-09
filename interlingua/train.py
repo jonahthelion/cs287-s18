@@ -1,24 +1,26 @@
-from torchtext import data
-from torchtext import datasets
-import spacy
+import torch
+import argparse
+from torch.utils import data as torchdata
 
-# spacy_de = spacy.load('de')
-spacy_en = spacy.load('en')
-spacy_fr = spacy.load('fr')
+from utils.preprocess import get_data
 
-# def tokenize_de(text):
-#     return [tok.text for tok in spacy_de.tokenizer(text)]
+"""
+python3 train.py -d ../multi30k-dataset -batch_size 4
+"""
 
-def tokenize_en(text):
-    return [tok.text for tok in spacy_en.tokenizer(text)]
+def get_args():
+    parser = argparse.ArgumentParser(description='Train unsupervised model.')
+    parser.add_argument('-d', metavar='-d', type=str,
+                        help='directory multi30k was cloned to (https://github.com/multi30k/dataset)')
+    parser.add_argument('-batch_size', type=int,
+                        help='batch_size for training and validating dataloaders')
+    return parser.parse_args()
 
-def tokenize_fr(text):
-    return [tok.text for tok in spacy_fr.tokenizer(text)]
+args = get_args()
+trainloader, valloader, TEXT = get_data(args)
+trainbatcher = torchdata.DataLoader(trainloader, batch_size=args.batch_size, num_workers=4, shuffle=True)
+valbatcher = torchdata.DataLoader(valloader, batch_size=args.batch_size, num_workers=4, shuffle=False)
 
-BOS_WORD = '<s>'
-EOS_WORD = '</s>'
-EN = data.Field(tokenize=tokenize_en, init_token = BOS_WORD, eos_token = EOS_WORD)
-# DE = data.Field(tokenize=tokenize_de, init_token = BOS_WORD, eos_token = EOS_WORD)
-FR = data.Field(tokenize=tokenize_fr, init_token = BOS_WORD, eos_token = EOS_WORD)
-
-train, val, test = datasets.Multi30k.splits(exts=('.fr', '.en'), fields=(FR, EN))
+for batch_ix,batch in enumerate(trainbatcher):
+    print(batch_ix, batch)
+    assert False
